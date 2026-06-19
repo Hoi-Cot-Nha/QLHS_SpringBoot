@@ -1,4 +1,4 @@
-package Dao;
+package Api;
 
 import Connection.ConnectDB;
 import Model.HanhKiem;
@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HanhKiemDAO {
+public class HanhKiemApi {
 
 
     public List<HanhKiem> getHanhKiemByFilter(String maLop, String namHoc, int hocKy) {

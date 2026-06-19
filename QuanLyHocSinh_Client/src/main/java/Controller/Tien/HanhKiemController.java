@@ -1,6 +1,6 @@
 package Controller.Tien;
 
-import Dao.HanhKiemDAO;
+import Api.HanhKiemApi;
 import Dao.LopDAO;
 import Model.HanhKiem;
 import Model.LopGVCN;
@@ -15,11 +15,11 @@ import Model.Auth;
 public class HanhKiemController {
     
     private HanhKiemPanel view;
-    private HanhKiemDAO dao;
+    private HanhKiemApi dao;
 
     public HanhKiemController(HanhKiemPanel view) {
         this.view = view;
-        this.dao = new HanhKiemDAO();
+        this.dao = new HanhKiemApi();
         
         loadComboBoxData();
         initEvents();

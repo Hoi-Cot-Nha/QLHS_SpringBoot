@@ -1,6 +1,6 @@
 package Controller.Tien;
 
-import Dao.LichThiDAO;
+import Api.LichThiApi;
 import Model.LichThi;
 import View.Tien.LichThiPanel;
 import java.awt.event.MouseAdapter;
@@ -13,11 +13,11 @@ import Model.Auth;
 public class LichThiController {
     
     private LichThiPanel view;
-    private LichThiDAO dao;
+    private LichThiApi dao;
     
     public LichThiController(LichThiPanel view) {
         this.view = view;
-        this.dao = new LichThiDAO();
+        this.dao = new LichThiApi();
         initEvents();
         loadAll();
     }

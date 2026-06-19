@@ -1,6 +1,6 @@
 package Controller.Dai;
 
-import Dao.TaiKhoanDAO;
+import Api.TaiKhoanApi;
 import Model.TaiKhoan;
 
 import javax.swing.table.DefaultTableModel;
@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TaiKhoanController {
 
-    private TaiKhoanDAO dao = new TaiKhoanDAO();
+    private TaiKhoanApi dao = new TaiKhoanApi();
 
     
     public void loadTable(DefaultTableModel model) {

@@ -3,18 +3,18 @@ package Controller.Dai;
 import Model.Auth;
 import Model.TaiKhoan;
 import view.LoginView;
-import Dao.TaiKhoanDAO; 
+import Api.TaiKhoanApi; 
 import com.qlhs.main.MainFormNew;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginController {
     private LoginView view;
-    private TaiKhoanDAO dao;
+    private TaiKhoanApi dao;
 
     public LoginController(LoginView view) {
         this.view = view;
-        this.dao = new TaiKhoanDAO();
+        this.dao = new TaiKhoanApi();
 
         view.addLoginListener(new LoginListener());
         view.addExitListener(e -> System.exit(0));

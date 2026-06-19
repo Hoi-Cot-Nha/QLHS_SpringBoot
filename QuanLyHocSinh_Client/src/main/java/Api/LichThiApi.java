@@ -1,4 +1,4 @@
-package Dao;
+package Api;
 
 import Connection.ConnectDB;
 import Model.LichThi;
@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LichThiDAO {
+public class LichThiApi {
 
 
     public List<LichThi> getAllLichThi() {

@@ -1,4 +1,4 @@
-package Dao;
+package Api;
 
 import Connection.ConnectDB;
 import Model.Diem;
@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DiemDAO {
+public class DiemApi {
 
     public List<Diem> getDiemByFilter(String maLop, String maMH, int hocKy) {
         List<Diem> list = new ArrayList<>();

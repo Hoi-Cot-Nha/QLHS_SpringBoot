@@ -1,6 +1,6 @@
 package Controller.Tien; 
 
-import Dao.DiemDAO;
+import Api.DiemApi;
 import Dao.LopDAO;
 import Dao.MonHocDAO;
 import Model.Auth;
@@ -18,11 +18,11 @@ import Model.Auth;
 public class DiemController { 
     
     private QuanLyDiemPanel view;
-    private DiemDAO dao;
+    private DiemApi dao;
 
     public DiemController(QuanLyDiemPanel view) {
         this.view = view;
-        this.dao = new DiemDAO();
+        this.dao = new DiemApi();
         
         loadComboBoxData();
         initEvents();

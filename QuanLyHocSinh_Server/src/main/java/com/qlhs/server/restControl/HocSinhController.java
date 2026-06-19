@@ -1,4 +1,4 @@
-package com.qlhs.server.controller;
+package com.qlhs.server.restControl;
 
 import com.qlhs.server.entity.HocSinh;
 import com.qlhs.server.service.HocSinhService;

@@ -1,4 +1,4 @@
-package Dao;
+package Api;
 
 import Model.TaiKhoan;
 import java.sql.*;
@@ -12,7 +12,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
 import java.util.HashMap;
-public class TaiKhoanDAO {
+public class TaiKhoanApi {
 
     public String checkLogin(String user, String pass) {
         TaiKhoan tk = checkLoginFull(user, pass);
