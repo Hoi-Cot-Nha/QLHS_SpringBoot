@@ -2,7 +2,7 @@ package Controller.Dai;
 
 import Model.Auth;
 import Model.TaiKhoan;
-import view.LoginView;
+import View.LoginView;
 import Api.TaiKhoanApi; 
 import com.qlhs.main.MainFormNew;
 import java.awt.event.ActionEvent;

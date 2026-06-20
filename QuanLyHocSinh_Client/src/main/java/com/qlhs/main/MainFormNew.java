@@ -17,7 +17,7 @@ import Model.Giaovien;
 import Dao.HocSinhDAO;
 import Dao.GiaovienDAO;
 import View.Tien.HanhKiemPanel;
-import view.LoginView;
+import View.LoginView;
 import Controller.Dai.LoginController;
 import View.Tien.QuanLyDiemPanel;
 import Controller.Tien.DiemController;
@@ -400,7 +400,6 @@ public class MainFormNew extends JFrame {
         }
 
         Component viewToShow = null;
-        // Logic gán Controller & Panel (Giữ nguyên từ bản gốc của bạn)[cite: 1]
         if (formCode.equals("FormDiemSo")) {
             QuanLyDiemPanel view = new QuanLyDiemPanel();
             new DiemController(view); viewToShow = view;

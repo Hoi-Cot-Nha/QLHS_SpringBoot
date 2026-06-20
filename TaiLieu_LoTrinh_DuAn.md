@@ -45,7 +45,8 @@ QLHS/
 │       ├── View/                      # Màn hình giao diện (vd: LoginView)
 │       ├── Controller/                # Điều khiển sự kiện nút bấm
 │       ├── Model/                     # Class chứa dữ liệu (TaiKhoan, Diem,...)
-│       ├── Dao/                       # Nơi gửi HTTP Request lên Server (đã bỏ JDBC)
+│       ├── Dao/                       # (Cũ) Các file gọi Database trực tiếp bằng SQL
+│       ├── Api/                       # (Mới) Nơi gửi HTTP Request lên Server (thay thế Dao)
 │       └── TienIch/                   # Tiện ích chung
 │
 └── QuanLyHocSinh_Server/              # (Máy chủ xử lý ẩn)
@@ -58,7 +59,7 @@ QLHS/
         │   │   ├── entity/                     # Ánh xạ các bảng SQL (TaiKhoan, HocSinh...)
         │   │   ├── repository/                 # Nhúng JPA để gọi database ko cần viết SQL
         │   │   ├── service/                    # Xử lý Logic (Vd: Kiểm tra tk/mk hợp lệ)
-        │   │   └── controller/                 # Tạo API tiếp đón Client (Vd: /api/taikhoan/login)
+        │   │   └── restControl/                # Tạo API tiếp đón Client (Vd: /api/taikhoan/login)
         │   │
         └── resources/
             └── application.yml        # Cấu hình kết nối SQL Server (Bảo mật tên DB, user, pass)
@@ -71,12 +72,14 @@ QLHS/
 1. **Khởi tạo Server Spring Boot:** Thiết lập thành công kết nối tới cơ sở dữ liệu `QuanLyHocSinh` trong `application.yml`. Đặc biệt có xử lý chống đổi tên cột (`PhysicalNamingStrategy`) để tương thích 100% với database SQL Server hiện tại của bạn.
 2. **Khắc phục lỗi biên dịch Lombok:** Cập nhật Lombok lên `1.18.32` để tương thích với các IDE cài đặt Java đời mới.
 3. **Xây dựng API cho Tài Khoản:** 
-   - Tạo bộ `Entity - Repo - Service - Controller`.
+   - Tạo bộ `Entity - Repo - Service - Controller` (Lưu trong thư mục `restControl`).
    - Tạo Endpoint: `POST http://localhost:8080/api/taikhoan/login`.
 4. **Chuẩn bị sẵn Entity cho các tính năng khác:** Đã tạo trước cấu trúc cho phần **Điểm, Lịch Thi, Hạnh Kiểm**.
-5. **Cập nhật Client:** 
+5. **Cập nhật Client & Refactor Kiến Trúc:** 
    - Đưa thư viện Gson vào `pom.xml`.
-   - Viết lại toàn bộ hàm `checkLoginFull()` trong `TaiKhoanDAO.java` để nó gửi request bằng `HttpClient` thay vì mò trực tiếp vào Database.
+   - Di chuyển các tính năng đã nâng cấp (`TaiKhoan`, `Diem`, `LichThi`, `HanhKiem`) từ thư mục `Dao` sang thư mục mới tên là `Api`.
+   - Đổi tên class từ `XxxDAO` thành `XxxApi` (Vd: `TaiKhoanApi.java`).
+   - Viết lại hàm gửi request bằng `HttpClient` thay vì mò trực tiếp vào Database.
 
 ---
 
@@ -140,8 +143,8 @@ Nếu bạn hoặc các thành viên khác muốn tự tay chuyển đổi các 
 - Mở package `service`.
 - Tạo class `LopHocService` (đánh dấu bằng `@Service`). Gọi hàm `findAll()`, `save()` của Repository ra. Nơi đây bạn sẽ viết các logic kiểm tra (ví dụ: tên lớp không được để trống).
 
-**Bước 4: Tạo Controller**
-- Mở package `controller`.
+**Bước 4: Tạo Controller (API Endpoint)**
+- Mở package `restControl`.
 - Tạo class `LopHocController` (đánh dấu bằng `@RestController` và `@RequestMapping("/api/lophoc")`).
 - Tạo các hàm `@GetMapping` (để lấy dữ liệu), `@PostMapping` (để Thêm/Sửa), `@DeleteMapping` (để Xóa).
 
@@ -149,8 +152,10 @@ Nếu bạn hoặc các thành viên khác muốn tự tay chuyển đổi các 
 
 ### PHÍA CLIENT (Mở dự án `QuanLyHocSinh_Client`)
 
-**Bước 5: Chỉnh sửa file DAO**
-Mở file DAO cũ (Ví dụ: `LopDAO.java`). Thay vì gọi `ConnectDB.getConnection()`, bạn hãy đổi code thành:
+**Bước 5: Chuyển đổi DAO thành Api**
+- Mở file DAO cũ (Ví dụ: `LopDAO.java`) và chuyển nó sang thư mục `Api`. 
+- Đổi tên file thành `LopApi.java` (để mọi người biết nó xài API mới).
+- Thay vì gọi `ConnectDB.getConnection()`, bạn hãy đổi code thành:
 1. Dùng `HttpRequest` và `HttpClient` (có sẵn của Java) gọi vào đường dẫn `http://localhost:8080/api/lophoc`.
 2. Dùng thư viện `Gson` biến đổi kết quả trả về:
    ```java

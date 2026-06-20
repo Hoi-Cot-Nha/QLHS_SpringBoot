@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-import view.LoginView; 
+import View.LoginView; 
 import Controller.Dai.LoginController;
 
 import View.Tien.QuanLyDiemPanel;

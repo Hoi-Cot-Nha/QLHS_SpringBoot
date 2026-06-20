@@ -2,7 +2,7 @@ package com.qlhs.main;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import view.LoginView;
+import View.LoginView;
 import Controller.Dai.LoginController;
 
 public class QuanLyHocSinh {

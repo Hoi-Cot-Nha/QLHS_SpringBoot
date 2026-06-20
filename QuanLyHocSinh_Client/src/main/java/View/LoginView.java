@@ -1,4 +1,4 @@
-package view; // Hoặc package View; nếu thư mục của bạn viết hoa
+package View; // Hoặc package View; nếu thư mục của bạn viết hoa
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
