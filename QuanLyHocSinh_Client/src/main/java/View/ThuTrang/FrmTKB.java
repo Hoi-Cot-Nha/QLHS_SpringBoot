@@ -21,11 +21,9 @@ public class FrmTKB extends JPanel {
     private JTextField txtLocMon;
     private JButton btnXemDanhSach, btnLocTimKiem;
 
-    // Form — đổi thành ComboBox
     private JComboBox<String> cboMaLop, cboMaMH, cboMaGV, cboMaPhong;
     private JComboBox<Integer> cboThuThem, cboTietBD, cboTietKT;
 
-    // Map lưu mã tương ứng với tên hiển thị
     private List<Map<String, String>> danhSachLop;
     private List<Map<String, String>> danhSachMon;
     private List<Map<String, String>> danhSachGV;
@@ -84,19 +82,17 @@ public class FrmTKB extends JPanel {
         pnlNorth.add(pnlTop, BorderLayout.CENTER);
         add(pnlNorth, BorderLayout.NORTH);
 
-        // TABLE — đổi cột GV và Tên MH
         model = new DefaultTableModel(
                 new String[]{"ID", "Lớp", "Mã MH", "Tên MH", "Tên GV", "Phòng", "Thứ", "Tiết BD", "Tiết KT"}, 0
         );
         table = new JTable(model);
-        table.removeColumn(table.getColumnModel().getColumn(2)); // Ẩn cột Mã MH
+        table.removeColumn(table.getColumnModel().getColumn(2));
         TableSortHelper.enableTableSorting(table);
         table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         table.setRowHeight(26);
         table.getTableHeader().setDefaultRenderer(new TienIch.CustomTableHeaderRenderer());
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        // FORM — ComboBox
         JPanel pnlSouth = new JPanel(new BorderLayout());
         pnlSouth.setBorder(new TitledBorder("Thêm / Cập nhật TKB"));
 
@@ -151,7 +147,6 @@ public class FrmTKB extends JPanel {
         setCrudButtonState(true, false, false, false, false);
     }
 
-    // Load ComboBox từ controller
     public void setDanhSachLop(List<Map<String, String>> list) {
         this.danhSachLop = list;
         cboMaLop.removeAllItems();
@@ -181,7 +176,6 @@ public class FrmTKB extends JPanel {
         for (Map<String, String> m : list) cboMaPhong.addItem(m.get("ten"));
     }
 
-    // Lấy mã từ tên được chọn
     private String getMaFromTen(List<Map<String, String>> list, String ten) {
         return list.stream()
                 .filter(m -> m.get("ten").equals(ten))
@@ -204,7 +198,6 @@ public class FrmTKB extends JPanel {
     public void setTableData(List<TKB> list) {
         model.setRowCount(0);
         for (TKB t : list) {
-            // Đổi maGV → tenGV
             String tenGV = (danhSachGV != null) ? danhSachGV.stream()
                     .filter(m -> m.get("ma").equals(t.getMaGV()))
                     .map(m -> m.get("ten")).findFirst().orElse(t.getMaGV()) : t.getMaGV();

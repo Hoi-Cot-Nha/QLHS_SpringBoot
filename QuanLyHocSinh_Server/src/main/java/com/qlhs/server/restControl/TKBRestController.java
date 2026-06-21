@@ -36,7 +36,7 @@ public class TKBRestController {
         return tkbService.getAllTKB();
     }
 
-    @GetMapping("/{maTKB}")  // fix: đổi {maKB} → {maTKB}
+    @GetMapping("/{maTKB}")
     public ResponseEntity<TKB> getByIdTKB(@PathVariable Integer maTKB) {
         return tkbService.getByIdTKB(maTKB)
                 .map(ResponseEntity::ok)

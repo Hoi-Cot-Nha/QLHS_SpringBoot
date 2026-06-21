@@ -34,18 +34,14 @@ public class FrmMonHoc extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // ===== 1. PANEL NORTH: CHỨA TẤT CẢ PHẦN ĐẦU =====
-        // Sử dụng BorderLayout để xếp 3 món (Tiêu đề - Xem - Tìm) dọc xuống
-        JPanel pnlNorth = new JPanel(new BorderLayout(0, 5)); // 5 là khoảng cách giữa các phần
+        JPanel pnlNorth = new JPanel(new BorderLayout(0, 5));
 
-        // -- Món 1: Tiêu đề (Đặt ở NORTH) --
         JLabel title = new JLabel("QUẢN LÝ MÔN HỌC", JLabel.CENTER);
         title.setFont(new Font("Segoe UI", Font.BOLD, 26));
         title.setForeground(new Color(0, 102, 204));
-        title.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0)); // Tạo khoảng hở dưới chữ
+        title.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         pnlNorth.add(title, BorderLayout.NORTH);
 
-        // -- Món 2: Khung Xem danh sách (Đặt ở CENTER) --
         JPanel pnlView = new JPanel();
         pnlView.setBorder(new TitledBorder("Xem danh sách"));
         btnXem = new JButton("Xem danh sách");
@@ -53,7 +49,6 @@ public class FrmMonHoc extends JPanel {
         pnlView.add(btnXem);
         pnlNorth.add(pnlView, BorderLayout.CENTER);
 
-        // -- Món 3: Khung Tìm kiếm (Đặt ở SOUTH) --
         JPanel pnlSearch = new JPanel();
         pnlSearch.setBorder(new TitledBorder("Tìm kiếm"));
         pnlSearch.add(new JLabel("Mã / Tên môn:"));
@@ -64,11 +59,8 @@ public class FrmMonHoc extends JPanel {
         pnlSearch.add(btnTimKiem);
         pnlNorth.add(pnlSearch, BorderLayout.SOUTH);
 
-        // Đưa pnlNorth (đã chứa đủ 3 món) ra giao diện chính
         add(pnlNorth, BorderLayout.NORTH);
 
-
-        // ===== 2. TABLE (CENTER) =====
         model = new DefaultTableModel(new String[]{"Mã MH", "Tên môn"}, 0);
         table = new JTable(model);
         TableSortHelper.enableTableSorting(table);
@@ -77,8 +69,6 @@ public class FrmMonHoc extends JPanel {
         table.getTableHeader().setDefaultRenderer(new TienIch.CustomTableHeaderRenderer());
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-
-        // ===== 3. FORM INPUT (SOUTH) =====
         JPanel pnlSouth = new JPanel(new BorderLayout());
         pnlSouth.setBorder(new TitledBorder("Cập nhật môn học"));
 
@@ -124,7 +114,6 @@ public class FrmMonHoc extends JPanel {
         setCrudButtonState(true, false, false, false, false);
     }
 
-    // ===== DATA =====
     public MonHoc getMonHocInput() {
         return new MonHoc(
             txtMaMH.getText().trim(),
@@ -165,7 +154,6 @@ public class FrmMonHoc extends JPanel {
         JOptionPane.showMessageDialog(this, msg);
     }
 
-    // ===== GETTERS =====
     public JButton getBtnThem() { return btnThem; }
     public JButton getBtnSua() { return btnSua; }
     public JButton getBtnXoa() { return btnXoa; }
@@ -182,7 +170,6 @@ public class FrmMonHoc extends JPanel {
         btnHuy.setEnabled(huy);
     }
 
-    // ===== EVENTS =====
     public void addBtnXemListener(ActionListener l) {
         btnXem.addActionListener(l);
     }

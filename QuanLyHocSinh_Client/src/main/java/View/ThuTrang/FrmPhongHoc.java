@@ -20,16 +20,13 @@ import TienIch.TableSortHelper;
  * @author Admin
  */
 public class FrmPhongHoc extends JPanel {
- // ===== FILTER / SEARCH =====
     private JTextField txtMaPhongTim;
     private JComboBox<String> cboLoaiPhongTim, cboTinhTrangTim;
     private JButton btnXem, btnTim;
 
-    // ===== TABLE =====
     private JTable table;
     private DefaultTableModel model;
 
-    // ===== FORM INPUT =====
     private JTextField txtMaPhong, txtTenPhong, txtSucChua;
     private JComboBox<String> cboLoaiPhong, cboTinhTrang;
 
@@ -43,23 +40,16 @@ public class FrmPhongHoc extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // ===== 1. PANEL NORTH: CHỨA TIÊU ĐỀ + BỘ LỌC (FILTER) =====
-        // Sử dụng BorderLayout để Tiêu đề nằm trên, Bộ lọc nằm dưới
         JPanel pnlNorth = new JPanel(new BorderLayout(0, 10));
 
-        // -- Tiêu đề --
         JLabel lblTitle = new JLabel("QUẢN LÝ PHÒNG HỌC", JLabel.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
         lblTitle.setForeground(new Color(0, 102, 204));
-        lblTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0)); // Tạo khoảng cách nhỏ
-        
-        // Thêm tiêu đề vào vị trí trên cùng của pnlNorth
+        lblTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
         pnlNorth.add(lblTitle, BorderLayout.NORTH); 
 
-        // -- Bộ lọc (Filter/Search) --
-        JPanel pnlTop = new JPanel(new GridLayout(2, 1, 5, 5)); // Panel chứa 2 dòng công cụ
+        JPanel pnlTop = new JPanel(new GridLayout(2, 1, 5, 5));
 
-        // --- Dòng 1: Xem danh sách ---
         JPanel pnlView = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
         pnlView.setBorder(new TitledBorder("Xem danh sách"));
         btnXem = new JButton("Xem tất cả phòng");
@@ -67,7 +57,6 @@ public class FrmPhongHoc extends JPanel {
         pnlView.add(btnXem);
         pnlTop.add(pnlView);
 
-        // --- Dòng 2: Tìm kiếm ---
         JPanel pnlSearch = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
         pnlSearch.setBorder(new TitledBorder("Tìm kiếm"));
 
@@ -94,14 +83,10 @@ public class FrmPhongHoc extends JPanel {
         pnlSearch.add(btnTim);
         pnlTop.add(pnlSearch);
 
-        // Thêm bộ lọc (pnlTop) vào phần giữa của pnlNorth
         pnlNorth.add(pnlTop, BorderLayout.CENTER);
 
-        // ==> CUỐI CÙNG: Đưa cả khối pnlNorth ra giao diện chính
         add(pnlNorth, BorderLayout.NORTH);
 
-
-        // ===== 2. TABLE (CENTER) =====
         model = new DefaultTableModel(
                 new String[]{"Mã phòng", "Tên phòng", "Sức chứa", "Loại", "Tình trạng"}, 0
         );
@@ -112,8 +97,6 @@ public class FrmPhongHoc extends JPanel {
         table.getTableHeader().setDefaultRenderer(new TienIch.CustomTableHeaderRenderer());
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-
-        // ===== 3. FORM INPUT (SOUTH) =====
         JPanel pnlSouth = new JPanel(new BorderLayout());
         pnlSouth.setBorder(new TitledBorder("Cập nhật phòng học"));
 
@@ -194,7 +177,6 @@ public class FrmPhongHoc extends JPanel {
         setCrudButtonState(true, false, false, false, false);
     }
 
-    // ===== GET FILTER =====
     public String getMaPhongTim() {
         return txtMaPhongTim.getText().trim();
     }
@@ -207,7 +189,6 @@ public class FrmPhongHoc extends JPanel {
         return cboTinhTrangTim.getSelectedItem().toString();
     }
 
-    // ===== GET INPUT =====
     public PhongHoc getPhongHocInput() {
         PhongHoc p = new PhongHoc();
         p.setMaPhong(txtMaPhong.getText().trim());
@@ -218,7 +199,6 @@ public class FrmPhongHoc extends JPanel {
         return p;
     }
 
-    // ===== TABLE =====
     public void setTableData(List<PhongHoc> list) {
         model.setRowCount(0);
         for (PhongHoc p : list) {
@@ -266,7 +246,6 @@ public class FrmPhongHoc extends JPanel {
         JOptionPane.showMessageDialog(this, msg);
     }
 
-    // ===== EVENTS =====
     public JButton getBtnThem() { return btnThem; }
     public JButton getBtnSua() { return btnSua; }
     public JButton getBtnXoa() { return btnXoa; }
