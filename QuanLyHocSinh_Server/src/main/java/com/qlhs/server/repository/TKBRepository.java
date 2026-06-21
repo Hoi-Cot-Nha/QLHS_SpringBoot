@@ -1,0 +1,16 @@
+package com.qlhs.server.repository;
+
+import com.qlhs.server.entity.TKB;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface TKBRepository extends JpaRepository<TKB,String> {
+    List<TKB> findByMaLop(String maLop);
+    List<TKB> findByMaMH(String maMH);
+    List<TKB> findByMaPH(String maPH);
+    List<TKB> findByMaGV(String maGV);
+    List<TKB> findByThu(int thu);
+}

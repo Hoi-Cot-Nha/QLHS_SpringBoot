@@ -1,45 +1,46 @@
 package Controller.ThuTrang;
 
-import Dao.TKBDAO;
+import Api.TKBApiClient;
 import Model.TKB;
-import View.ThuTrang.FrmTKB;
 import TienIch.XuatExcel;
+import View.ThuTrang.FrmTKB;
 
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import javax.swing.JOptionPane;
 
 public class TKBController {
     private FrmTKB view;
-    private TKBDAO dao;
+    private TKBApiClient apiClient;
 
     public TKBController(FrmTKB view) {
         this.view = view;
-        this.dao = new TKBDAO();
+        this.apiClient = new TKBApiClient();
 
-        // Đổ danh sách lớp vào ComboBox cho Admin/GV
-        if (!Model.Auth.isHocSinh()) {
-            view.setCboLocMaLop(dao.getDistinctMaLop());
+        try {
+            if (!Model.Auth.isHocSinh()) {
+                view.setCboLocMaLop(apiClient.getDistinctMaLop());
+            }
+        } catch (Exception ex) {
+            view.showMessage("Không thể tải danh sách lớp: " + ex.getMessage());
         }
 
         initEvents();
-        loadData(); // Tự động load dữ liệu khi vào trang
+        loadData();
     }
 
     private void initEvents() {
         boolean[] editMode = {false};
-        Runnable setIdleState = () -> view.setCrudButtonState(true, false, false, false, false);
-        Runnable setAddState = () -> view.setCrudButtonState(false, false, false, true, true);
-        Runnable setSelectedState = () -> view.setCrudButtonState(false, true, true, false, true);
-        Runnable setEditState = () -> view.setCrudButtonState(false, true, true, true, true);
+        Runnable setIdleState    = () -> view.setCrudButtonState(true, false, false, false, false);
+        Runnable setAddState     = () -> view.setCrudButtonState(false, false, false, true, true);
+        Runnable setSelectedState= () -> view.setCrudButtonState(false, true, true, false, true);
+        Runnable setEditState    = () -> view.setCrudButtonState(false, true, true, true, true);
         setIdleState.run();
 
-        // 1. Nút tải lại / Nút lọc kết quả
         view.addBtnXemDanhSachListener(e -> loadData());
-        view.addBtnLocTimKiemListener(e -> loadData()); // Trỏ chung về hàm loadData cực kỳ gọn
+        view.addBtnLocTimKiemListener(e -> loadData());
 
-        // 2. Các nút CRUD cơ bản
         view.addBtnThemListener(e -> {
             editMode[0] = false;
             view.clearForm();
@@ -59,22 +60,28 @@ public class TKBController {
             int row = view.getTable().getSelectedRow();
             if (row == -1) { view.showMessage("Vui lòng chọn dòng cần xóa"); return; }
 
-            int confirm = JOptionPane.showConfirmDialog(view, "Bạn có chắc chắn muốn xóa TKB này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            int confirm = JOptionPane.showConfirmDialog(view, "Bạn có chắc chắn muốn xóa?",
+                    "Xác nhận", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                int id = Integer.parseInt(view.getTable().getValueAt(row, 0).toString());
-                dao.delete(id);
-                view.showMessage("Đã xóa");
-                loadData();
-                view.clearForm();
-                editMode[0] = false;
-                setIdleState.run();
+                try {
+                    String maTKB = view.getTable().getValueAt(row, 0).toString();
+                    apiClient.delete(maTKB);
+                    view.showMessage("Đã xóa");
+                    loadData();
+                    view.clearForm();
+                    editMode[0] = false;
+                    setIdleState.run();
+                } catch (Exception ex) {
+                    view.showMessage("Lỗi xóa: " + ex.getMessage());
+                }
             }
         });
 
         view.addBtnLuuListener(e -> {
             try {
                 TKB t = view.getTKBInput();
-                if (t.getMaLop().isEmpty() || t.getMaMH().isEmpty() || t.getMaGV().isEmpty() || t.getMaPhong().isEmpty()) {
+                if (t.getMaLop().isEmpty() || t.getMaMH().isEmpty()
+                        || t.getMaGV().isEmpty() || t.getMaPhong().isEmpty()) {
                     view.showMessage("Vui lòng nhập đầy đủ thông tin");
                     return;
                 }
@@ -82,16 +89,14 @@ public class TKBController {
                     view.showMessage("Tiết bắt đầu phải nhỏ hơn hoặc bằng tiết kết thúc");
                     return;
                 }
-                if (dao.isTrungPhongTiet(t)) {
-                    view.showMessage("Trùng phòng hoặc trùng tiết");
-                    return;
-                }
-
                 if (editMode[0]) {
-                    view.showMessage("Cập nhật thời khóa biểu thành công");
+                    String maTKB = view.getTable().getValueAt(
+                            view.getTable().getSelectedRow(), 0).toString();
+                    apiClient.update(maTKB, t);
+                    view.showMessage("Cập nhật thành công");
                 } else {
-                    dao.insert(t);
-                    view.showMessage("Thêm thời khóa biểu thành công");
+                    apiClient.create(t);
+                    view.showMessage("Thêm thành công");
                 }
                 loadData();
                 view.clearForm();
@@ -100,7 +105,7 @@ public class TKBController {
             } catch (NumberFormatException ex) {
                 view.showMessage("Tiết bắt đầu / kết thúc phải là số");
             } catch (Exception ex) {
-                view.showMessage("Lỗi khi thêm TKB: " + ex.getMessage());
+                view.showMessage("Lỗi: " + ex.getMessage());
             }
         });
 
@@ -108,6 +113,12 @@ public class TKBController {
             view.clearForm();
             editMode[0] = false;
             view.getTable().clearSelection();
+            setIdleState.run();
+        });
+
+        view.addBtnHuyListener(e -> {
+            view.clearForm();
+            editMode[0] = false;
             setIdleState.run();
         });
 
@@ -126,25 +137,18 @@ public class TKBController {
         view.addBtnXuatExcelListener(e -> XuatExcel.xuatFileExcel(view.getTable(), view));
     }
 
-    // === HÀM LOAD VÀ LỌC DỮ LIỆU TỔNG HỢP ===
     public void loadData() {
         try {
-            boolean isHocSinh = Model.Auth.isHocSinh();
-            String maNguoiDung = Model.Auth.maNguoiDung;
             String locLop = view.getLocMaLop();
             String locMon = view.getLocMon();
             int locThu = view.getLocThu();
-
-            // Gọi thẳng hàm lọc duy nhất từ DAO
-            List<TKB> list = dao.getTKBByFilter(isHocSinh, maNguoiDung, locLop, locMon, locThu);
-
+            List<TKB> list = apiClient.getByFilter(locLop, locMon, locThu);
             view.setTableData(list);
-
-            if(list.isEmpty() && !locMon.isEmpty()) {
+            if (list.isEmpty() && !locMon.isEmpty()) {
                 view.showMessage("Không tìm thấy TKB phù hợp với bộ lọc!");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            view.showMessage("Không thể kết nối server: " + ex.getMessage());
         }
     }
 }

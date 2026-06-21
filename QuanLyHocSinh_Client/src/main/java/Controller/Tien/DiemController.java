@@ -1,8 +1,8 @@
 package Controller.Tien; 
 
 import Api.DiemApi;
+import Api.MonHocApiClient;
 import Dao.LopDAO;
-import Dao.MonHocDAO;
 import Model.Auth;
 import Model.Diem;
 import Model.LopGVCN;
@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import TienIch.XuatExcel;
-import Model.Auth;
 
 public class DiemController { 
     
@@ -31,7 +30,7 @@ public class DiemController {
 
     private void loadComboBoxData() {
         LopDAO lopDAO = new LopDAO();
-        MonHocDAO monHocDAO = new MonHocDAO();
+        MonHocApiClient monHocApiClient = new MonHocApiClient();
 
         List<LopGVCN> lops = lopDAO.getAllLop();
         List<String> maLops = new ArrayList<>();
@@ -40,10 +39,16 @@ public class DiemController {
         }
         view.setMaLopData(maLops);
 
-        List<MonHoc> mons = monHocDAO.getAll();
         List<String> maMons = new ArrayList<>();
-        for (MonHoc m : mons) {
-            maMons.add(m.getMaMH());
+        try {
+            List<MonHoc> mons = monHocApiClient.getAll();
+            for (MonHoc m : mons) {
+                maMons.add(m.getMaMH());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Nếu lỗi kết nối, có thể đưa ra thông báo hoặc để trống danh sách
+            System.out.println("Lỗi khi tải danh sách môn học từ API: " + e.getMessage());
         }
         view.setMonHocData(maMons);
 
