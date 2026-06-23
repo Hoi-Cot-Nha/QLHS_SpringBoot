@@ -20,36 +20,48 @@ public class PhongHocRestController {
         return phongHocService.getAllPH();
     }
 
-    @GetMapping("/{MaPH}")
-    public ResponseEntity<PhongHoc> getByIdPH(@PathVariable String maPH){
-        return phongHocService.getByIdPH(maPH)
+    @GetMapping("/{maPhong}")
+    public ResponseEntity<PhongHoc> getByIdPH(@PathVariable String maPhong){
+        return phongHocService.getByIdPH(maPhong)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/search")
+    public List<PhongHoc> search(
+            @RequestParam(defaultValue = "") String ma,
+            @RequestParam(defaultValue = "") String loai,
+            @RequestParam(defaultValue = "") String tinhTrang) {
+        return phongHocService.search(ma, loai, tinhTrang);
+    }
+
+
     @PostMapping
-    public ResponseEntity<PhongHoc> create(@RequestBody PhongHoc phongHoc){
-        if (phongHocService.existsPH(phongHoc.getMaPH())){
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<PhongHoc> create(@RequestBody PhongHoc phongHoc) {
+        if (phongHocService.existsPH(phongHoc.getMaPhong())) {
+            return ResponseEntity.status(409).body(null);
+        }
+        if (phongHocService.existsByTenPhong(phongHoc.getTenPhong())) {
+            return ResponseEntity.status(422).body(null);
         }
         return ResponseEntity.ok(phongHocService.save(phongHoc));
     }
 
-    @PutMapping("/{MaPH}")
-    public ResponseEntity<PhongHoc> update(@PathVariable String maPH, @RequestBody PhongHoc phongHoc){
-        if (!phongHocService.existsPH(maPH)){
+    @PutMapping("/{maPhong}")
+    public ResponseEntity<PhongHoc> update(@PathVariable String maPhong, @RequestBody PhongHoc phongHoc){
+        if (!phongHocService.existsPH(maPhong)){
             return ResponseEntity.notFound().build();
         }
-        phongHoc.setMaPH(maPH);
+        phongHoc.setMaPhong(maPhong);
         return ResponseEntity.ok(phongHocService.save(phongHoc));
     }
 
-    @DeleteMapping("/{MaPH}")
-    public ResponseEntity<PhongHoc> delete(@PathVariable String maPH){
-        if (!phongHocService.existsPH(maPH)){
+    @DeleteMapping("/{maPhong}")
+    public ResponseEntity<PhongHoc> delete(@PathVariable String maPhong){
+        if (!phongHocService.existsPH(maPhong)){
             return ResponseEntity.notFound().build();
         }
-        phongHocService.delete(maPH);
+        phongHocService.delete(maPhong);
         return ResponseEntity.ok().build();
     }
 }

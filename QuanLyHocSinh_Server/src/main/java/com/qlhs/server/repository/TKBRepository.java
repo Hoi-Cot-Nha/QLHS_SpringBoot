@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TKBRepository extends JpaRepository<TKB,String> {
+public interface TKBRepository extends JpaRepository<TKB,Integer> {
     List<TKB> findByMaLop(String maLop);
     List<TKB> findByMaMH(String maMH);
-    List<TKB> findByMaPH(String maPH);
+    List<TKB> findByMaPhong(String maPhong);
     List<TKB> findByMaGV(String maGV);
     List<TKB> findByThu(int thu);
 }
