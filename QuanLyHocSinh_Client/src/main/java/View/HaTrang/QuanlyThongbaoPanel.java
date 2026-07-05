@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package View.HaTrang;
+
 import Controller.HaTrang.Thongbaocontroller;
 import Model.Thongbao;
 import java.awt.*;
@@ -13,14 +14,15 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import TienIch.ButtonStyleHelper;
 import TienIch.TableSortHelper;
+
 /**
  *
  * @author ADMIN
  */
-public class QuanlyThongbaoPanel extends JPanel{
+public class QuanlyThongbaoPanel extends JPanel {
     private JTable table;
     private DefaultTableModel model;
-    private JTextField txtTieuDe, txtNguoiGui, txtLocKeyword; 
+    private JTextField txtTieuDe, txtNguoiGui, txtLocKeyword;
     private JTextArea txtNoiDung;
     private JButton btnLoc, btnThem, btnSua, btnXoa, btnLuu, btnHuy;
 
@@ -34,15 +36,14 @@ public class QuanlyThongbaoPanel extends JPanel{
         setBackground(new Color(245, 245, 245));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
- 
         JPanel pnlNorth = new JPanel(new BorderLayout(10, 10));
         pnlNorth.setOpaque(false);
-        //thêm ngày 09/04/2026
+
         String titleText = (Model.Auth.isHocSinh() || Model.Auth.isGiaoVien()) ? "THÔNG BÁO" : "QUẢN LÝ THÔNG BÁO";
         JLabel lblTitle = new JLabel(titleText, JLabel.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
         lblTitle.setForeground(new Color(41, 128, 185));
-        
+
         JPanel pnlFilter = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
         pnlFilter.setBackground(Color.WHITE);
         pnlFilter.add(new JLabel("Tìm kiếm:"));
@@ -54,7 +55,7 @@ public class QuanlyThongbaoPanel extends JPanel{
         pnlNorth.add(lblTitle, BorderLayout.NORTH);
         pnlNorth.add(pnlFilter, BorderLayout.SOUTH);
         add(pnlNorth, BorderLayout.NORTH);
- 
+
         String[] cols = {"STT", "Tiêu đề", "Người gửi", "Ngày tạo", "Nội dung"};
         model = new DefaultTableModel(cols, 0) {
             @Override
@@ -66,7 +67,6 @@ public class QuanlyThongbaoPanel extends JPanel{
         table.setRowHeight(30);
         table.getTableHeader().setDefaultRenderer(new TienIch.CustomTableHeaderRenderer());
         add(new JScrollPane(table), BorderLayout.CENTER);
-
 
         JPanel pnlSouth = new JPanel(new BorderLayout(10, 10));
         pnlSouth.setOpaque(false);
@@ -97,50 +97,49 @@ public class QuanlyThongbaoPanel extends JPanel{
         ButtonStyleHelper.styleButtonSave(btnLuu);
         btnHuy = new JButton("Hủy");
         ButtonStyleHelper.styleButtonCancel(btnHuy);
-        
+
         Dimension sz = new Dimension(90, 35);
         btnThem.setPreferredSize(sz);
         btnSua.setPreferredSize(sz);
         btnXoa.setPreferredSize(sz);
         btnLuu.setPreferredSize(sz);
         btnHuy.setPreferredSize(sz);
-        
-        pnlBtns.add(btnThem); 
-        pnlBtns.add(btnSua); 
-        pnlBtns.add(btnXoa); 
+
+        pnlBtns.add(btnThem);
+        pnlBtns.add(btnSua);
+        pnlBtns.add(btnXoa);
         pnlBtns.add(btnLuu);
         pnlBtns.add(btnHuy);
 
         pnlSouth.add(pnlInput, BorderLayout.CENTER);
         pnlSouth.add(pnlBtns, BorderLayout.SOUTH);
         add(pnlSouth, BorderLayout.SOUTH);
-        //thêm ngyaf 13/04/2026
+
         if (Model.Auth.isHocSinh() || Model.Auth.isGiaoVien()) {
-            //pnlFilter.setVisible(false);
             pnlSouth.setVisible(false);
         }
 
         setCrudButtonState(true, false, false, false, false);
+        setInputEditable(false); // Khóa form lúc khởi tạo ban đầu
+    }
 
-        table.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int row = table.getSelectedRow();
-                if (row != -1) {
-         
-                    txtTieuDe.setText(table.getValueAt(row, 1).toString());
-                    txtNguoiGui.setText(table.getValueAt(row, 2).toString());
-               
-                    txtNoiDung.setText(table.getValueAt(row, 4).toString());
-                }
-            }
-        });
+    // Điều khiển trạng thái cho phép nhập liệu hoặc khóa ô văn bản
+    public void setInputEditable(boolean editable) {
+        txtTieuDe.setEditable(editable);
+        txtNguoiGui.setEditable(editable);
+        txtNoiDung.setEditable(editable);
+
+        // Đổi màu nền để người dùng nhận biết biểu thị đóng/mở khóa ô nhập
+        Color bgColor = editable ? Color.WHITE : new Color(240, 240, 240);
+        txtTieuDe.setBackground(bgColor);
+        txtNguoiGui.setBackground(bgColor);
+        txtNoiDung.setBackground(bgColor);
     }
 
     private JButton createBtn(String t, Color c) {
-        JButton b = new JButton(t); 
+        JButton b = new JButton(t);
         b.setBackground(c);
-        b.setPreferredSize(new Dimension(120, 35)); 
+        b.setPreferredSize(new Dimension(120, 35));
         return b;
     }
 
@@ -149,8 +148,8 @@ public class QuanlyThongbaoPanel extends JPanel{
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         int stt = 1;
         for (Thongbao tb : list) {
-            model.addRow(new Object[]{stt++, tb.getTieuDe(), tb.getNguoiGui(), 
-                tb.getNgayTao() != null ? sdf.format(tb.getNgayTao()) : "", tb.getNoiDung()});
+            model.addRow(new Object[]{stt++, tb.getTieuDe(), tb.getNguoiGui(),
+                    tb.getNgayTao() != null ? sdf.format(tb.getNgayTao()) : "", tb.getNoiDung()});
         }
     }
 
@@ -161,45 +160,23 @@ public class QuanlyThongbaoPanel extends JPanel{
     }
 
     public void refresh() {
-        txtTieuDe.setText(""); txtNguoiGui.setText(""); 
+        txtTieuDe.setText(""); txtNguoiGui.setText("");
         txtNoiDung.setText(""); txtLocKeyword.setText("");
         table.clearSelection();
     }
 
+    public JTable getTable() { return table; }
+    public JButton getBtnThem() { return btnThem; }
+    public JButton getBtnSua() { return btnSua; }
+    public JButton getBtnXoa() { return btnXoa; }
+    public JButton getBtnLuu() { return btnLuu; }
+    public JButton getBtnHuy() { return btnHuy; }
+    public JButton getBtnLoc() { return btnLoc; }
+    public String getTieuDe() { return txtTieuDe.getText(); }
+    public String getNguoiGui() { return txtNguoiGui.getText(); }
+    public String getNoiDung() { return txtNoiDung.getText(); }
+    public String getLocKeyword() { return txtLocKeyword.getText(); }
 
-    public JTable getTable() { 
-        return table; 
-    }
-    public JButton getBtnThem() { 
-        return btnThem; 
-    }
-    public JButton getBtnSua() { 
-        return btnSua; 
-    }
-    public JButton getBtnXoa() { 
-        return btnXoa; 
-    }
-    public JButton getBtnLuu() { 
-        return btnLuu; 
-    }
-    public JButton getBtnHuy() { 
-        return btnHuy; 
-    }
-    public JButton getBtnLoc() {
-        return btnLoc; 
-    }
-    public String getTieuDe() { 
-        return txtTieuDe.getText(); 
-    }
-    public String getNguoiGui() { 
-        return txtNguoiGui.getText(); 
-    }
-    public String getNoiDung() { 
-        return txtNoiDung.getText(); 
-    }
-    public String getLocKeyword() { 
-        return txtLocKeyword.getText(); 
-    }
     public void setCrudButtonState(boolean them, boolean sua, boolean xoa, boolean luu, boolean huy) {
         btnThem.setEnabled(them);
         btnSua.setEnabled(sua);
@@ -207,7 +184,7 @@ public class QuanlyThongbaoPanel extends JPanel{
         btnLuu.setEnabled(luu);
         btnHuy.setEnabled(huy);
     }
-    
+
     public void addBtnThemListener(java.awt.event.ActionListener ac) { btnThem.addActionListener(ac); }
     public void addBtnSuaListener(java.awt.event.ActionListener ac) { btnSua.addActionListener(ac); }
     public void addBtnXoaListener(java.awt.event.ActionListener ac) { btnXoa.addActionListener(ac); }

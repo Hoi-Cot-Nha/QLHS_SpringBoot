@@ -1,39 +1,58 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Controller.HaTrang;
-import Dao.PhuckhaoDAO;
+
+import Api.PhucKhaoApiClient;
 import Model.Phuckhao;
 import View.HaTrang.QuanLyPhucKhaoPanel;
 import java.awt.event.*;
 import java.util.List;
 import javax.swing.JOptionPane;
-/**
- *
- * @author ADMIN
- */
+
 public class Phuckhaocontroller {
     private QuanLyPhucKhaoPanel view;
-    private PhuckhaoDAO dao;
+    private PhucKhaoApiClient dao;
     private List<Phuckhao> listCurrent;
 
     public Phuckhaocontroller(QuanLyPhucKhaoPanel view) {
         this.view = view;
-        this.dao = new PhuckhaoDAO();
+        this.dao = new PhucKhaoApiClient();
         initEvents();
         loadData();
     }
 
     private void initEvents() {
         boolean[] editMode = {false};
-        Runnable setIdleState = () -> view.setCrudButtonState(true, false, false, false, false);
-        Runnable setAddState = () -> view.setCrudButtonState(false, false, false, true, true);
-        Runnable setSelectedState = () -> view.setCrudButtonState(false, true, true, false, true);
-        Runnable setEditState = () -> view.setCrudButtonState(false, true, true, true, true);
+
+        Runnable setIdleState = () -> {
+            if (Model.Auth.isHocSinh()) {
+                view.setCrudButtonState(true, false, false, false, false);
+            } else {
+                view.setCrudButtonState(false, false, false, false, false);
+            }
+            view.setInputEditable(false);
+        };
+
+        Runnable setAddState = () -> {
+            view.setCrudButtonState(false, false, false, true, true);
+            view.setInputEditable(true);
+        };
+
+        Runnable setSelectedState = () -> {
+            if (Model.Auth.isHocSinh()) {
+                view.setCrudButtonState(false, true, true, false, true);
+            } else {
+                view.setCrudButtonState(false, true, false, false, true);
+            }
+            view.setInputEditable(false);
+        };
+
+        Runnable setEditState = () -> {
+            view.setCrudButtonState(false, false, false, true, true);
+            view.setInputEditable(true);
+        };
+
         setIdleState.run();
 
-        // Table click - select row and fill form
+        // Table click
         view.getTable().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -46,7 +65,7 @@ public class Phuckhaocontroller {
             }
         });
 
-        // Add button - clear form for new entry
+        // Add button
         view.getBtnThem().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -57,7 +76,7 @@ public class Phuckhaocontroller {
             }
         });
 
-        // Edit button - enable edit mode
+        // Edit button
         view.getBtnSua().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -67,66 +86,71 @@ public class Phuckhaocontroller {
                     view.fillForm(row);
                     setEditState.run();
                 } else {
-                    JOptionPane.showMessageDialog(view, "Chọn dòng cần sửa!");
+                    JOptionPane.showMessageDialog(view, "Vui lòng chọn dòng cần sửa trên danh sách trước!");
                 }
             }
         });
 
-        // Save button (handles both add and edit)
+        // Save button
         view.getBtnLuu().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (editMode[0]) {
-                    // Edit mode: update existing
                     int row = view.getTable().getSelectedRow();
                     if (row != -1 && validateForm()) {
                         Phuckhao pk = getForm();
-                        pk.setMaPK(listCurrent.get(row).getMaPK());
+                        int modelRow = view.getTable().convertRowIndexToModel(row);
+                        pk.setMaPK(listCurrent.get(modelRow).getMaPK());
                         if (dao.update(pk)) {
-                            JOptionPane.showMessageDialog(view, "Cập nhật thành công!");
+                            JOptionPane.showMessageDialog(view, "Cập nhật yêu cầu phúc khảo thành công!");
                             loadData();
                             view.refresh();
                             editMode[0] = false;
                             setIdleState.run();
+                        } else {
+                            JOptionPane.showMessageDialog(view, "Cập nhật thất bại!");
                         }
                     } else {
                         JOptionPane.showMessageDialog(view, "Chọn dòng cần sửa!");
                     }
                 } else {
-                    // Add mode: insert new
                     if (validateForm()) {
                         Phuckhao pk = getForm();
                         if (dao.insert(pk)) {
-                            JOptionPane.showMessageDialog(view, "Gửi yêu cầu thành công!");
-                            loadData(); 
+                            JOptionPane.showMessageDialog(view, "Gửi yêu cầu phúc khảo thành công!");
+                            loadData();
                             view.refresh();
                             editMode[0] = false;
                             setIdleState.run();
                         } else {
-                            JOptionPane.showMessageDialog(view, "Thêm thất bại! Kiểm tra lại Mã HS/MH có tồn tại không.");
+                            JOptionPane.showMessageDialog(view, "Thêm thất bại! Vui lòng kiểm tra lại Mã Môn Học.");
                         }
                     }
                 }
             }
         });
 
-        // Delete button with confirmation
+        // Delete button
         view.getBtnXoa().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int row = view.getTable().getSelectedRow();
                 if (row != -1) {
-                    int id = listCurrent.get(row).getMaPK();
+                    int modelRow = view.getTable().convertRowIndexToModel(row);
+                    int id = listCurrent.get(modelRow).getMaPK();
                     int confirm = JOptionPane.showConfirmDialog(
-                        view, "Bạn có chắc chắn muốn xóa?", "Xác nhận",
-                        JOptionPane.YES_NO_OPTION
+                            view, "Bạn có chắc chắn muốn xóa yêu cầu này?", "Xác nhận xóa",
+                            JOptionPane.YES_NO_OPTION
                     );
                     if (confirm == JOptionPane.YES_OPTION) {
                         if (dao.delete(id)) {
+                            JOptionPane.showMessageDialog(view, "Xóa đơn thành công!");
                             loadData();
                             view.refresh();
                             editMode[0] = false;
                             setIdleState.run();
+                        } else {
+                            JOptionPane.showMessageDialog(view, "Xóa đơn thất bại!");
                         }
                     }
                 } else {
@@ -135,44 +159,50 @@ public class Phuckhaocontroller {
             }
         });
 
-        // Search/Filter button
+        // Search/Filter button - ĐÃ SỬA CHUẨN CASE-INSENSITIVE
+        // Search/Filter button - ĐÃ ĐỒNG BỘ VỚI BACKEND
         view.getBtnLoc().addActionListener(new ActionListener() {
-            @Override 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 String tuKhoa = view.getLocKeyword().trim();
-                listCurrent = dao.search(tuKhoa); 
+
+                if (tuKhoa.isEmpty()) {
+                    loadData();
+                    return;
+                }
+                // Gọi API tìm kiếm từ Backend
+                List<Phuckhao> searchResult = dao.search(tuKhoa);
+
+                listCurrent = searchResult;
                 view.loadTable(listCurrent);
-                if (listCurrent.isEmpty()) {
-                    JOptionPane.showMessageDialog(view, "Không tìm thấy kết quả nào!");
+
+                if (listCurrent == null || listCurrent.isEmpty()) {
+                    JOptionPane.showMessageDialog(view, "Không tìm thấy yêu cầu phúc khảo nào với từ khóa: " + tuKhoa, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
 
-        // Reset/Cancel button
+        // Cancel button
         view.getBtnHuy().addActionListener(new ActionListener() {
-            @Override 
-            public void actionPerformed(ActionEvent e) { 
-                view.refresh(); 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                view.refresh();
                 loadData();
                 editMode[0] = false;
                 setIdleState.run();
             }
         });
     }
-    //thêm ngày 13/4/2026
-    // Tìm hàm load dữ liệu lên bảng trong Phuckhaocontroller và sửa lại thế này:
-    private void loadData() { // (Hoặc tên hàm load của bạn)
+
+    private void loadData() {
         try {
             List<Phuckhao> list;
-
             if (Model.Auth.isHocSinh()) {
-                // Nếu là học sinh, chỉ lấy danh sách của chính mình
                 list = dao.getByMaHS(Model.Auth.maNguoiDung);
             } else {
-                // Nếu là Admin/Giáo viên thì lấy tất cả
                 list = dao.getAll();
             }
-
+            listCurrent = list;
             view.loadTable(list);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -181,7 +211,7 @@ public class Phuckhaocontroller {
 
     private boolean validateForm() {
         if (view.getMaHS().trim().isEmpty() || view.getMaMH().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(view, "Mã HS và Mã MH không được để trống!");
+            JOptionPane.showMessageDialog(view, "Mã học sinh và Mã môn học không được để trống!");
             return false;
         }
         return true;
@@ -189,10 +219,11 @@ public class Phuckhaocontroller {
 
     private Phuckhao getForm() {
         Phuckhao pk = new Phuckhao();
-        pk.setMaHS(view.getMaHS().trim());
-        pk.setMaMH(view.getMaMH().trim());
+        pk.setMaHS(view.getMaHS().trim().toUpperCase());
+        pk.setMaMH(view.getMaMH().trim().toUpperCase());
         pk.setTrangThai(view.getTrangThai().trim());
         pk.setLyDo(view.getLyDo().trim());
+        pk.setNgayGui(new java.util.Date());
         return pk;
     }
 }
