@@ -1,6 +1,7 @@
 package Controller.ThuTrang;
 
-import Api.TKBApiClient;
+import Api.ThuTrang.TKBApiClient;
+import Api.Đai.HocSinhApi;
 import Model.TKB;
 import TienIch.XuatExcel;
 import View.ThuTrang.FrmTKB;
@@ -39,22 +40,22 @@ public class TKBController {
         Runnable setEditState    = () -> view.setCrudButtonState(false, true, true, true, true);
         setIdleState.run();
 
-        view.addBtnXemDanhSachListener(e -> loadData());
-        view.addBtnLocTimKiemListener( e -> {
+        view.addBtnLocTimKiemListener(e -> {
             try {
-                String locLop = view.getLocMaLop();
-                String locMon = view.getLocMon();
-                int locThu = view.getLocThu();
-                List<TKB> list = apiClient.getByFilter(locLop, locMon, locThu);
-                view.setTableData(list);
-                if (list.isEmpty() && !locMon.isEmpty()) {
-                    view.showMessage("Không tìm thấy TKB phù hợp với bộ lọc!");
+                String maLop = view.getLocMaLop();
+                String maMH = view.getLocMon();
+                int thu = view.getLocThu();
+                if ((maLop.isEmpty() || maLop.equals("Tất cả")) && maMH.isEmpty() && thu == 0) {
+                    loadData();
+                } else {
+                    List<TKB> list = apiClient.getByFilter(maLop, maMH, thu);
+                    list = filterByRole(list);
+                    view.setTableData(list);
                 }
             } catch (Exception ex) {
                 view.showMessage("Không thể kết nối server: " + ex.getMessage());
             }
-        }
-        );
+        });
 
         view.addBtnThemListener(e -> {
             editMode[0] = false;
@@ -155,9 +156,23 @@ public class TKBController {
     public void loadData() {
         try {
             List<TKB> list = apiClient.getAll();
+            list = filterByRole(list);
             view.setTableData(list);
         } catch (Exception ex) {
             view.showMessage("Không thể kết nối server: " + ex.getMessage());
         }
+    }
+
+    private List<TKB> filterByRole(List<TKB> list) {
+        if (Model.Auth.isHocSinh()) {
+            Model.HocSinh hs = new HocSinhApi().getHocSinh(Model.Auth.maNguoiDung);
+            if (hs != null && hs.getMaLop() != null) {
+                return list.stream().filter(t -> hs.getMaLop().equals(t.getMaLop())).collect(java.util.stream.Collectors.toList());
+            }
+            return new java.util.ArrayList<>();
+        } else if (Model.Auth.isGiaoVien()) {
+            return list.stream().filter(t -> Model.Auth.maNguoiDung.equals(t.getMaGV())).collect(java.util.stream.Collectors.toList());
+        }
+        return list;
     }
 }

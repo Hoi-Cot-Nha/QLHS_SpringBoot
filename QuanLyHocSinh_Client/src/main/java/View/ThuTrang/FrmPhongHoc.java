@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package View.ThuTrang;
 
 import Model.PhongHoc;
@@ -15,21 +11,17 @@ import java.util.List;
 import TienIch.ButtonStyleHelper;
 import TienIch.TableSortHelper;
 
-/**
- *
- * @author Admin
- */
 public class FrmPhongHoc extends JPanel {
+
     private JTextField txtMaPhongTim;
     private JComboBox<String> cboLoaiPhongTim, cboTinhTrangTim;
-    private JButton btnXem, btnTim;
+    private JButton btnTim;
 
     private JTable table;
     private DefaultTableModel model;
 
     private JTextField txtMaPhong, txtTenPhong, txtSucChua;
     private JComboBox<String> cboLoaiPhong, cboTinhTrang;
-
     private JButton btnThem, btnSua, btnXoa, btnLuu, btnHuy;
 
     public FrmPhongHoc() {
@@ -40,22 +32,14 @@ public class FrmPhongHoc extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        // NORTH: tiêu đề + tìm kiếm
         JPanel pnlNorth = new JPanel(new BorderLayout(0, 10));
 
         JLabel lblTitle = new JLabel("QUẢN LÝ PHÒNG HỌC", JLabel.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
         lblTitle.setForeground(new Color(0, 102, 204));
         lblTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
-        pnlNorth.add(lblTitle, BorderLayout.NORTH); 
-
-        JPanel pnlTop = new JPanel(new GridLayout(2, 1, 5, 5));
-
-        JPanel pnlView = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
-        pnlView.setBorder(new TitledBorder("Xem danh sách"));
-        btnXem = new JButton("Xem tất cả phòng");
-        ButtonStyleHelper.styleButtonView(btnXem);
-        pnlView.add(btnXem);
-        pnlTop.add(pnlView);
+        pnlNorth.add(lblTitle, BorderLayout.NORTH);
 
         JPanel pnlSearch = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
         pnlSearch.setBorder(new TitledBorder("Tìm kiếm"));
@@ -65,31 +49,23 @@ public class FrmPhongHoc extends JPanel {
         pnlSearch.add(txtMaPhongTim);
 
         pnlSearch.add(new JLabel("Loại phòng:"));
-        cboLoaiPhongTim = new JComboBox<>(new String[]{
-            "", "Tất cả", "Lý thuyết", "Thực hành"
-        });
-        cboLoaiPhongTim.setSelectedIndex(0);
+        cboLoaiPhongTim = new JComboBox<>(new String[]{"Tất cả", "Lý thuyết", "Thực hành"});
         pnlSearch.add(cboLoaiPhongTim);
 
         pnlSearch.add(new JLabel("Tình trạng:"));
-        cboTinhTrangTim = new JComboBox<>(new String[]{
-            "", "Tất cả", "Trống", "Đang học", "Bảo trì"
-        });
-        cboTinhTrangTim.setSelectedIndex(0);
+        cboTinhTrangTim = new JComboBox<>(new String[]{"Tất cả", "Trống", "Đang học", "Bảo trì"});
         pnlSearch.add(cboTinhTrangTim);
 
         btnTim = new JButton("Tìm");
         ButtonStyleHelper.styleButtonSearch(btnTim);
         pnlSearch.add(btnTim);
-        pnlTop.add(pnlSearch);
 
-        pnlNorth.add(pnlTop, BorderLayout.CENTER);
-
+        pnlNorth.add(pnlSearch, BorderLayout.CENTER);
         add(pnlNorth, BorderLayout.NORTH);
 
+        // TABLE
         model = new DefaultTableModel(
-                new String[]{"Mã phòng", "Tên phòng", "Sức chứa", "Loại", "Tình trạng"}, 0
-        );
+                new String[]{"Mã phòng", "Tên phòng", "Sức chứa", "Loại", "Tình trạng"}, 0);
         table = new JTable(model);
         TableSortHelper.enableTableSorting(table);
         table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -97,6 +73,7 @@ public class FrmPhongHoc extends JPanel {
         table.getTableHeader().setDefaultRenderer(new TienIch.CustomTableHeaderRenderer());
         add(new JScrollPane(table), BorderLayout.CENTER);
 
+        // SOUTH: form nhập
         JPanel pnlSouth = new JPanel(new BorderLayout());
         pnlSouth.setBorder(new TitledBorder("Cập nhật phòng học"));
 
@@ -105,89 +82,50 @@ public class FrmPhongHoc extends JPanel {
         gbc.insets = new Insets(5, 10, 5, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        txtMaPhong = new JTextField(15);
+        txtMaPhong  = new JTextField(15);
         txtTenPhong = new JTextField(35);
-        txtSucChua = new JTextField(15);
+        txtSucChua  = new JTextField(15);
+        cboLoaiPhong = new JComboBox<>(new String[]{"Lý thuyết", "Thực hành"});
+        cboTinhTrang = new JComboBox<>(new String[]{"Trống", "Đang học", "Bảo trì"});
 
-        cboLoaiPhong = new JComboBox<>(new String[]{
-            "", "Lý thuyết", "Thực hành"
-        });
-        cboLoaiPhong.setSelectedIndex(0);
+        gbc.gridx = 0; gbc.gridy = 0; pnlInput.add(new JLabel("Mã phòng"), gbc);
+        gbc.gridx = 1; pnlInput.add(txtMaPhong, gbc);
+        gbc.gridx = 2; pnlInput.add(new JLabel("Tên phòng"), gbc);
+        gbc.gridx = 3; pnlInput.add(txtTenPhong, gbc);
 
-        cboTinhTrang = new JComboBox<>(new String[]{
-            "", "Trống", "Đang học", "Bảo trì"
-        });
-        cboTinhTrang.setSelectedIndex(0);
+        gbc.gridx = 0; gbc.gridy = 1; pnlInput.add(new JLabel("Sức chứa"), gbc);
+        gbc.gridx = 1; pnlInput.add(txtSucChua, gbc);
+        gbc.gridx = 2; pnlInput.add(new JLabel("Loại phòng"), gbc);
+        gbc.gridx = 3; pnlInput.add(cboLoaiPhong, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 0;
-        pnlInput.add(new JLabel("Mã phòng"), gbc);
-        gbc.gridx = 1;
-        pnlInput.add(txtMaPhong, gbc);
-
-        gbc.gridx = 2;
-        pnlInput.add(new JLabel("Tên phòng"), gbc);
-        gbc.gridx = 3;
-        pnlInput.add(txtTenPhong, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 1;
-        pnlInput.add(new JLabel("Sức chứa"), gbc);
-        gbc.gridx = 1;
-        pnlInput.add(txtSucChua, gbc);
-
-        gbc.gridx = 2;
-        pnlInput.add(new JLabel("Loại phòng"), gbc);
-        gbc.gridx = 3;
-        pnlInput.add(cboLoaiPhong, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 2;
-        pnlInput.add(new JLabel("Tình trạng"), gbc);
-        gbc.gridx = 1;
-        pnlInput.add(cboTinhTrang, gbc);
+        gbc.gridx = 0; gbc.gridy = 2; pnlInput.add(new JLabel("Tình trạng"), gbc);
+        gbc.gridx = 1; pnlInput.add(cboTinhTrang, gbc);
 
         pnlSouth.add(pnlInput, BorderLayout.CENTER);
 
         JPanel pnlBtn = new JPanel(new FlowLayout());
-        btnThem = new JButton("Thêm");
-        ButtonStyleHelper.styleButtonAdd(btnThem);
-        btnSua = new JButton("Sửa");
-        ButtonStyleHelper.styleButtonEdit(btnSua);
-        btnXoa = new JButton("Xóa");
-        ButtonStyleHelper.styleButtonDelete(btnXoa);
-        btnLuu = new JButton("Lưu");
-        ButtonStyleHelper.styleButtonSave(btnLuu);
-        btnHuy = new JButton("Hủy");
-        ButtonStyleHelper.styleButtonCancel(btnHuy);
+        btnThem = new JButton("Thêm"); ButtonStyleHelper.styleButtonAdd(btnThem);
+        btnSua  = new JButton("Sửa");  ButtonStyleHelper.styleButtonEdit(btnSua);
+        btnXoa  = new JButton("Xóa");  ButtonStyleHelper.styleButtonDelete(btnXoa);
+        btnLuu  = new JButton("Lưu");  ButtonStyleHelper.styleButtonSave(btnLuu);
+        btnHuy  = new JButton("Hủy");  ButtonStyleHelper.styleButtonCancel(btnHuy);
 
         Dimension sz = new Dimension(90, 35);
-        btnThem.setPreferredSize(sz);
-        btnSua.setPreferredSize(sz);
-        btnXoa.setPreferredSize(sz);
-        btnLuu.setPreferredSize(sz);
+        btnThem.setPreferredSize(sz); btnSua.setPreferredSize(sz);
+        btnXoa.setPreferredSize(sz);  btnLuu.setPreferredSize(sz);
         btnHuy.setPreferredSize(sz);
 
-        pnlBtn.add(btnThem);
-        pnlBtn.add(btnSua);
-        pnlBtn.add(btnXoa);
-        pnlBtn.add(btnLuu);
-        pnlBtn.add(btnHuy);
-
+        pnlBtn.add(btnThem); pnlBtn.add(btnSua); pnlBtn.add(btnXoa);
+        pnlBtn.add(btnLuu);  pnlBtn.add(btnHuy);
         pnlSouth.add(pnlBtn, BorderLayout.SOUTH);
         add(pnlSouth, BorderLayout.SOUTH);
 
         setCrudButtonState(true, false, false, false, false);
     }
 
-    public String getMaPhongTim() {
-        return txtMaPhongTim.getText().trim();
-    }
-
-    public String getLoaiPhongTim() {
-        return cboLoaiPhongTim.getSelectedItem().toString();
-    }
-
-    public String getTinhTrangTim() {
-        return cboTinhTrangTim.getSelectedItem().toString();
-    }
+    public String getMaPhongTim()  { return txtMaPhongTim.getText().trim(); }
+    public String getLoaiPhongTim() { return cboLoaiPhongTim.getSelectedItem().toString(); }
+    public String getTinhTrangTim() { return cboTinhTrangTim.getSelectedItem().toString(); }
 
     public PhongHoc getPhongHocInput() {
         PhongHoc p = new PhongHoc();
@@ -201,93 +139,47 @@ public class FrmPhongHoc extends JPanel {
 
     public void setTableData(List<PhongHoc> list) {
         model.setRowCount(0);
-        for (PhongHoc p : list) {
-            model.addRow(new Object[]{
-                    p.getMaPhong(),
-                    p.getTenPhong(),
-                    p.getSucChua(),
-                    p.getLoaiPhong(),
-                    p.getTinhTrang()
-            });
-        }
+        for (PhongHoc p : list)
+            model.addRow(new Object[]{p.getMaPhong(), p.getTenPhong(),
+                    p.getSucChua(), p.getLoaiPhong(), p.getTinhTrang()});
     }
 
-    public JTable getTable() {
-        return table;
-    }
+    public JTable getTable() { return table; }
 
     public void fillForm(int row) {
         if (row < 0) return;
-
         txtMaPhong.setText(model.getValueAt(row, 0).toString());
         txtTenPhong.setText(model.getValueAt(row, 1).toString());
         txtSucChua.setText(model.getValueAt(row, 2).toString());
         cboLoaiPhong.setSelectedItem(model.getValueAt(row, 3).toString());
-        
-        String tinhTrang = model.getValueAt(row, 4).toString();
-        if (tinhTrang.equals("Trống")) {
-            cboTinhTrang.setSelectedIndex(0);
-        } else if (tinhTrang.equals("Đang học")) {
-            cboTinhTrang.setSelectedIndex(1);
-        } else if (tinhTrang.equals("Bảo trì")) {
-            cboTinhTrang.setSelectedIndex(2);
-        }
+        cboTinhTrang.setSelectedItem(model.getValueAt(row, 4).toString());
     }
 
     public void clearForm() {
-        txtMaPhong.setText("");
-        txtTenPhong.setText("");
-        txtSucChua.setText("");
-        cboLoaiPhong.setSelectedIndex(0);
-        cboTinhTrang.setSelectedIndex(0);
+        txtMaPhong.setText(""); txtTenPhong.setText(""); txtSucChua.setText("");
+        cboLoaiPhong.setSelectedIndex(0); cboTinhTrang.setSelectedIndex(0);
     }
 
-    public void showMessage(String msg) {
-        JOptionPane.showMessageDialog(this, msg);
-    }
+    public void showMessage(String msg) { JOptionPane.showMessageDialog(this, msg); }
 
     public JButton getBtnThem() { return btnThem; }
-    public JButton getBtnSua() { return btnSua; }
-    public JButton getBtnXoa() { return btnXoa; }
-    public JButton getBtnLuu() { return btnLuu; }
-    public JButton getBtnHuy() { return btnHuy; }
+    public JButton getBtnSua()  { return btnSua; }
+    public JButton getBtnXoa()  { return btnXoa; }
+    public JButton getBtnLuu()  { return btnLuu; }
+    public JButton getBtnHuy()  { return btnHuy; }
+
     public void setCrudButtonState(boolean them, boolean sua, boolean xoa, boolean luu, boolean huy) {
-        btnThem.setEnabled(them);
-        btnSua.setEnabled(sua);
-        btnXoa.setEnabled(xoa);
-        btnLuu.setEnabled(luu);
-        btnHuy.setEnabled(huy);
-    }
-    
-    public void addBtnXemListener(ActionListener l) {
-        btnXem.addActionListener(l);
+        btnThem.setEnabled(them); btnSua.setEnabled(sua); btnXoa.setEnabled(xoa);
+        btnLuu.setEnabled(luu);   btnHuy.setEnabled(huy);
     }
 
-    public void addBtnTimListener(ActionListener l) {
-        btnTim.addActionListener(l);
-    }
-
-    public void addBtnThemListener(ActionListener l) {
-        btnThem.addActionListener(l);
-    }
-
-    public void addBtnSuaListener(ActionListener l) {
-        btnSua.addActionListener(l);
-    }
-
-    public void addBtnXoaListener(ActionListener l) {
-        btnXoa.addActionListener(l);
-    }
-
-    public void addBtnLuuListener(ActionListener l) {
-        btnLuu.addActionListener(l);
-    }
-
-    public void addBtnHuyListener(ActionListener l) {
-        btnHuy.addActionListener(l);
-    }
-
-    public void addTableMouseListener(MouseAdapter l) {
-        table.addMouseListener(l);
-    }
+    public void addBtnTimListener(ActionListener l)     { btnTim.addActionListener(l); }
+    public void addBtnThemListener(ActionListener l)    { btnThem.addActionListener(l); }
+    public void addBtnSuaListener(ActionListener l)     { btnSua.addActionListener(l); }
+    public void addBtnXoaListener(ActionListener l)     { btnXoa.addActionListener(l); }
+    public void addBtnLuuListener(ActionListener l)     { btnLuu.addActionListener(l); }
+    public void addBtnHuyListener(ActionListener l)     { btnHuy.addActionListener(l); }
+    public void addTableMouseListener(MouseAdapter l)   { table.addMouseListener(l); }
+    public void addCboLoaiPhongTimListener(ActionListener l) { cboLoaiPhongTim.addActionListener(l); }
+    public void addCboTinhTrangTimListener(ActionListener l) { cboTinhTrangTim.addActionListener(l); }
 }

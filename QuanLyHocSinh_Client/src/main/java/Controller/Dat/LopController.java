@@ -1,7 +1,7 @@
 package Controller.Dat;
 
-import Api.LopApi;
-import Api.GiaoVienApi;
+import Api.Đat.LopApi;
+import Api.Đat.GiaoVienApi;
 import Model.Giaovien;
 import Model.Lop;
 import Model.LopGVCN;

@@ -52,6 +52,13 @@ public class QuanLyHocPhiPanel extends JPanel {
         txtPhaiDong.setBackground(new Color(245, 245, 245));
         cboTrangThai = new JComboBox<>(new String[]{"Chưa đóng", "Đã đóng", "Bảo lưu"});
 
+        // KHỞI TẠO CÁC NÚT ĐỂ CONTROLLER KHÔNG BỊ LỖI NULL POINTER
+        btnThem = new JButton("Thêm");       ButtonStyleHelper.styleButtonAdd(btnThem);
+        btnSua = new JButton("Sửa");         ButtonStyleHelper.styleButtonEdit(btnSua);
+        btnXoa = new JButton("Xóa");         ButtonStyleHelper.styleButtonDelete(btnXoa);
+        btnLuu = new JButton("Lưu");         ButtonStyleHelper.styleButtonSave(btnLuu);
+        btnHuy = new JButton("Hủy");         ButtonStyleHelper.styleButtonCancel(btnHuy);
+
         // --- PANEL NORTH (TITLE & FILTER) ---
         JPanel pnlNorth = new JPanel(new BorderLayout(10, 10));
         pnlNorth.setOpaque(false);
@@ -138,12 +145,6 @@ public class QuanLyHocPhiPanel extends JPanel {
 
             JPanel pnlButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
             pnlButtons.setOpaque(false);
-
-            btnThem = new JButton("Thêm");       ButtonStyleHelper.styleButtonAdd(btnThem);
-            btnSua = new JButton("Sửa");         ButtonStyleHelper.styleButtonEdit(btnSua);
-            btnXoa = new JButton("Xóa");         ButtonStyleHelper.styleButtonDelete(btnXoa);
-            btnLuu = new JButton("Lưu");         ButtonStyleHelper.styleButtonSave(btnLuu);
-            btnHuy = new JButton("Hủy");         ButtonStyleHelper.styleButtonCancel(btnHuy);
 
             Dimension sz = new Dimension(90, 35);
             btnThem.setPreferredSize(sz); btnSua.setPreferredSize(sz); btnXoa.setPreferredSize(sz);

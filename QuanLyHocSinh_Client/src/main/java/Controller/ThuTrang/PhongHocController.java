@@ -1,6 +1,6 @@
 package Controller.ThuTrang;
 
-import Api.PhongHocApiClient;
+import Api.ThuTrang.PhongHocApiClient;
 import Model.PhongHoc;
 import View.ThuTrang.FrmPhongHoc;
 
@@ -27,16 +27,49 @@ public class PhongHocController {
         Runnable setEditState    = () -> view.setCrudButtonState(false, true, true, true, true);
         setIdleState.run();
 
-        view.addBtnXemListener(e -> loadData());
-
         view.addBtnTimListener(e -> {
             try {
-                List<PhongHoc> list = apiClient.search(
-                        view.getMaPhongTim(),
-                        view.getLoaiPhongTim(),
-                        view.getTinhTrangTim()
-                );
-                view.setTableData(list);
+                String ma = view.getMaPhongTim();
+                String loai = view.getLoaiPhongTim();
+                String tinhTrang = view.getTinhTrangTim();
+                if (ma.isEmpty() && (loai.isEmpty() || loai.equals("Tất cả")) && (tinhTrang.isEmpty() || tinhTrang.equals("Tất cả"))) {
+                    loadData();
+                } else {
+                    List<PhongHoc> list = apiClient.search(ma, loai, tinhTrang);
+                    view.setTableData(list);
+                }
+            } catch (Exception ex) {
+                view.showMessage("Lỗi tìm kiếm: " + ex.getMessage());
+            }
+        });
+
+        view.addCboLoaiPhongTimListener(e -> {
+            try {
+                String ma = view.getMaPhongTim();
+                String loai = view.getLoaiPhongTim();
+                String tinhTrang = view.getTinhTrangTim();
+                if (ma.isEmpty() && (loai.isEmpty() || loai.equals("Tất cả")) && (tinhTrang.isEmpty() || tinhTrang.equals("Tất cả"))) {
+                    loadData();
+                } else {
+                    List<PhongHoc> list = apiClient.search(ma, loai, tinhTrang);
+                    view.setTableData(list);
+                }
+            } catch (Exception ex) {
+                view.showMessage("Lỗi tìm kiếm: " + ex.getMessage());
+            }
+        });
+
+        view.addCboTinhTrangTimListener(e -> {
+            try {
+                String ma = view.getMaPhongTim();
+                String loai = view.getLoaiPhongTim();
+                String tinhTrang = view.getTinhTrangTim();
+                if (ma.isEmpty() && (loai.isEmpty() || loai.equals("Tất cả")) && (tinhTrang.isEmpty() || tinhTrang.equals("Tất cả"))) {
+                    loadData();
+                } else {
+                    List<PhongHoc> list = apiClient.search(ma, loai, tinhTrang);
+                    view.setTableData(list);
+                }
             } catch (Exception ex) {
                 view.showMessage("Lỗi tìm kiếm: " + ex.getMessage());
             }

@@ -227,9 +227,21 @@ public class MainForm extends JFrame {
         }
 
         // -- HÀ TRANG --
-        else if (formCode.equals("FormHocPhi")) { viewToShow = new QuanLyHocPhiPanel(); }
-        else if (formCode.equals("FormThongBao")) { viewToShow = new QuanlyThongbaoPanel(); }
-        else if (formCode.equals("FormPhucKhao")) { viewToShow = new QuanLyPhucKhaoPanel(); }
+        else if (formCode.equals("FormHocPhi")) {
+            QuanLyHocPhiPanel view = new QuanLyHocPhiPanel();
+            new Controller.HaTrang.Hocphicontroller(view);
+            viewToShow = view;
+        }
+        else if (formCode.equals("FormThongBao")) {
+            QuanlyThongbaoPanel view = new QuanlyThongbaoPanel();
+            new Controller.HaTrang.Thongbaocontroller(view);
+            viewToShow = view;
+        }
+        else if (formCode.equals("FormPhucKhao")) {
+            QuanLyPhucKhaoPanel view = new QuanLyPhucKhaoPanel();
+            new Controller.HaTrang.Phuckhaocontroller(view);
+            viewToShow = view;
+        }
 
         // -- THU TRANG --
         // Lưu ý: Nếu các Frm này khai báo là `extends JFrame` thay vì `JPanel`, ta phải dùng `.getContentPane()`

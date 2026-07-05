@@ -1,6 +1,6 @@
 package Controller.Tien;
 
-import Api.LichThiApi;
+import Api.Tien.LichThiApi;
 import Model.LichThi;
 import View.Tien.LichThiPanel;
 import java.awt.event.MouseAdapter;
@@ -9,11 +9,10 @@ import java.util.List;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import TienIch.XuatExcel;
-import Model.Auth;
 import Model.MonHoc;
 import Model.PhongHoc;
-import Api.MonHocApiClient;
-import Api.PhongHocApiClient;
+import Api.ThuTrang.MonHocApiClient;
+import Api.ThuTrang.PhongHocApiClient;
 
 public class LichThiController {
     

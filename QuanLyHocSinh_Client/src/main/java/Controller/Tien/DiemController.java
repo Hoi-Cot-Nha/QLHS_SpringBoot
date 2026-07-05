@@ -1,8 +1,8 @@
 package Controller.Tien; 
 
-import Api.DiemApi;
-import Api.MonHocApiClient;
-import Api.LopApi;
+import Api.Tien.DiemApi;
+import Api.ThuTrang.MonHocApiClient;
+import Api.Đat.LopApi;
 import Model.Auth;
 import Model.Diem;
 import Model.LopGVCN;

@@ -1,6 +1,6 @@
 package Controller.HaTrang;
 
-import Api.ThongBaoApiClient;
+import Api.HaTrang.ThongBaoApiClient;
 import Model.Thongbao;
 import View.HaTrang.QuanlyThongbaoPanel;
 import java.awt.event.*;

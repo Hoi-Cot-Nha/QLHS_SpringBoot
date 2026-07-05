@@ -49,15 +49,6 @@ public class FrmTKB extends JPanel {
         title.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
         pnlNorth.add(title, BorderLayout.NORTH);
 
-        JPanel pnlTop = new JPanel(new GridLayout(2, 1, 5, 5));
-
-        pnlView = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        pnlView.setBorder(new TitledBorder("Tải lại dữ liệu"));
-        btnXemDanhSach = new JButton("Làm mới danh sách");
-        ButtonStyleHelper.styleButtonView(btnXemDanhSach);
-        pnlView.add(btnXemDanhSach);
-        pnlTop.add(pnlView);
-
         JPanel pnlSearch = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
         pnlSearch.setBorder(new TitledBorder("Bộ lọc & Tìm kiếm"));
 
@@ -78,8 +69,8 @@ public class FrmTKB extends JPanel {
         btnLocTimKiem = new JButton("Lọc kết quả");
         ButtonStyleHelper.styleButtonFilter(btnLocTimKiem);
         pnlSearch.add(btnLocTimKiem);
-        pnlTop.add(pnlSearch);
-        pnlNorth.add(pnlTop, BorderLayout.CENTER);
+
+        pnlNorth.add(pnlSearch, BorderLayout.CENTER);
         add(pnlNorth, BorderLayout.NORTH);
 
         model = new DefaultTableModel(
@@ -137,7 +128,6 @@ public class FrmTKB extends JPanel {
         add(pnlSouth, BorderLayout.SOUTH);
 
         if (Model.Auth.isHocSinh()) {
-            pnlView.setVisible(false);
             pnlSouth.setVisible(false);
             lblLop.setVisible(false);
             cboLocMaLop.setVisible(false);

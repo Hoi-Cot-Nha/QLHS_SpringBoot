@@ -1,6 +1,6 @@
 package Controller.Dai;
 
-import Api.DoiTuongUuTienApi;
+import Api.Đai.DoiTuongUuTienApi;
 import Model.DoiTuongUuTien;
 
 import javax.swing.table.DefaultTableModel;

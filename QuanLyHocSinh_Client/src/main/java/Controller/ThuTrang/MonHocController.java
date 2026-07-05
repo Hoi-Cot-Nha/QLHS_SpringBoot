@@ -1,6 +1,6 @@
 package Controller.ThuTrang;
 
-import Api.MonHocApiClient;
+import Api.ThuTrang.MonHocApiClient;
 import Model.MonHoc;
 import View.ThuTrang.FrmMonHoc;
 
@@ -27,18 +27,15 @@ public class MonHocController {
         Runnable setEditState    = () -> view.setCrudButtonState(false, true, true, true, true);
         setIdleState.run();
 
-        view.addBtnXemListener(e -> loadData());
-
         view.addBtnTimKiemListener(e -> {
             String key = view.getTuKhoa();
-            if (key.isEmpty()) {
-                view.showMessage("Vui lòng nhập mã hoặc tên môn");
-                return;
-            }
             try {
-                List<MonHoc> list = apiClient.search(key);
+                List<MonHoc> list = key.isEmpty()
+                        ? apiClient.getAll()
+                        : apiClient.search(key);
                 view.setTableData(list);
-                if (list.isEmpty()) view.showMessage("Không tìm thấy môn học");
+                if (!key.isEmpty() && list.isEmpty())
+                    view.showMessage("Không tìm thấy môn học");
             } catch (Exception ex) {
                 view.showMessage("Lỗi tìm kiếm: " + ex.getMessage());
             }

@@ -1,6 +1,6 @@
 package Controller.HaTrang;
 
-import Api.PhucKhaoApiClient;
+import Api.HaTrang.PhucKhaoApiClient;
 import Model.Phuckhao;
 import View.HaTrang.QuanLyPhucKhaoPanel;
 import java.awt.event.*;
@@ -172,6 +172,10 @@ public class Phuckhaocontroller {
                 }
                 // Gọi API tìm kiếm từ Backend
                 List<Phuckhao> searchResult = dao.search(tuKhoa);
+                
+                if (Model.Auth.isHocSinh()) {
+                    searchResult = searchResult.stream().filter(pk -> pk.getMaHS().equals(Model.Auth.maNguoiDung)).collect(java.util.stream.Collectors.toList());
+                }
 
                 listCurrent = searchResult;
                 view.loadTable(listCurrent);
@@ -196,11 +200,9 @@ public class Phuckhaocontroller {
 
     private void loadData() {
         try {
-            List<Phuckhao> list;
+            List<Phuckhao> list = dao.getAll();
             if (Model.Auth.isHocSinh()) {
-                list = dao.getByMaHS(Model.Auth.maNguoiDung);
-            } else {
-                list = dao.getAll();
+                list = list.stream().filter(pk -> pk.getMaHS().equals(Model.Auth.maNguoiDung)).collect(java.util.stream.Collectors.toList());
             }
             listCurrent = list;
             view.loadTable(list);
