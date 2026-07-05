@@ -1,19 +1,40 @@
 package Api;
 
 import Model.TaiKhoan;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import Connection.ConnectDB;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class TaiKhoanApi {
 
+    private static final String SERVER_URL = "http://localhost:8080/api/taikhoan";
+
+    private final HttpClient client;
+    private final Gson gson;
+
+    public TaiKhoanApi() {
+        client = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(10))
+                .build();
+
+        gson = new Gson();
+    }
+
+    /**
+     * Đăng nhập và trả về quyền
+     */
     public String checkLogin(String user, String pass) {
         TaiKhoan tk = checkLoginFull(user, pass);
         if (tk != null) {
@@ -22,150 +43,210 @@ public class TaiKhoanApi {
         return null;
     }
 
-  
-    public List<TaiKhoan> getAll() {
-        List<TaiKhoan> list = new ArrayList<>();
-        String sql = "SELECT * FROM TaiKhoan";
-
-        try (Connection con = ConnectDB.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                list.add(map(rs));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
- 
-    public boolean insert(TaiKhoan tk) {
-        String sql = """
-            INSERT INTO TaiKhoan
-            (TenDangNhap, MatKhau, Quyen, MaNguoiDung)
-            VALUES (?, ?, ?, ?)
-        """;
-
-        try (Connection con = ConnectDB.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setString(1, tk.getTenDangNhap());
-            ps.setString(2, tk.getMatKhau());
-            ps.setString(3, tk.getQuyen());
-            ps.setString(4, tk.getMaNguoiDung());
-
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public boolean update(TaiKhoan tk) {
-        String sql = """
-            UPDATE TaiKhoan
-            SET MatKhau = ?, Quyen = ?, MaNguoiDung = ?
-            WHERE TenDangNhap = ?
-        """;
-
-        try (Connection con = ConnectDB.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setString(1, tk.getMatKhau());
-            ps.setString(2, tk.getQuyen());
-            ps.setString(3, tk.getMaNguoiDung());
-            ps.setString(4, tk.getTenDangNhap());
-
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-
-    public boolean delete(String tenDangNhap) {
-        String sql = "DELETE FROM TaiKhoan WHERE TenDangNhap = ?";
-
-        try (Connection con = ConnectDB.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setString(1, tenDangNhap);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-
-    public List<TaiKhoan> search(String keyword) {
-        List<TaiKhoan> list = new ArrayList<>();
-        String sql = """
-            SELECT * FROM TaiKhoan
-            WHERE TenDangNhap LIKE ?
-               OR Quyen LIKE ?
-               OR MaNguoiDung LIKE ?
-        """;
-
-        try (Connection con = ConnectDB.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            String key = "%" + keyword + "%";
-            ps.setString(1, key);
-            ps.setString(2, key);
-            ps.setString(3, key);
-
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(map(rs));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-
-    private TaiKhoan map(ResultSet rs) throws SQLException {
-        TaiKhoan tk = new TaiKhoan();
-        tk.setTenDangNhap(rs.getString("TenDangNhap"));
-        tk.setMatKhau(rs.getString("MatKhau"));
-        tk.setQuyen(rs.getString("Quyen"));
-        tk.setMaNguoiDung(rs.getString("MaNguoiDung"));
-        return tk;
-    }
-    // Thêm cho phân quyền tài khoản sử dụng API từ Server
+    /**
+     * Đăng nhập và trả về đầy đủ thông tin tài khoản
+     */
     public TaiKhoan checkLoginFull(String tenDangNhap, String matKhau) {
+
         try {
-            // Chuẩn bị dữ liệu gửi đi (JSON)
+
             Map<String, String> data = new HashMap<>();
             data.put("tenDangNhap", tenDangNhap);
             data.put("matKhau", matKhau);
-            
-            Gson gson = new Gson();
-            String jsonRequest = gson.toJson(data);
 
-            // Tạo request gửi đến Server Spring Boot
+            String json = gson.toJson(data);
+
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(ApiConfig.BASE_URL + "/api/taikhoan/login"))
+                    .uri(URI.create(SERVER_URL + "/login"))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonRequest))
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
-            // Thực hiện gọi và nhận kết quả
-            HttpClient client = HttpClient.newHttpClient();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response =
+                    client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                // Nếu thành công (HTTP 200), chuyển JSON trả về thành object TaiKhoan
                 return gson.fromJson(response.body(), TaiKhoan.class);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null; // Đăng nhập thất bại hoặc lỗi server
+
+        return null;
     }
+
+    /**
+     * Lấy toàn bộ tài khoản
+     */
+    public List<TaiKhoan> getAll() {
+
+        try {
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(SERVER_URL))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response =
+                    client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+
+                Type listType = new TypeToken<ArrayList<TaiKhoan>>(){}.getType();
+
+                return gson.fromJson(response.body(), listType);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
+    }
+
+    /**
+     * Lấy tài khoản theo tên đăng nhập
+     */
+    public TaiKhoan getByTenDangNhap(String tenDangNhap) {
+
+        try {
+
+            String url = SERVER_URL + "/"
+                    + URLEncoder.encode(tenDangNhap, StandardCharsets.UTF_8);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response =
+                    client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                return gson.fromJson(response.body(), TaiKhoan.class);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * Thêm tài khoản
+     */
+    public boolean insert(TaiKhoan tk) {
+
+        try {
+
+            String json = gson.toJson(tk);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(SERVER_URL))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+
+            HttpResponse<String> response =
+                    client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return response.statusCode() == 200;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * Cập nhật tài khoản
+     */
+    public boolean update(TaiKhoan tk) {
+
+        try {
+
+            String json = gson.toJson(tk);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(SERVER_URL))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+
+            HttpResponse<String> response =
+                    client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return response.statusCode() == 200;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * Xóa tài khoản
+     */
+    public boolean delete(String tenDangNhap) {
+
+        try {
+
+            String url = SERVER_URL + "/"
+                    + URLEncoder.encode(tenDangNhap, StandardCharsets.UTF_8);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .DELETE()
+                    .build();
+
+            HttpResponse<String> response =
+                    client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return response.statusCode() == 200;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * Tìm kiếm tài khoản
+     */
+    public List<TaiKhoan> search(String keyword) {
+
+        try {
+
+            String url = SERVER_URL + "/search?keyword="
+                    + URLEncoder.encode(keyword, StandardCharsets.UTF_8);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response =
+                    client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+
+                Type listType = new TypeToken<ArrayList<TaiKhoan>>(){}.getType();
+
+                return gson.fromJson(response.body(), listType);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
+    }
+
 }

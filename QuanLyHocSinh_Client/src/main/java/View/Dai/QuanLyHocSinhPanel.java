@@ -208,9 +208,7 @@ public class QuanLyHocSinhPanel extends JPanel {
         btnHuy.addActionListener(e -> huy());
 
         btnTim.addActionListener(e -> timKiem());
-        btnHienThiTatCa.addActionListener(e ->
-                controller.loadTable(tableModel)
-        );
+        btnHienThiTatCa.addActionListener(e -> hienThiTatCa());
         //thêm ngày 09/04/2026
         if (Model.Auth.isHocSinh()) {
             pnlSearch.setVisible(false);
@@ -350,6 +348,24 @@ public class QuanLyHocSinhPanel extends JPanel {
         }
     }
 
+    private void hienThiTatCa() {
+
+        // Xóa ô tìm kiếm
+        txtTimKiem.setText("");
+
+        // Bỏ chọn dòng trên bảng
+        tableHS.clearSelection();
+
+        // Xóa dữ liệu trên Form
+        clearForm();
+
+        // Khóa Form
+        setFormEnabled(false);
+
+        // Hiển thị toàn bộ dữ liệu
+        controller.loadTable(tableModel);
+    }
+
     private void doDuLieuVaoForm() {
         int r = tableHS.getSelectedRow();
         if (r >= 0) {
@@ -402,7 +418,8 @@ public class QuanLyHocSinhPanel extends JPanel {
     private void clearForm() {
         txtMaHS.setText("");
         txtHoTen.setText("");
-        spNgaySinh.setValue(new Date()); 
+        spNgaySinh.setValue(new Date());
+        cboGioiTinh.setSelectedIndex(0);
         txtDiaChi.setText("");
         cboMaLop.setSelectedIndex(-1);
         cboMaDT.setSelectedIndex(-1);

@@ -8,50 +8,70 @@ import java.util.List;
 
 public class TaiKhoanController {
 
-    private TaiKhoanApi dao = new TaiKhoanApi();
+    private final TaiKhoanApi api = new TaiKhoanApi();
 
-    
+    /**
+     * Hiển thị danh sách tài khoản
+     */
     public void loadTable(DefaultTableModel model) {
+
         model.setRowCount(0);
-        List<TaiKhoan> list = dao.getAll();
+
+        List<TaiKhoan> list = api.getAll();
 
         for (TaiKhoan tk : list) {
+
             model.addRow(new Object[]{
-                tk.getTenDangNhap(),
-                tk.getMatKhau(),
-                tk.getQuyen(),
-                tk.getMaNguoiDung(),
+                    tk.getTenDangNhap(),
+                    tk.getMatKhau(),
+                    tk.getQuyen(),
+                    tk.getMaNguoiDung()
             });
+
         }
+
     }
 
-  
+    /**
+     * Thêm tài khoản
+     */
     public boolean them(TaiKhoan tk) {
-        return dao.insert(tk);
+        return api.insert(tk);
     }
 
- 
+    /**
+     * Cập nhật tài khoản
+     */
     public boolean sua(TaiKhoan tk) {
-        return dao.update(tk);
+        return api.update(tk);
     }
 
-   
+    /**
+     * Xóa tài khoản
+     */
     public boolean xoa(String tenDangNhap) {
-        return dao.delete(tenDangNhap);
+        return api.delete(tenDangNhap);
     }
 
-  
-    public void timKiem(String keyword, DefaultTableModel model) {
+    /**
+     * Tìm kiếm tài khoản
+     */
+    public boolean timKiem(String keyword, DefaultTableModel model) {
+
         model.setRowCount(0);
-        List<TaiKhoan> list = dao.search(keyword);
+
+        List<TaiKhoan> list = api.search(keyword);
 
         for (TaiKhoan tk : list) {
             model.addRow(new Object[]{
-                tk.getTenDangNhap(),
-                tk.getMatKhau(),
-                tk.getQuyen(),
-                tk.getMaNguoiDung(),
+                    tk.getTenDangNhap(),
+                    tk.getMatKhau(),
+                    tk.getQuyen(),
+                    tk.getMaNguoiDung()
             });
         }
+
+        return !list.isEmpty();
     }
+
 }
