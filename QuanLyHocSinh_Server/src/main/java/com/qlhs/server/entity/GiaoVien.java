@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.time.LocalDate;
 
@@ -31,6 +32,6 @@ public class GiaoVien {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MaToHop")
-    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+    @JsonBackReference
     private ToHopMon toHopMon;
 }

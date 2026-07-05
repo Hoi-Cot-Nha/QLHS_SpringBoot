@@ -1,6 +1,7 @@
 package Controller.Dat;
 
 import Dao.ToHopMonDAO;
+import Api.ToHopMonApi;
 import Model.ToBoMon;
 import View.Dat.QuanLyToBoMonPanel;
 import java.awt.event.MouseAdapter;
@@ -11,14 +12,17 @@ import javax.swing.JOptionPane;
 public class ToBoMonController {
 
     private QuanLyToBoMonPanel view;
-    private ToHopMonDAO dao;
+    private ToHopMonApi dao;
     private String currentMode = ""; // "ADD" hoặc "EDIT"
 
     public ToBoMonController(QuanLyToBoMonPanel view) {
         this.view = view;
-        this.dao = new ToHopMonDAO();
+        this.dao = new ToHopMonApi();
+
+        // 1. Gán sự kiện cho các nút
         initEvents();
 
+        // 2. Tải dữ liệu ban đầu
         loadData();
     }
 

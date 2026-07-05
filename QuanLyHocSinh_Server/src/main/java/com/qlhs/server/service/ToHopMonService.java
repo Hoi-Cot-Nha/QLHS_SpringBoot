@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Service
 public class ToHopMonService {
@@ -14,22 +14,19 @@ public class ToHopMonService {
     @Autowired
     private ToHopMonRepository toHopMonRepository;
 
-    // Lấy danh sách tất cả tổ hợp môn
-    public List<ToHopMon> getAllToHopMon() {
-        return toHopMonRepository.findAll();
+    // Lấy tất cả tổ hợp môn
+    public List<Map<String, Object>> getAllToHopMon() {
+        return toHopMonRepository.findAllToHopMon();
     }
 
-    // Lấy tổ hợp môn theo mã
-    public Optional<ToHopMon> getByIdToHopMon(String maToHop) {
-        return toHopMonRepository.findById(maToHop);
+    // Tìm kiếm tổ hợp môn
+    public List<Map<String, Object>> searchToHopMon(String keyword) {
+        return toHopMonRepository.searchToHopMon(keyword);
     }
 
-    // Tìm kiếm theo mã hoặc tên
-    public List<ToHopMon> search(String keyword) {
-        return toHopMonRepository.findAll().stream()
-                .filter(t -> t.getMaToHop().contains(keyword)
-                        || t.getTenToHop().contains(keyword))
-                .collect(java.util.stream.Collectors.toList());
+    // Lấy theo mã
+    public List<Map<String, Object>> getToHopMonById(String maToHop) {
+        return toHopMonRepository.findByMaToHop(maToHop);
     }
 
     // Thêm hoặc cập nhật
@@ -37,19 +34,18 @@ public class ToHopMonService {
         return toHopMonRepository.save(toHopMon);
     }
 
-    // Xóa theo mã
+    // Xóa
     public void deleteToHopMon(String maToHop) {
         toHopMonRepository.deleteById(maToHop);
     }
 
-    // Kiểm tra mã đã tồn tại chưa
+    // Kiểm tra mã tồn tại
     public boolean existsToHopMon(String maToHop) {
         return toHopMonRepository.existsById(maToHop);
     }
 
-    // Kiểm tra tên tổ hợp đã tồn tại chưa
-    public boolean existsByTenToHop(String tenToHop) {
-        return toHopMonRepository.findAll().stream()
-                .anyMatch(t -> t.getTenToHop().equalsIgnoreCase(tenToHop));
+    // Lấy danh sách tên tổ hợp môn
+    public List<String> getDistinctTenToHop() {
+        return toHopMonRepository.findDistinctTenToHop();
     }
 }

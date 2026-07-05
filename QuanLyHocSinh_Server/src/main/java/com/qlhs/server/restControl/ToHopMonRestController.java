@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/tohopmon")
@@ -15,62 +16,56 @@ public class ToHopMonRestController {
     @Autowired
     private ToHopMonService toHopMonService;
 
+    // Lấy tất cả
     @GetMapping
-    public List<ToHopMon> getAllToHopMon() {
+    public List<Map<String, Object>> getAllToHopMon() {
         return toHopMonService.getAllToHopMon();
     }
 
-    @GetMapping("/{maToHop}")
-    public ResponseEntity<ToHopMon> getByIdToHopMon(@PathVariable String maToHop) {
-        return toHopMonService.getByIdToHopMon(maToHop)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
+    // Tìm kiếm
     @GetMapping("/search")
-    public List<ToHopMon> search(@RequestParam(defaultValue = "") String keyword) {
-        return toHopMonService.search(keyword);
+    public List<Map<String, Object>> searchToHopMon(
+            @RequestParam String keyword) {
+
+        return toHopMonService.searchToHopMon(keyword);
     }
 
+    // Lấy theo mã
+    @GetMapping("/{maToHop}")
+    public List<Map<String, Object>> getToHopMonById(
+            @PathVariable String maToHop) {
+
+        return toHopMonService.getToHopMonById(maToHop);
+    }
+
+    // Thêm
     @PostMapping
-    public ResponseEntity<ToHopMon> createToHopMon(@RequestBody ToHopMon toHopMon) {
+    public ResponseEntity<ToHopMon> create(
+            @RequestBody ToHopMon toHopMon) {
 
-        // Kiểm tra mã đã tồn tại
-        if (toHopMonService.existsToHopMon(toHopMon.getMaToHop())) {
-            return ResponseEntity.status(409).body(null);
-        }
-
-        // Kiểm tra tên đã tồn tại
-        if (toHopMonService.existsByTenToHop(toHopMon.getTenToHop())) {
-            return ResponseEntity.status(422).body(null);
-        }
-
-        return ResponseEntity.ok(toHopMonService.saveToHopMon(toHopMon));
+        return ResponseEntity.ok(
+                toHopMonService.saveToHopMon(toHopMon));
     }
 
+    // Cập nhật
     @PutMapping("/{maToHop}")
-    public ResponseEntity<ToHopMon> updateToHopMon(
+    public ResponseEntity<ToHopMon> update(
             @PathVariable String maToHop,
             @RequestBody ToHopMon toHopMon) {
 
-        if (!toHopMonService.existsToHopMon(maToHop)) {
-            return ResponseEntity.notFound().build();
-        }
-
         toHopMon.setMaToHop(maToHop);
 
-        return ResponseEntity.ok(toHopMonService.saveToHopMon(toHopMon));
+        return ResponseEntity.ok(
+                toHopMonService.saveToHopMon(toHopMon));
     }
 
+    // Xóa
     @DeleteMapping("/{maToHop}")
-    public ResponseEntity<Void> deleteToHopMon(@PathVariable String maToHop) {
-
-        if (!toHopMonService.existsToHopMon(maToHop)) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> delete(
+            @PathVariable String maToHop) {
 
         toHopMonService.deleteToHopMon(maToHop);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

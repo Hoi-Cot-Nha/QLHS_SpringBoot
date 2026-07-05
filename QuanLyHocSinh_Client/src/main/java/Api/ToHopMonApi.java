@@ -4,136 +4,97 @@ import Model.ToBoMon;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.Type;
-import java.net.URI;
-import java.net.URLEncoder;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 public class ToHopMonApi {
 
-    private static final String BASE_URL = ApiConfig.BASE_URL + "/api/tohopmon";
-
-    private final HttpClient client = HttpClient.newHttpClient();
+    private static final String BASE_URL = "http://localhost:8080/api/tohopmon";
     private final Gson gson = new Gson();
 
     // Lấy tất cả
-    public List<ToBoMon> getAll() throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .GET()
-                .build();
+    public List<ToBoMon> getAll() {
+        try {
+            URL url = new URL(BASE_URL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
 
-        HttpResponse<String> response =
-                client.send(request, HttpResponse.BodyHandlers.ofString());
+            Type listType = new TypeToken<List<ToBoMon>>() {}.getType();
+            return gson.fromJson(new InputStreamReader(conn.getInputStream()), listType);
 
-        Type type = new TypeToken<List<ToBoMon>>() {}.getType();
-        return gson.fromJson(response.body(), type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    // Lấy theo mã
-    public ToBoMon getById(String maToHop) throws Exception {
+    // Thêm
+    public boolean insert(ToBoMon toHopMon) {
+        try {
+            URL url = new URL(BASE_URL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/" + maToHop))
-                .GET()
-                .build();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
 
-        HttpResponse<String> response =
-                client.send(request, HttpResponse.BodyHandlers.ofString());
+            String json = gson.toJson(toHopMon);
 
-        if (response.statusCode() == 404) {
-            return null;
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(json.getBytes("UTF-8"));
+            }
+
+            return conn.getResponseCode() == HttpURLConnection.HTTP_OK
+                    || conn.getResponseCode() == HttpURLConnection.HTTP_CREATED;
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        return gson.fromJson(response.body(), ToBoMon.class);
-    }
-
-    // Kiểm tra tồn tại
-    public boolean exists(String maToHop) throws Exception {
-        return getById(maToHop) != null;
-    }
-
-    // Thêm mới
-    public ToBoMon create(ToBoMon toBoMon) throws Exception {
-
-        String json = gson.toJson(toBoMon);
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
-
-        HttpResponse<String> response =
-                client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() == 409) {
-            throw new Exception("Mã tổ hợp đã tồn tại");
-        }
-
-        if (response.statusCode() == 422) {
-            throw new Exception("Tên tổ hợp đã tồn tại");
-        }
-
-        return gson.fromJson(response.body(), ToBoMon.class);
+        return false;
     }
 
     // Cập nhật
-    public ToBoMon update(String maToHop, ToBoMon toBoMon) throws Exception {
+    public boolean update(ToBoMon toHopMon) {
+        try {
+            URL url = new URL(BASE_URL + "/" + toHopMon.getMaToHop());
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-        String json = gson.toJson(toBoMon);
+            conn.setRequestMethod("PUT");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/" + maToHop))
-                .header("Content-Type", "application/json")
-                .PUT(HttpRequest.BodyPublishers.ofString(json))
-                .build();
+            String json = gson.toJson(toHopMon);
 
-        HttpResponse<String> response =
-                client.send(request, HttpResponse.BodyHandlers.ofString());
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(json.getBytes("UTF-8"));
+            }
 
-        if (response.statusCode() == 404) {
-            throw new Exception("Không tìm thấy tổ hợp môn");
+            return conn.getResponseCode() == HttpURLConnection.HTTP_OK;
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        return gson.fromJson(response.body(), ToBoMon.class);
+        return false;
     }
 
     // Xóa
-    public void delete(String maToHop) throws Exception {
+    public boolean delete(String maToHop) {
+        try {
+            URL url = new URL(BASE_URL + "/" + maToHop);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/" + maToHop))
-                .DELETE()
-                .build();
+            conn.setRequestMethod("DELETE");
 
-        HttpResponse<String> response =
-                client.send(request, HttpResponse.BodyHandlers.ofString());
+            return conn.getResponseCode() == HttpURLConnection.HTTP_NO_CONTENT
+                    || conn.getResponseCode() == HttpURLConnection.HTTP_OK;
 
-        if (response.statusCode() == 404) {
-            throw new Exception("Không tìm thấy tổ hợp môn");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    }
-
-    // Tìm kiếm
-    public List<ToBoMon> search(String keyword) throws Exception {
-
-        String url = BASE_URL + "/search?keyword="
-                + URLEncoder.encode(keyword, StandardCharsets.UTF_8);
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET()
-                .build();
-
-        HttpResponse<String> response =
-                client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        Type type = new TypeToken<List<ToBoMon>>() {}.getType();
-        return gson.fromJson(response.body(), type);
+        return false;
     }
 }
