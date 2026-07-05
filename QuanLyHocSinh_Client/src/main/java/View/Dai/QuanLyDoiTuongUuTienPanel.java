@@ -36,8 +36,7 @@ public class QuanLyDoiTuongUuTienPanel extends JPanel {
 
     public QuanLyDoiTuongUuTienPanel() {
         initComponents();
-        controller = new DoiTuongUuTienController();
-        controller.loadTable(tableModel); 
+        controller.loadTable(tableModel);
         setFormEnabled(false);
     }
 
@@ -148,9 +147,7 @@ public class QuanLyDoiTuongUuTienPanel extends JPanel {
         btnHuy.addActionListener(e -> huy());
 
         btnTim.addActionListener(e -> timKiem());
-        btnHienThiTatCa.addActionListener(e ->
-                controller.loadTable(tableModel)
-        );
+        btnHienThiTatCa.addActionListener(e -> hienThiTatCa());
     }
 
 
@@ -182,14 +179,22 @@ public class QuanLyDoiTuongUuTienPanel extends JPanel {
 
         double tiLe;
         try {
+
             tiLe = Double.parseDouble(txtTiLeGiam.getText());
+
             if (tiLe < 0 || tiLe > 100) {
                 JOptionPane.showMessageDialog(this, "Tỉ lệ giảm phải từ 0 đến 100");
                 return;
             }
+
+            // Chuyển từ % sang số thực để lưu DB
+            tiLe = tiLe / 100.0;
+
         } catch (NumberFormatException e) {
+
             JOptionPane.showMessageDialog(this, "Tỉ lệ giảm phải là số");
             return;
+
         }
 
         DoiTuongUuTien dt = new DoiTuongUuTien(
@@ -202,8 +207,7 @@ public class QuanLyDoiTuongUuTienPanel extends JPanel {
 
         if (ok) {
             JOptionPane.showMessageDialog(this, "Lưu thành công");
-            controller.loadTable(tableModel);
-            clearForm();
+            hienThiTatCa();
             setFormEnabled(false);
         }
     }
@@ -243,21 +247,65 @@ public class QuanLyDoiTuongUuTienPanel extends JPanel {
     if (confirm == JOptionPane.YES_OPTION) {
         if (controller.xoa(txtMaDT.getText())) {
             JOptionPane.showMessageDialog(this, "Xóa thành công");
-            controller.loadTable(tableModel);
-            clearForm();
+            hienThiTatCa();
         }
     }
 }
 
-    
-    
+
+
 
     private void timKiem() {
-        if (txtTimKiem.getText().trim().isEmpty()) {
-            controller.loadTable(tableModel);  
-        } else {
-            controller.timKiem(txtTimKiem.getText(), tableModel); 
+
+        String keyword = txtTimKiem.getText().trim();
+
+        // Chưa nhập từ khóa
+        if (keyword.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Vui lòng nhập mã hoặc tên đối tượng cần tìm!",
+                    "Thông báo",
+                    JOptionPane.WARNING_MESSAGE
+            );
+
+            txtTimKiem.requestFocus();
+            return;
         }
+
+        try {
+
+            boolean found = controller.timKiem(keyword, tableModel);
+
+            if (!found) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Không tìm thấy đối tượng ưu tiên!",
+                        "Thông báo",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+
+        } catch (RuntimeException ex) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    ex.getMessage(),
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+        }
+    }
+
+    private void hienThiTatCa() {
+
+        txtTimKiem.setText("");
+
+        tableDT.clearSelection();
+
+        clearForm();
+
+        controller.loadTable(tableModel);
     }
 
 
@@ -266,11 +314,7 @@ public class QuanLyDoiTuongUuTienPanel extends JPanel {
         if (row >= 0) {
             txtMaDT.setText(tableModel.getValueAt(row, 0).toString());
             txtTenDT.setText(tableModel.getValueAt(row, 1).toString());
-            Object tiLeValue = tableModel.getValueAt(row, 2);
-            if (tiLeValue != null) {
-                double tiLeDisplay = Double.parseDouble(tiLeValue.toString());
-                txtTiLeGiam.setText(String.valueOf(tiLeDisplay / 100));
-            }
+            txtTiLeGiam.setText(tableModel.getValueAt(row, 2).toString());
         }
     }
 

@@ -312,10 +312,41 @@ public class QuanLyHocSinhPanel extends JPanel {
     }
 
     private void timKiem() {
-        if (txtTimKiem.getText().trim().isEmpty()) {
-            controller.loadTable(tableModel);   
-        } else {
-            controller.timKiem(txtTimKiem.getText(), tableModel); 
+
+        String keyword = txtTimKiem.getText().trim();
+
+        // Chưa nhập từ khóa
+        if (keyword.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Vui lòng nhập mã hoặc tên học sinh cần tìm!",
+                    "Thông báo",
+                    JOptionPane.WARNING_MESSAGE
+            );
+
+            txtTimKiem.requestFocus();
+            return;
+        }
+
+        try {
+            boolean found = controller.timKiem(keyword, tableModel);
+
+            if (!found) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Không tìm thấy học sinh!",
+                        "Thông báo",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Không thể kết nối tới Server!",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
     }
 

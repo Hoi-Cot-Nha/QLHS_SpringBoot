@@ -3,46 +3,83 @@ package com.qlhs.server.restControl;
 import com.qlhs.server.entity.HocSinh;
 import com.qlhs.server.service.HocSinhService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
-@RestController // Cho biết đây là lớp Controller trả về dữ liệu (JSON)
-@RequestMapping("/api/hocsinh") // Đường dẫn gốc cho tất cả API học sinh
+@RestController
+@RequestMapping("/api/hocsinh")
+@CrossOrigin(origins = "*")
 public class HocSinhController {
 
     @Autowired
-    private HocSinhService hocSinhService;
+    private HocSinhService service;
 
-    // API 1: Lấy danh sách học sinh
-    // Khi gọi GET http://localhost:8080/api/hocsinh
     @GetMapping
     public List<HocSinh> getAllHocSinh() {
-        return hocSinhService.getAllHocSinh();
+        return service.getAllHocSinh();
     }
 
-    // API 2: Lấy 1 học sinh theo Mã
-    // Khi gọi GET http://localhost:8080/api/hocsinh/{maHS}
     @GetMapping("/{maHS}")
-    public ResponseEntity<HocSinh> getHocSinhById(@PathVariable String maHS) {
-        return hocSinhService.getHocSinhById(maHS)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Optional<HocSinh> getHocSinh(@PathVariable String maHS) {
+        return service.getHocSinhById(maHS);
     }
 
-    // API 3: Thêm mới hoặc Cập nhật học sinh
-    // Khi gọi POST http://localhost:8080/api/hocsinh
     @PostMapping
-    public HocSinh createOrUpdateHocSinh(@RequestBody HocSinh hs) {
-        return hocSinhService.saveHocSinh(hs);
+    public HocSinh insert(@RequestBody HocSinh hs) {
+        return service.saveHocSinh(hs);
     }
 
-    // API 4: Xóa học sinh
-    // Khi gọi DELETE http://localhost:8080/api/hocsinh/{maHS}
-    @DeleteMapping("/{maHS}")
-    public ResponseEntity<Void> deleteHocSinh(@PathVariable String maHS) {
-        hocSinhService.deleteHocSinh(maHS);
-        return ResponseEntity.ok().build();
+    @PutMapping("/{maHS}")
+    public HocSinh update(@PathVariable String maHS,
+                          @RequestBody HocSinh hs) {
+
+        hs.setMaHS(maHS);
+
+        return service.saveHocSinh(hs);
+
     }
+
+    @DeleteMapping("/{maHS}")
+    public void delete(@PathVariable String maHS) {
+
+        service.deleteHocSinh(maHS);
+
+    }
+
+    //=====================
+    // Tìm kiếm
+    //=====================
+
+    @GetMapping("/search")
+    public List<HocSinh> search(
+            @RequestParam String keyword) {
+
+        return service.search(keyword);
+
+    }
+
+    //=====================
+    // Lấy danh sách mã lớp
+    //=====================
+
+    @GetMapping("/malop")
+    public List<String> getAllMaLop() {
+
+        return service.getAllMaLop();
+
+    }
+
+    //=====================
+    // Lấy danh sách mã đối tượng
+    //=====================
+
+    @GetMapping("/madoituong")
+    public List<String> getAllMaDT() {
+
+        return service.getAllMaDT();
+
+    }
+
 }
