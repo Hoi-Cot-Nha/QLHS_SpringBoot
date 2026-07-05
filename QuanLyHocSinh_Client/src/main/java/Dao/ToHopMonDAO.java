@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToBoMonDAO {
+public class ToHopMonDAO {
 
     // 1. LẤY TẤT CẢ
     public List<ToBoMon> getAll() {
