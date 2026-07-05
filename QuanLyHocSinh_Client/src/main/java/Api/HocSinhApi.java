@@ -13,7 +13,7 @@ import java.util.List;
 
 public class HocSinhApi {
 
-    private static final String API_URL = "http://localhost:8080/api/hocsinh";
+    private static final String API_URL = ApiConfig.BASE_URL+ "/api/hocsinh";
 
     private static final Gson gson = new Gson();
 

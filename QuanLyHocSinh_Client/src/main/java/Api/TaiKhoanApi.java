@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class TaiKhoanApi {
 
-    private static final String SERVER_URL = "http://localhost:8080/api/taikhoan";
+    private static final String SERVER_URL = ApiConfig.BASE_URL+ "/api/taikhoan";
 
     private final HttpClient client;
     private final Gson gson;

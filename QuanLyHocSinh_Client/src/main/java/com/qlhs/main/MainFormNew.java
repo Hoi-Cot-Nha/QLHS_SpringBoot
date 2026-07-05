@@ -14,7 +14,7 @@ import java.awt.FontMetrics;
 import Model.Auth;
 import Model.HocSinh;
 import Model.Giaovien;
-import Dao.HocSinhDAO;
+import Api.HocSinhApi;
 import Api.GiaoVienApi;
 import View.Tien.HanhKiemPanel;
 import View.LoginView;
@@ -148,7 +148,7 @@ public class MainFormNew extends JFrame {
 
         if (!maNguoiDung.isEmpty()) {
             if (Auth.isHocSinh()) {
-                HocSinh hs = new HocSinhDAO().getByMaHS(maNguoiDung);
+                HocSinh hs = new HocSinhApi().getHocSinh(maNguoiDung);
                 if (hs != null && hs.getHoTen() != null && !hs.getHoTen().trim().isEmpty()) {
                     return hs.getHoTen().trim();
                 }

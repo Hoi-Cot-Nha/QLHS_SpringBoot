@@ -15,7 +15,7 @@ import java.util.List;
 
 public class DoiTuongUuTienApi {
 
-    private static final String API_URL = "http://localhost:8080/api/doituong";
+    private static final String API_URL = ApiConfig.BASE_URL+ "/api/doituong";
 
     private static final Gson gson = new Gson();
 
