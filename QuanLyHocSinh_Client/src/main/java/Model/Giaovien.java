@@ -1,39 +1,77 @@
 package Model;
 
 public class Giaovien {
+
     private String maGV;
     private String hoTen;
-    private String ngaysinh;
+    private String ngaySinh;
     private String sdt;
-    private String maTH; // Mã tổ hợp
+    private String maToHop;
+    private String tenToHop;
 
-    public Giaovien() { }
-
-    public Giaovien(String maGV, String hoTen, String ngaysinh, String sdt, String maTH) {
-        this.maGV = maGV;
-        this.hoTen = hoTen;
-        this.ngaysinh = ngaysinh;
-        this.sdt = sdt;
-        this.maTH = maTH;
+    public Giaovien() {
     }
 
-    public String getMaGV() { return maGV; }
-    public void setMaGV(String maGV) { this.maGV = maGV; }
+    public Giaovien(String maGV, String hoTen, String ngaySinh,
+                    String sdt, String maToHop, String tenToHop) {
+        this.maGV = maGV;
+        this.hoTen = hoTen;
+        this.ngaySinh = ngaySinh;
+        this.sdt = sdt;
+        this.maToHop = maToHop;
+        this.tenToHop = tenToHop;
+    }
 
-    public String getHoTen() { return hoTen; }
-    public void setHoTen(String hoTen) { this.hoTen = hoTen; }
+    public String getMaGV() {
+        return maGV;
+    }
 
-    public String getNgaysinh() { return ngaysinh; }
-    public void setNgaysinh(String ngaysinh) { this.ngaysinh = ngaysinh; }
+    public void setMaGV(String maGV) {
+        this.maGV = maGV;
+    }
 
-    public String getSdt() { return sdt; }
-    public void setSdt(String sdt) { this.sdt = sdt; }
+    public String getHoTen() {
+        return hoTen;
+    }
 
-    public String getMaTH() { return maTH; }
-    public void setMaTH(String maTH) { this.maTH = maTH; }
-    
+    public void setHoTen(String hoTen) {
+        this.hoTen = hoTen;
+    }
+
+    public String getNgaySinh() {
+        return ngaySinh;
+    }
+
+    public void setNgaySinh(String ngaySinh) {
+        this.ngaySinh = ngaySinh;
+    }
+
+    public String getSdt() {
+        return sdt;
+    }
+
+    public void setSdt(String sdt) {
+        this.sdt = sdt;
+    }
+
+    public String getMaToHop() {
+        return maToHop;
+    }
+
+    public void setMaToHop(String maToHop) {
+        this.maToHop = maToHop;
+    }
+
+    public String getTenToHop() {
+        return tenToHop;
+    }
+
+    public void setTenToHop(String tenToHop) {
+        this.tenToHop = tenToHop;
+    }
+
     @Override
     public String toString() {
-        return this.hoTen; 
+        return hoTen;
     }
 }

@@ -1,7 +1,7 @@
 package Controller.Dat;
 
-import Dao.GiaovienDAO;
-import Dao.LopDAO;
+import Api.LopApi;
+import Api.GiaoVienApi;
 import Model.Giaovien;
 import Model.Lop;
 import Model.LopGVCN;
@@ -15,19 +15,19 @@ import java.util.List;
 public class LopController {
 
     private QuanLyLopPanel view;
-    private LopDAO dao;
-    private GiaovienDAO gvDao;
+    private LopApi dao;
+    private GiaoVienApi gvDao;
     private String currentMode = "";
 
     public LopController(QuanLyLopPanel view) {
         this.view = view;
-        this.dao = new LopDAO();
-        this.gvDao = new GiaovienDAO();
+        this.dao = new LopApi();
+        this.gvDao = new GiaoVienApi();
 
-        initController();
+        init();
     }
 
-    private void initController() {
+    private void init() {
 
         loadComboBox();
         loadTable();
@@ -64,11 +64,18 @@ public class LopController {
                 view.getCboNienKhoa().addItem(nienKhoa);
             }
         }
-
-        List<Giaovien> list = gvDao.getAll();
-
-        for (Giaovien gv : list) {
-            view.getCboGVCN().addItem(gv);
+        try {
+            List<Giaovien> list = gvDao.getAll();
+            for (Giaovien gv : list) {
+                view.getCboGVCN().addItem(gv);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(
+                    view,
+                    "Không thể tải danh sách giáo viên!\n" + ex.getMessage(),
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
     }
 
@@ -77,7 +84,10 @@ public class LopController {
         view.getTableModel().setRowCount(0);
         for (LopGVCN l : list) {
             view.getTableModel().addRow(new Object[] {
-                    l.getMaLop(), l.getTenLop(), l.getNienKhoa(), l.getTenGVCN()
+                    l.getMaLop(),
+                    l.getTenLop(),
+                    l.getNienKhoa(),
+                    l.getTenGVCN()
             });
         }
     }
@@ -178,7 +188,7 @@ public class LopController {
 
         boolean ok = false;
         if ("ADD".equals(currentMode))
-            ok = dao.insert(l);
+            ok = dao.create(l);
         else if ("EDIT".equals(currentMode))
             ok = dao.update(l);
 
@@ -215,6 +225,7 @@ public class LopController {
         view.getBtnLuu().setEnabled(!normal);
         view.getBtnHuy().setEnabled(!normal);
         view.getTableLop().setEnabled(normal);
+
     }
 
     private void searchData() {
@@ -226,7 +237,7 @@ public class LopController {
             return;
         }
 
-        List<LopGVCN> list = dao.searchLop(keyword);
+        List<LopGVCN> list = dao.search(keyword);
 
         view.getTableModel().setRowCount(0);
         for (LopGVCN l : list) {

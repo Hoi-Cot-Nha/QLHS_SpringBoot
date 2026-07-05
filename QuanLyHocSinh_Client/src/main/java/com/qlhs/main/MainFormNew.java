@@ -15,7 +15,7 @@ import Model.Auth;
 import Model.HocSinh;
 import Model.Giaovien;
 import Dao.HocSinhDAO;
-import Dao.GiaovienDAO;
+import Api.GiaoVienApi;
 import View.Tien.HanhKiemPanel;
 import View.LoginView;
 import Controller.Dai.LoginController;
@@ -153,9 +153,15 @@ public class MainFormNew extends JFrame {
                     return hs.getHoTen().trim();
                 }
             } else if (Auth.isGiaoVien()) {
-                Giaovien gv = new GiaovienDAO().getByMaGV(maNguoiDung);
-                if (gv != null && gv.getHoTen() != null && !gv.getHoTen().trim().isEmpty()) {
-                    return gv.getHoTen().trim();
+                try {
+                    Giaovien gv = new GiaoVienApi().getByMaGV(maNguoiDung);
+
+                    if (gv != null && gv.getHoTen() != null && !gv.getHoTen().trim().isEmpty()) {
+                        return gv.getHoTen().trim();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }

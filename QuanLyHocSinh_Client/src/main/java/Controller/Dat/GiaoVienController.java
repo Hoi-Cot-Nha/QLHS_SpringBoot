@@ -1,7 +1,7 @@
 package Controller.Dat;
 
-import Dao.GiaovienDAO;
-import Dao.ToBoMonDAO;
+import Api.GiaoVienApi;
+import Dao.ToHopMonDAO;
 import Model.Giaovien;
 import Model.ToBoMon;
 import View.Dat.QuanLyGiaoVienPanel;
@@ -15,23 +15,27 @@ import java.util.List;
 
 public class GiaoVienController {
 
-    private QuanLyGiaoVienPanel view;
-    private GiaovienDAO dao;
-    private ToBoMonDAO tbmDao;
-    private String currentMode = ""; 
+    private final QuanLyGiaoVienPanel view;
+    private final GiaoVienApi api;
+    private final ToHopMonDAO toHopDAO;
+
+    private String mode = "";
 
     public GiaoVienController(QuanLyGiaoVienPanel view) {
-        this.view = view;
-        this.dao = new GiaovienDAO();
-        this.tbmDao = new ToBoMonDAO();
 
-        initController();
+        this.view = view;
+        this.api = new GiaoVienApi();
+        this.toHopDAO = new ToHopMonDAO();
+
+        init();
     }
 
-    private void initController() {
+    private void init() {
+
         loadComboBox();
         loadTable();
-        setButtonState(true); 
+
+        setButtonState(true);
 
         view.getTableGV().addMouseListener(new MouseAdapter() {
             @Override
@@ -41,169 +45,328 @@ public class GiaoVienController {
         });
 
         view.getBtnThem().addActionListener(e -> them());
+
         view.getBtnSua().addActionListener(e -> sua());
+
         view.getBtnXoa().addActionListener(e -> xoa());
+
         view.getBtnLuu().addActionListener(e -> luu());
+
         view.getBtnHuy().addActionListener(e -> huy());
+
         view.getBtnXem().addActionListener(e -> loadTable());
-        view.getBtnTimKiem().addActionListener(e -> searchData());
+
+        view.getBtnTimKiem().addActionListener(e -> search());
     }
 
     private void loadComboBox() {
+
         view.getCboMaToHop().removeAllItems();
-        List<ToBoMon> list = tbmDao.getAll();
+
+        List<ToBoMon> list = toHopDAO.getAll();
+
         for (ToBoMon t : list) {
             view.getCboMaToHop().addItem(t);
         }
     }
 
     private void loadTable() {
-        // Sử dụng phương thức mới với kiểm tra quyền
-        List<Giaovien> list = dao.getAllWithPermission();
-        view.getTableModel().setRowCount(0);
-        for (Giaovien gv : list) {
-            view.getTableModel().addRow(new Object[]{
-                gv.getMaGV(), gv.getHoTen(), gv.getNgaysinh(), gv.getSdt(), gv.getMaTH()
-            });
+
+        try {
+
+            List<Giaovien> list = api.getAll();
+
+            view.getTableModel().setRowCount(0);
+
+            for (Giaovien gv : list) {
+
+                view.getTableModel().addRow(new Object[]{
+                        gv.getMaGV(),
+                        gv.getHoTen(),
+                        gv.getNgaySinh(),
+                        gv.getSdt(),
+                        gv.getMaToHop()
+                });
+
+            }
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(view,
+                    "Không tải được danh sách giáo viên");
+
         }
+
     }
 
     private void fillForm() {
-        int r = view.getTableGV().getSelectedRow();
-        if (r < 0) return;
-        
-        view.getTxtMaGV().setText(view.getTableGV().getValueAt(r, 0).toString());
-        view.getTxtHoTen().setText(view.getTableGV().getValueAt(r, 1).toString());
-        
-        try {
-            // Dữ liệu từ DB ở dạng "yyyy-MM-dd", parse để set vào JSpinner
-            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(view.getTableGV().getValueAt(r, 2).toString());
-            view.getSpNgaySinh().setValue(date);
-        } catch (Exception e) {}
-        
-        view.getTxtSDT().setText(view.getTableGV().getValueAt(r, 3).toString());
 
-        String maTH = view.getTableGV().getValueAt(r, 4).toString();
-        for (int i = 0; i < view.getCboMaToHop().getItemCount(); i++) {
-            if (view.getCboMaToHop().getItemAt(i).getMaToHop().equals(maTH)) {
+        int row = view.getTableGV().getSelectedRow();
+
+        if (row < 0) return;
+
+        view.getTxtMaGV().setText(
+                view.getTableGV().getValueAt(row,0).toString());
+
+        view.getTxtHoTen().setText(
+                view.getTableGV().getValueAt(row,1).toString());
+
+        view.getTxtSDT().setText(
+                view.getTableGV().getValueAt(row,3).toString());
+
+        try {
+
+            Date d = new SimpleDateFormat("yyyy-MM-dd")
+                    .parse(view.getTableGV().getValueAt(row,2).toString());
+
+            view.getSpNgaySinh().setValue(d);
+
+        } catch (Exception ignored){}
+
+        String maTH = view.getTableGV().getValueAt(row,4).toString();
+
+        for(int i=0;i<view.getCboMaToHop().getItemCount();i++){
+
+            if(view.getCboMaToHop().getItemAt(i)
+                    .getMaToHop()
+                    .equals(maTH)){
+
                 view.getCboMaToHop().setSelectedIndex(i);
+
                 break;
             }
+
         }
+
     }
 
-    private void them() {
+    private void them(){
+
         clearForm();
-        currentMode = "ADD";
-        setButtonState(false); 
-        view.getTxtMaGV().setEnabled(true);
-        view.getTxtMaGV().requestFocus();
-    }
 
-    private void sua() {
-        if (view.getTableGV().getSelectedRow() == -1) {
-            JOptionPane.showMessageDialog(view, "Vui lòng chọn giáo viên cần sửa!");
-            return;
-        }
-        currentMode = "EDIT";
+        mode="ADD";
+
         setButtonState(false);
-        view.getTxtMaGV().setEnabled(false); 
-    }
 
-    private void xoa() {
-        int r = view.getTableGV().getSelectedRow();
-        if (r == -1) {
-            JOptionPane.showMessageDialog(view, "Vui lòng chọn dòng cần xóa!");
-            return;
-        }
-        if (JOptionPane.showConfirmDialog(view, "Bạn có chắc chắn muốn xóa?", "Xác nhận", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            String ma = view.getTxtMaGV().getText();
-            if (dao.delete(ma)) {
-                JOptionPane.showMessageDialog(view, "Đã xóa!");
-                loadTable();
-                clearForm();
-            } else {
-                JOptionPane.showMessageDialog(view, "Xóa thất bại!");
-            }
-        }
-    }
-
-    private void luu() {
-        if (view.getTxtMaGV().getText().isEmpty() || view.getTxtHoTen().getText().isEmpty()) {
-            JOptionPane.showMessageDialog(view, "Vui lòng nhập đủ thông tin!");
-            return;
-        }
-
-        Giaovien gv = new Giaovien();
-        gv.setMaGV(view.getTxtMaGV().getText());
-        gv.setHoTen(view.getTxtHoTen().getText());
-        gv.setSdt(view.getTxtSDT().getText());
-        // Lấy ngày từ JSpinner và format thành "yyyy-MM-dd" để lưu vào DB
-        gv.setNgaysinh(new SimpleDateFormat("yyyy-MM-dd").format(view.getSpNgaySinh().getValue()));
-
-        ToBoMon tbm = (ToBoMon) view.getCboMaToHop().getSelectedItem();
-        if (tbm != null) gv.setMaTH(tbm.getMaToHop());
-
-        boolean ok = false;
-        if ("ADD".equals(currentMode)) ok = dao.insert(gv);
-        else if ("EDIT".equals(currentMode)) ok = dao.update(gv);
-
-        if (ok) {
-            JOptionPane.showMessageDialog(view, "Lưu thành công!");
-            loadTable();
-            setButtonState(true);
-            clearForm();
-        } else {
-            JOptionPane.showMessageDialog(view, "Thao tác thất bại! Có thể mã đã tồn tại.");
-        }
-    }
-
-    private void huy() {
-        setButtonState(true);
-        clearForm();
-        view.getTableGV().clearSelection();
-    }
-    private void searchData() {
-    String keyword = view.getTxtTimKiem().getText().trim();
-
-    if (keyword.isEmpty()) {
-        JOptionPane.showMessageDialog(view, "Vui lòng nhập từ khóa tìm kiếm!");
-        return;
-    }
-
-    List<Giaovien> list = dao.searchGiaoVien(keyword);
-
-    view.getTableModel().setRowCount(0); 
-
-    for (Giaovien gv : list) {
-        view.getTableModel().addRow(new Object[]{
-            gv.getMaGV(),
-            gv.getHoTen(),
-            gv.getNgaysinh(),
-            gv.getSdt(),
-            gv.getMaTH()
-        });
-    }
-
-    if (list.isEmpty()) {
-        JOptionPane.showMessageDialog(view,
-                "Không tìm thấy giáo viên nào với từ khóa: " + keyword);
-    }
-}
-    private void clearForm() {
-        view.getTxtMaGV().setText("");
-        view.getTxtHoTen().setText("");
-        // ĐÃ SỬA DÒNG NÀY (Thêm ngoặc đơn)
-        view.getTxtSDT().setText(""); 
         view.getTxtMaGV().setEnabled(true);
+        view.getTxtHoTen().setEnabled(true);
+        view.getTxtSDT().setEnabled(true);
+        view.getSpNgaySinh().setEnabled(true);
+        view.getCboMaToHop().setEnabled(true);
+        view.getBtnHuy().setEnabled(true);
+        view.getBtnLuu().setEnabled(true);
+
     }
 
-    private void setButtonState(boolean normal) {
-        view.getBtnThem().setEnabled(normal);
-        view.getBtnSua().setEnabled(normal);
-        view.getBtnXoa().setEnabled(normal);
-        view.getBtnLuu().setEnabled(!normal);
-        view.getBtnHuy().setEnabled(!normal);
-        view.getTableGV().setEnabled(normal); 
+    private void sua(){
+
+        if(view.getTableGV().getSelectedRow()==-1){
+
+            JOptionPane.showMessageDialog(view,
+                    "Chọn giáo viên cần sửa");
+
+            return;
+
+        }
+
+        mode="EDIT";
+
+        setButtonState(false);
+
+        view.getTxtMaGV().setEnabled(false);
+
     }
+
+    private void xoa(){
+
+        if(view.getTableGV().getSelectedRow()==-1){
+
+            JOptionPane.showMessageDialog(view,
+                    "Chọn giáo viên cần xóa");
+
+            return;
+
+        }
+
+        int c=JOptionPane.showConfirmDialog(view,
+                "Bạn có chắc muốn xóa?",
+                "Xác nhận",
+                JOptionPane.YES_NO_OPTION);
+
+        if(c!=JOptionPane.YES_OPTION) return;
+
+        try{
+
+            api.delete(view.getTxtMaGV().getText());
+
+            JOptionPane.showMessageDialog(view,
+                    "Đã xóa");
+
+            loadTable();
+
+            clearForm();
+
+        }catch(Exception e){
+
+            JOptionPane.showMessageDialog(view,
+                    "Xóa thất bại");
+
+        }
+
+    }
+
+    private void luu(){
+
+        if(view.getTxtMaGV().getText().isEmpty()
+                ||view.getTxtHoTen().getText().isEmpty()){
+
+            JOptionPane.showMessageDialog(view,
+                    "Nhập đầy đủ thông tin");
+
+            return;
+
+        }
+
+        Giaovien gv=new Giaovien();
+
+        gv.setMaGV(view.getTxtMaGV().getText());
+
+        gv.setHoTen(view.getTxtHoTen().getText());
+
+        gv.setSdt(view.getTxtSDT().getText());
+
+        gv.setNgaySinh(
+                new SimpleDateFormat("yyyy-MM-dd")
+                        .format(view.getSpNgaySinh().getValue())
+        );
+
+        ToBoMon tb=(ToBoMon)view.getCboMaToHop().getSelectedItem();
+
+        if(tb!=null){
+
+            gv.setMaToHop(tb.getMaToHop());
+
+        }
+
+        try{
+
+            if(mode.equals("ADD")){
+
+                api.insert(gv);
+
+            }else{
+
+                api.update(gv);
+
+            }
+
+            JOptionPane.showMessageDialog(view,
+                    "Lưu thành công");
+
+            loadTable();
+
+            clearForm();
+
+            setButtonState(true);
+
+        }catch(Exception e){
+
+            JOptionPane.showMessageDialog(view,
+                    "Lưu thất bại");
+
+        }
+
+    }
+
+    private void search(){
+
+        try{
+
+            String keyword=view.getTxtTimKiem().getText().trim();
+
+            if(keyword.isEmpty()){
+
+                loadTable();
+
+                return;
+
+            }
+
+            List<Giaovien> list=api.searchGiaoVien(keyword);
+
+            view.getTableModel().setRowCount(0);
+
+            for(Giaovien gv:list){
+
+                view.getTableModel().addRow(new Object[]{
+
+                        gv.getMaGV(),
+                        gv.getHoTen(),
+                        gv.getNgaySinh(),
+                        gv.getSdt(),
+                        gv.getMaToHop()
+
+                });
+
+            }
+
+            if(list.isEmpty()){
+
+                JOptionPane.showMessageDialog(view,
+                        "Không tìm thấy dữ liệu");
+
+            }
+
+        }catch(Exception e){
+
+            JOptionPane.showMessageDialog(view,
+                    "Lỗi tìm kiếm");
+
+        }
+
+    }
+
+    private void huy(){
+
+        clearForm();
+
+        setButtonState(true);
+
+        view.getTableGV().clearSelection();
+        view.getTxtMaGV().setEnabled(false);
+        view.getTxtHoTen().setEnabled(false);
+        view.getTxtSDT().setEnabled(false);
+        view.getSpNgaySinh().setEnabled(false);
+        view.getCboMaToHop().setEnabled(false);
+
+    }
+
+    private void clearForm(){
+
+        view.getTxtMaGV().setText("");
+
+        view.getTxtHoTen().setText("");
+
+        view.getTxtSDT().setText("");
+
+        view.getTxtMaGV().setEnabled(true);
+
+    }
+
+    private void setButtonState(boolean normal){
+
+        view.getBtnThem().setEnabled(normal);
+
+        view.getBtnSua().setEnabled(normal);
+
+        view.getBtnXoa().setEnabled(normal);
+
+        view.getBtnLuu().setEnabled(!normal);
+
+        view.getBtnHuy().setEnabled(!normal);
+
+        view.getTableGV().setEnabled(normal);
+
+    }
+
 }
