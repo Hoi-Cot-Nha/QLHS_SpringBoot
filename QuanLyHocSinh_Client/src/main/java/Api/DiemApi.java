@@ -16,8 +16,8 @@ import java.util.List;
 
 public class DiemApi {
     private static final String BASE_URL = ApiConfig.BASE_URL + "/api/diem";
-    private HttpClient client;
-    private Gson gson;
+    private final HttpClient client;
+    private final Gson gson;
 
     public DiemApi() {
         client = HttpClient.newBuilder()

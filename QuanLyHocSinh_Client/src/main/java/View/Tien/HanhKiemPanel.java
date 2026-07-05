@@ -58,8 +58,8 @@ public class HanhKiemPanel extends JPanel {
         
         pnlFilter.add(new JLabel("Mã Lớp:"));
         cboLocMaLop = new JComboBox<>();
-        cboLocMaLop.addItem("");
-        cboLocMaLop.setSelectedIndex(0);
+        cboLocMaLop.addItem("Tất cả");
+        // Không setSelectedIndex(1) ở đây vì danh sách lớp chưa được đổ từ Database
         pnlFilter.add(cboLocMaLop); 
         
         pnlFilter.add(new JLabel("Năm Học:"));
@@ -198,7 +198,9 @@ public class HanhKiemPanel extends JPanel {
     }
 
     public String getMaLopFilter() {
-        return cboLocMaLop.getSelectedItem() != null ? cboLocMaLop.getSelectedItem().toString() : ""; 
+        if (cboLocMaLop.getSelectedItem() == null) return "";
+        String val = cboLocMaLop.getSelectedItem().toString();
+        return val.equals("Tất cả") ? "" : val;
     }
     public String getNamHocFilter() { 
         return cboLocNamHoc.getSelectedItem() != null ? cboLocNamHoc.getSelectedItem().toString() : ""; 
@@ -214,10 +216,13 @@ public class HanhKiemPanel extends JPanel {
     public void setMaLopData(List<String> lops) {
         cboLocMaLop.removeAllItems();
         cboMaLopInput.removeAllItems();
-        cboLocMaLop.addItem("");
+        cboLocMaLop.addItem("Tất cả");
         for (String lop : lops) {
             cboLocMaLop.addItem(lop);
             cboMaLopInput.addItem(lop);
+        }
+        if (cboLocMaLop.getItemCount() > 1) {
+            cboLocMaLop.setSelectedIndex(1);
         }
     }
 

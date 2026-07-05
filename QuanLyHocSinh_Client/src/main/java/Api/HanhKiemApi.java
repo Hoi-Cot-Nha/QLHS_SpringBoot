@@ -19,8 +19,8 @@ import java.util.Map;
 
 public class HanhKiemApi {
     private static final String BASE_URL = ApiConfig.BASE_URL + "/api/hanhkiem";
-    private HttpClient client;
-    private Gson gson;
+    private final HttpClient client;
+    private final Gson gson;
 
     public HanhKiemApi() {
         client = HttpClient.newBuilder()

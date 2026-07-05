@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/lichthi")
 public class LichThiRestController {
@@ -17,12 +15,12 @@ public class LichThiRestController {
     private LichThiService lichThiService;
 
     @GetMapping
-    public List<Map<String, Object>> getAll() {
+    public List<LichThi> getAll() {
         return lichThiService.getAllLichThi();
     }
 
     @GetMapping("/search")
-    public List<Map<String, Object>> search(@RequestParam String keyword) {
+    public List<LichThi> search(@RequestParam String keyword) {
         return lichThiService.searchLichThi(keyword);
     }
 
@@ -32,9 +30,9 @@ public class LichThiRestController {
     }
 
     @GetMapping("/filter")
-    public List<Map<String, Object>> filter(@RequestParam(required = false, defaultValue = "") String kyThi,
-                                            @RequestParam(required = false, defaultValue = "") String maMH,
-                                            @RequestParam(required = false, defaultValue = "") String maPhong) {
+    public List<LichThi> filter(@RequestParam(required = false, defaultValue = "") String kyThi,
+            @RequestParam(required = false, defaultValue = "") String maMH,
+            @RequestParam(required = false, defaultValue = "") String maPhong) {
         return lichThiService.getLichThiByFilter(kyThi, maMH, maPhong);
     }
 

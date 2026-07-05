@@ -6,23 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class HanhKiemService {
     @Autowired
     private HanhKiemRepository hanhKiemRepository;
 
-    public List<Map<String, Object>> getHanhKiemByFilter(String maLop, String namHoc, int hocKy) {
+    public List<HanhKiem> getHanhKiemByFilter(String maLop, String namHoc, int hocKy) {
         return hanhKiemRepository.getHanhKiemByFilter(maLop, namHoc, hocKy);
     }
 
-    public List<Map<String, Object>> searchHanhKiem(String keyword) {
+    public List<HanhKiem> searchHanhKiem(String keyword) {
         return hanhKiemRepository.searchHanhKiem(keyword);
     }
 
-    public List<Map<String, Object>> getHanhKiemByMaHS(String maHS) {
+    public List<HanhKiem> getHanhKiemByMaHS(String maHS) {
         return hanhKiemRepository.getHanhKiemByMaHS(maHS);
     }
 
@@ -38,6 +36,7 @@ public class HanhKiemService {
         hanhKiemRepository.deleteById(new HanhKiem.HanhKiemId(maHS, namHoc, hocKy));
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean exists(String maHS, String namHoc, int hocKy) {
         return hanhKiemRepository.existsById(new HanhKiem.HanhKiemId(maHS, namHoc, hocKy));
     }

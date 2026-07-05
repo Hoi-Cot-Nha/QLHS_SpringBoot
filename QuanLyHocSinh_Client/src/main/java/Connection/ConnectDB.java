@@ -9,11 +9,12 @@ public class ConnectDB {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
-            String dbUrl = "jdbc:sqlserver://26.44.245.147:1433;databaseName=QuanLyHocSinh;encrypt=true;trustServerCertificate=true;";
-//            String dbUrl = "jdbc:sqlserver://TRANG\\MSSQLSERVER2025;databaseName=QuanLyHocSinh;encrypt=true;trustServerCertificate=true;";
-            String username = "sa"; 
-            String password = "123456"; 
-            
+            String dbUrl = "jdbc:sqlserver://localhost:1433;databaseName=QuanLyHocSinh;encrypt=true;trustServerCertificate=true;";
+            // String dbUrl =
+            // "jdbc:sqlserver://TRANG\\MSSQLSERVER2025;databaseName=QuanLyHocSinh;encrypt=true;trustServerCertificate=true;";
+            String username = "sa";
+            String password = "123456";
+
             cons = DriverManager.getConnection(dbUrl, username, password);
             System.out.println("Kết nối CSDL thành công!");
         } catch (Exception e) {
@@ -22,6 +23,5 @@ public class ConnectDB {
         }
         return cons;
     }
-    
 
 }

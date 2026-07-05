@@ -7,18 +7,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import java.util.Map;
-
 @Service
 public class LichThiService {
     @Autowired
     private LichThiRepository lichThiRepository;
 
-    public List<Map<String, Object>> getAllLichThi() {
+    public List<LichThi> getAllLichThi() {
         return lichThiRepository.getAllLichThiWithTenMon();
     }
 
-    public List<Map<String, Object>> searchLichThi(String keyword) {
+    public List<LichThi> searchLichThi(String keyword) {
         return lichThiRepository.searchLichThiNative(keyword);
     }
 
@@ -26,7 +24,7 @@ public class LichThiService {
         return lichThiRepository.getDistinctKyThi();
     }
 
-    public List<Map<String, Object>> getLichThiByFilter(String tenKyThi, String maMH, String maPhong) {
+    public List<LichThi> getLichThiByFilter(String tenKyThi, String maMH, String maPhong) {
         return lichThiRepository.filterLichThi(tenKyThi, maMH, maPhong);
     }
 
@@ -38,6 +36,7 @@ public class LichThiService {
         lichThiRepository.deleteById(maLT);
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean exists(int maLT) {
         return lichThiRepository.existsById(maLT);
     }

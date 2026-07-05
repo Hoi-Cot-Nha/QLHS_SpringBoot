@@ -12,5 +12,5 @@ public interface TKBRepository extends JpaRepository<TKB,Integer> {
     List<TKB> findByMaMH(String maMH);
     List<TKB> findByMaPhong(String maPhong);
     List<TKB> findByMaGV(String maGV);
-    List<TKB> findByThu(int thu);
+//    List<TKB> findByThu(int thu);
 }

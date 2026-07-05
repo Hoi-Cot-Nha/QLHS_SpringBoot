@@ -47,4 +47,20 @@ public class Diem {
 
     @Column(name = "DiemTongKet")
     private double diemTongKet;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MaHS", insertable = false, updatable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private HocSinh hocSinh;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MaMH", insertable = false, updatable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private MonHoc monHoc;
+
+    @Transient
+    public String getTenHS() { return hocSinh != null ? hocSinh.getHoTen() : null; }
+
+    @Transient
+    public String getTenMH() { return monHoc != null ? monHoc.getTenMH() : null; }
 }

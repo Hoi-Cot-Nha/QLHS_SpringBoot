@@ -182,6 +182,26 @@ public class LichThiController {
                 view.showMessage("Lỗi định dạng giờ!");
                 return;
             }
+
+            // Kiểm tra trùng lịch thi (Overlap Check)
+            List<LichThi> allExams = dao.getAllLichThi();
+            for (LichThi existing : allExams) {
+                if (existing.getMaLT() == lt.getMaLT()) continue; // Bỏ qua chính nó khi sửa
+                
+                if (existing.getNgayThi() != null && existing.getMaPhong() != null &&
+                    existing.getNgayThi().equals(lt.getNgayThi()) && 
+                    existing.getMaPhong().equals(lt.getMaPhong())) {
+                    
+                    // Logic trùng giờ: Bắt đầu mới < Kết thúc cũ VÀ Kết thúc mới > Bắt đầu cũ
+                    if (lt.getGioBatDau().compareTo(existing.getGioKetThuc()) < 0 && 
+                        lt.getGioKetThuc().compareTo(existing.getGioBatDau()) > 0) {
+                        view.showMessage(String.format("Lỗi: Trùng lịch với Mã LT %d (từ %s đến %s) cùng ngày, cùng phòng!", 
+                            existing.getMaLT(), existing.getGioBatDau(), existing.getGioKetThuc()));
+                        return;
+                    }
+                }
+            }
+
             if (editMode[0]) {
                 if(dao.updateLichThi(lt)) {
                     view.showMessage("Cập nhật thành công!");

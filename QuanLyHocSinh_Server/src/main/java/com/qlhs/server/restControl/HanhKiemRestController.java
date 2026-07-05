@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/hanhkiem")
@@ -16,14 +15,14 @@ public class HanhKiemRestController {
     private HanhKiemService hanhKiemService;
 
     @GetMapping("/filter")
-    public List<Map<String, Object>> getByFilter(@RequestParam(defaultValue = "") String maLop,
-                                                 @RequestParam(defaultValue = "") String namHoc,
-                                                 @RequestParam(defaultValue = "0") int hocKy) {
+    public List<HanhKiem> getByFilter(@RequestParam(defaultValue = "") String maLop,
+            @RequestParam(defaultValue = "") String namHoc,
+            @RequestParam(defaultValue = "0") int hocKy) {
         return hanhKiemService.getHanhKiemByFilter(maLop, namHoc, hocKy);
     }
 
     @GetMapping("/search")
-    public List<Map<String, Object>> search(@RequestParam String keyword) {
+    public List<HanhKiem> search(@RequestParam String keyword) {
         return hanhKiemService.searchHanhKiem(keyword);
     }
 
@@ -33,7 +32,7 @@ public class HanhKiemRestController {
     }
 
     @GetMapping("/mahs/{maHS}")
-    public List<Map<String, Object>> getByMaHS(@PathVariable String maHS) {
+    public List<HanhKiem> getByMaHS(@PathVariable String maHS) {
         return hanhKiemService.getHanhKiemByMaHS(maHS);
     }
 
@@ -44,8 +43,8 @@ public class HanhKiemRestController {
 
     @DeleteMapping
     public ResponseEntity<Void> delete(@RequestParam String maHS,
-                                       @RequestParam String namHoc,
-                                       @RequestParam int hocKy) {
+            @RequestParam String namHoc,
+            @RequestParam int hocKy) {
         if (!hanhKiemService.exists(maHS, namHoc, hocKy)) {
             return ResponseEntity.notFound().build();
         }

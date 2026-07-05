@@ -170,7 +170,9 @@ public class QuanLyDiemPanel extends JPanel {
 
     // --- Các hàm Getter dữ liệu từ Form (Cho Controller gọi) ---
     public String getMaLopFilter() { 
-        return cboLocMaLop.getSelectedItem() != null ? cboLocMaLop.getSelectedItem().toString() : ""; 
+        if (cboLocMaLop.getSelectedItem() == null) return "";
+        String val = cboLocMaLop.getSelectedItem().toString();
+        return val.equals("Tất cả") ? "" : val;
     }
     public String getMaMonFilter() { 
         String tenMonSelected = cboLocMon.getSelectedItem() != null ? cboLocMon.getSelectedItem().toString() : "";
@@ -195,9 +197,13 @@ public class QuanLyDiemPanel extends JPanel {
     // --- Các hàm Setter dữ liệu cho ComboBox ---
     public void setMaLopData(List<String> lops) {
         cboLocMaLop.removeAllItems();
-        cboLocMaLop.addItem("");
+        cboLocMaLop.addItem("Tất cả"); // Thay vì để rỗng, để "Tất cả" cho rõ ràng
         for (String lop : lops) {
             cboLocMaLop.addItem(lop);
+        }
+        // Chọn lớp đầu tiên làm mặc định (nếu có lớp)
+        if (cboLocMaLop.getItemCount() > 1) {
+            cboLocMaLop.setSelectedIndex(1);
         }
     }
 

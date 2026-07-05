@@ -34,4 +34,14 @@ public class LichThi {
 
     @Column(name = "MaPhong", length = 50)
     private String maPhong;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MaMH", insertable = false, updatable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private MonHoc monHoc;
+
+    @Transient
+    public String getTenMH() {
+        return monHoc != null ? monHoc.getTenMH() : null;
+    }
 }

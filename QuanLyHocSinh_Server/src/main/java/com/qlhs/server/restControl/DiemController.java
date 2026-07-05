@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/diem")
@@ -17,12 +16,12 @@ public class DiemController {
     private DiemService diemService;
 
     @GetMapping
-    public List<Map<String, Object>> getAllDiem() {
+    public List<Diem> getAllDiem() {
         return diemService.getAllDiem();
     }
 
     @GetMapping("/filter")
-    public List<Map<String, Object>> getDiemByFilter(
+    public List<Diem> getDiemByFilter(
             @RequestParam String maLop,
             @RequestParam String maMH,
             @RequestParam int hocKy) {
@@ -30,7 +29,7 @@ public class DiemController {
     }
 
     @GetMapping("/search")
-    public List<Map<String, Object>> searchDiem(@RequestParam String keyword) {
+    public List<Diem> searchDiem(@RequestParam String keyword) {
         return diemService.searchDiem(keyword);
     }
 
@@ -40,7 +39,7 @@ public class DiemController {
     }
 
     @GetMapping("/hocsinh/{maHS}")
-    public List<Map<String, Object>> getDiemByMaHS(@PathVariable String maHS) {
+    public List<Diem> getDiemByMaHS(@PathVariable String maHS) {
         return diemService.getDiemByMaHS(maHS);
     }
 

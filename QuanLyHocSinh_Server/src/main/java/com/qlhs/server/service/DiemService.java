@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class DiemService {
@@ -14,19 +13,19 @@ public class DiemService {
     @Autowired
     private DiemRepository diemRepository;
 
-    public List<Map<String, Object>> getAllDiem() {
+    public List<Diem> getAllDiem() {
         return diemRepository.findAllDiemWithDetails();
     }
 
-    public List<Map<String, Object>> getDiemByFilter(String maLop, String maMH, int hocKy) {
+    public List<Diem> getDiemByFilter(String maLop, String maMH, int hocKy) {
         return diemRepository.findDiemByFilter(maLop, maMH, hocKy);
     }
 
-    public List<Map<String, Object>> searchDiem(String keyword) {
+    public List<Diem> searchDiem(String keyword) {
         return diemRepository.searchDiem(keyword);
     }
 
-    public List<Map<String, Object>> getDiemByMaHS(String maHS) {
+    public List<Diem> getDiemByMaHS(String maHS) {
         return diemRepository.findDiemByMaHSWithDetails(maHS);
     }
 
