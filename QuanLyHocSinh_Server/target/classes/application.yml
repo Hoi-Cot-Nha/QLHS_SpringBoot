@@ -18,7 +18,4 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
-        # dialect: org.hibernate.dialect.SQLServerDialect
-        # thay vì SQLServer2016Dialect (đã deprecated)
-        # dialect: org.hibernate.dialect.SQLServer2016Dialect
         format_sql: true

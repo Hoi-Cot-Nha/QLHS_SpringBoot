@@ -11,6 +11,10 @@ import javax.imageio.ImageIO;
 import java.awt.AlphaComposite;
 import java.awt.RenderingHints;
 import java.awt.FontMetrics;
+
+import Controller.HaTrang.Hocphicontroller;
+import Controller.HaTrang.Phuckhaocontroller;
+import Controller.HaTrang.Thongbaocontroller;
 import Model.Auth;
 import Model.HocSinh;
 import Model.Giaovien;
@@ -410,11 +414,14 @@ public class MainFormNew extends JFrame {
             LichThiPanel view = new LichThiPanel();
             new LichThiController(view); viewToShow = view;
         } else if (formCode.equals("FormHocPhi")) {
-            viewToShow = new QuanLyHocPhiPanel();
+            QuanLyHocPhiPanel view = new QuanLyHocPhiPanel();
+            new Hocphicontroller(view);viewToShow = view;
         } else if (formCode.equals("FormThongBao")) {
-            viewToShow = new QuanlyThongbaoPanel();
+            QuanlyThongbaoPanel view = new QuanlyThongbaoPanel();
+            new Thongbaocontroller(view);viewToShow = view;
         } else if (formCode.equals("FormPhucKhao")) {
-            viewToShow = new QuanLyPhucKhaoPanel();
+            QuanLyPhucKhaoPanel view = new QuanLyPhucKhaoPanel();
+            new Phuckhaocontroller(view);viewToShow = view;
         } else if (formCode.equals("FormMonHoc")) {
             FrmMonHoc panel = new FrmMonHoc();
             new MonHocController(panel); viewToShow = panel;

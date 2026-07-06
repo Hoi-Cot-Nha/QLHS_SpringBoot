@@ -38,6 +38,11 @@ public class PhucKhaoRestController {
 
     }
 
+    @GetMapping("/hocsinh/{maHS}")
+    public List<PhucKhao> getByMaHS(@PathVariable String maHS) {
+        return phucKhaoService.getByMaHS(maHS);
+    }
+
     @PostMapping
     public ResponseEntity<PhucKhao> createPK(@RequestBody PhucKhao phucKhao){
 

@@ -23,8 +23,6 @@ public class QuanLyPhucKhaoPanel extends JPanel {
 
     public QuanLyPhucKhaoPanel() {
         initComponents();
-        // Khởi tạo controller gán trực tiếp tại đây để điều khiển sự kiện
-        new Phuckhaocontroller(this);
     }
 
     private void initComponents() {
@@ -42,7 +40,7 @@ public class QuanLyPhucKhaoPanel extends JPanel {
 
         JPanel pnlFilter = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
         pnlFilter.setBackground(Color.WHITE);
-        pnlFilter.add(new JLabel("Nhập từ khoá: "));
+        pnlFilter.add(new JLabel("Tìm kiếm (MaHS/MaMH/TT/Lý do): "));
         txtLoc = new JTextField(20);
         btnLoc = new JButton("Tìm Kiếm");
         ButtonStyleHelper.styleButtonSearch(btnLoc);
@@ -187,7 +185,7 @@ public class QuanLyPhucKhaoPanel extends JPanel {
         if (!Model.Auth.isHocSinh()) {
             txtMaHS.setText("");
         } else {
-            txtMaHS.setText(Model.Auth.maNguoiDung);
+            txtMaHS.setText(Model.Auth.maNguoiDung != null ? Model.Auth.maNguoiDung.toUpperCase() : "");
         }
         txtMaMH.setText("");
         if (cboTrangThai.getItemCount() > 0) {

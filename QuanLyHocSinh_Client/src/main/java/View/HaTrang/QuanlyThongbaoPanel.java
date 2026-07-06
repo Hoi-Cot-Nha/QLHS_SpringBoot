@@ -46,7 +46,7 @@ public class QuanlyThongbaoPanel extends JPanel {
 
         JPanel pnlFilter = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
         pnlFilter.setBackground(Color.WHITE);
-        pnlFilter.add(new JLabel("Tìm kiếm:"));
+        pnlFilter.add(new JLabel("Tìm kiếm (Tiêu đề/ Người gửi/ Nội dung):"));
         txtLocKeyword = new JTextField(20);
         btnLoc = new JButton("Tìm Kiếm");
         ButtonStyleHelper.styleButtonSearch(btnLoc);

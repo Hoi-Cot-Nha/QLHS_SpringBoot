@@ -7,7 +7,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
-public interface PhucKhaoRepository extends JpaRepository<PhucKhao,Integer> {
+public interface PhucKhaoRepository extends JpaRepository<PhucKhao, Integer> {
+    List<PhucKhao> findByMaHS(String maHS);
+
     @Query("SELECT p FROM PhucKhao p WHERE " +
             "LOWER(p.maMH) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(p.maHS) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +

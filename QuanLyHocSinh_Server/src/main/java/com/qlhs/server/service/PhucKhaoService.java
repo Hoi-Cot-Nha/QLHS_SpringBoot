@@ -27,6 +27,10 @@ public class PhucKhaoService {
         return phucKhaoRepository.searchByKeyword(keyword);
     }
 
+    public List<PhucKhao> getByMaHS(String maHS) {
+        return phucKhaoRepository.findByMaHS(maHS);
+    }
+
     public PhucKhao savePK(PhucKhao phucKhao){
         return phucKhaoRepository.save(phucKhao);
     }

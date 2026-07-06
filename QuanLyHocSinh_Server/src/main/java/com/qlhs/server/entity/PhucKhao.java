@@ -15,6 +15,7 @@ import java.util.Date;
 public class PhucKhao {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="MaPK")
     private int maPK;
 

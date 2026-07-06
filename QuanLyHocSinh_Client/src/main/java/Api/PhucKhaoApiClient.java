@@ -120,8 +120,21 @@ public class PhucKhaoApiClient {
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            Type type = new TypeToken<List<Phuckhao>>(){}.getType();
-            return gson.fromJson(response.body(), type);
+            String body = response.body().trim();
+
+            Type listType = new TypeToken<List<Phuckhao>>(){}.getType();
+
+            // Nếu Server trả về Object chứ không phải Array danh sách
+            if (body.startsWith("{")) {
+                Phuckhao singlePk = gson.fromJson(body, Phuckhao.class);
+                List<Phuckhao> list = new ArrayList<>();
+                if (singlePk != null) {
+                    list.add(singlePk);
+                }
+                return list;
+            }
+
+            return gson.fromJson(body, listType);
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
