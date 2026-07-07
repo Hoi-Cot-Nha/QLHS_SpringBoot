@@ -126,8 +126,8 @@ Dưới đây là danh sách các thành viên trong nhóm tham gia phát triể
 
 | STT | Họ và tên | Nhiệm vụ | Phần trăm hoàn thành |
 |:---:|---|---|:---:|
-| 1 | **Lê Thu Trang** (NT) | - Vẽ biểu đồ Use Case chi tiết, lập kịch bản: **Use Case quản lý học phí, quản lý thông báo, báo cáo thống kê, quản lý lịch dạy.** | 100% |
-| 2 | **Trần Văn Tiến** | - Vẽ biểu đồ Use Case chi tiết, lập kịch bản: **Use Case phân quyền, sao lưu và khôi phục dữ liệu, tra cứu điểm, tra cứu học phí.** | 100% |
-| 3 | **Doãn Trung Đạt** | - Vẽ sơ đồ tổng quát.<br>- Vẽ biểu đồ Use Case chi tiết, lập kịch bản: **Use Case đăng nhập, quản lý tài khoản cá nhân, tìm kiếm, quản lý phúc khảo.** | 100% |
-| 4 | **Nguyễn Thị Hà Trang** | - Vẽ biểu đồ Use Case chi tiết, lập kịch bản: **Use Case thanh toán học phí, xem thời khoá biểu, thông báo, phúc khảo của học sinh.** | 100% |
-| 5 | **Nguyễn Đắc Đại** | - Vẽ biểu đồ Use Case chi tiết, lập kịch bản: **Use Case quản lý điểm, điểm danh, quản lý học sinh.** | 100% |
+| 1 | **Lê Thu Trang**(NT)| -lập kịch bản: **Use Case quản lý môn học, quản lý phòng học, quản lý lịch dạy, thời khóa biểu, phân quyền.** | 100% |
+| 2 | **Trần Văn Tiến** | -lập kịch bản: **Use Case quản lý điểm, quản lý hạnh kiểm, quản lý lịch thi.** | 100% |
+| 3 | **Doãn Trung Đạt** | -lập kịch bản: **Use Case quản lý giáo viên, quản lý lớp học, quản lý tổ bộ môn của giáo viên.** | 100% |
+| 4 | **Nguyễn Thị Hà Trang** | -lập kịch bản: **Use Case thanh toán học phí, quản lý phúc khảo, tạo đơn phúc khảo, quản lý thông báo.** | 100% |
+| 5 | **Nguyễn Đắc Đại** | -lập kịch bản: **Use Case tài khoản, quản lý học sinh, quản lý đối tượng ưu tiên.** | 100% |
