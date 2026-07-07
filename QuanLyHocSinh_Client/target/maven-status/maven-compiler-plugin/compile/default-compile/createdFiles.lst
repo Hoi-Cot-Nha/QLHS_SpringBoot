@@ -65,6 +65,7 @@ Api\GiaoVienApi.class
 com\qlhs\main\MainFormNew$2.class
 Api\TKBApiClient$5.class
 Controller\HaTrang\Phuckhaocontroller$2.class
+View\HaTrang\QuanLyHocPhiPanel$3.class
 View\ThuTrang\FrmTKB.class
 Api\PhucKhaoApiClient$2.class
 Model\PhongHoc.class
