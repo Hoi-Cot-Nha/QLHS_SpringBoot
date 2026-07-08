@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ToHopMonApi {
 
-    private static final String BASE_URL = "http://localhost:8080/api/tohopmon";
+    private static final String BASE_URL = ApiConfig.BASE_URL+"/api/tohopmon";
     private final Gson gson = new Gson();
 
     // Lấy tất cả
