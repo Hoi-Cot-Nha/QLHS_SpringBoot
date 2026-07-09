@@ -106,7 +106,6 @@ public class QuanLyPhucKhaoPanel extends JPanel {
         pnlSouth.add(pnlBtns, BorderLayout.SOUTH);
         add(pnlSouth, BorderLayout.SOUTH);
 
-        // PHÂN QUYỀN GIAO DIỆN KHI MỚI KHỞI TẠO
         if (Model.Auth.isHocSinh()) {
             lblTrangThai.setVisible(false);
             cboTrangThai.setVisible(false);
@@ -115,7 +114,7 @@ public class QuanLyPhucKhaoPanel extends JPanel {
             setCrudButtonState(true, false, false, false, false);
             setInputEditable(false);
         } else {
-            btnThem.setVisible(false); // Ẩn hoàn toàn nút thêm đối với GV/Admin
+            btnThem.setVisible(false); 
             setCrudButtonState(false, false, false, false, false);
             setInputEditable(false);
         }

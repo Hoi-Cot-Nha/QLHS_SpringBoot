@@ -67,7 +67,6 @@ public class Diem {
     public double getDiemCuoiKy() { return diemCuoiKy; }
     public void setDiemCuoiKy(double diemCuoiKy) { this.diemCuoiKy = diemCuoiKy; }
 
-    // TÍNH ĐIỂM TỔNG KẾT
     public double getDiemTongKet() {
         return (diem15p + diem1Tiet + diemGiuaKy * 2 + diemCuoiKy * 3) / 7.0;
     }

@@ -29,7 +29,6 @@ public class HanhKiem {
         this.nhanXet = nhanXet;
     }
 
-  
     public String getMaHS() { return maHS; }
     public void setMaHS(String maHS) { this.maHS = maHS; }
 

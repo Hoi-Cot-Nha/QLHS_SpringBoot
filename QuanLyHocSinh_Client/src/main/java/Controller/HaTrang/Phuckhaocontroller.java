@@ -52,7 +52,6 @@ public class Phuckhaocontroller {
 
         setIdleState.run();
 
-        // Table click
         view.getTable().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -65,7 +64,6 @@ public class Phuckhaocontroller {
             }
         });
 
-        // Add button
         view.getBtnThem().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -76,7 +74,6 @@ public class Phuckhaocontroller {
             }
         });
 
-        // Edit button
         view.getBtnSua().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -91,7 +88,6 @@ public class Phuckhaocontroller {
             }
         });
 
-        // Save button
         view.getBtnLuu().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -130,7 +126,6 @@ public class Phuckhaocontroller {
             }
         });
 
-        // Delete button
         view.getBtnXoa().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -159,8 +154,6 @@ public class Phuckhaocontroller {
             }
         });
 
-        // Search/Filter button - ĐÃ SỬA CHUẨN CASE-INSENSITIVE
-        // Search/Filter button - ĐÃ ĐỒNG BỘ VỚI BACKEND
         view.getBtnLoc().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -170,7 +163,7 @@ public class Phuckhaocontroller {
                     loadData();
                     return;
                 }
-                // Gọi API tìm kiếm từ Backend
+                
                 List<Phuckhao> searchResult = dao.search(tuKhoa);
                 
                 if (Model.Auth.isHocSinh()) {
@@ -186,7 +179,6 @@ public class Phuckhaocontroller {
             }
         });
 
-        // Cancel button
         view.getBtnHuy().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

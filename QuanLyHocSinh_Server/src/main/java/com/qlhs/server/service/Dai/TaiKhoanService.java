@@ -14,32 +14,20 @@ public class TaiKhoanService {
     @Autowired
     private TaiKhoanRepository taiKhoanRepository;
 
-    /**
-     * Kiểm tra đăng nhập
-     */
     public TaiKhoan checkLogin(String username, String password) {
         Optional<TaiKhoan> tk =
                 taiKhoanRepository.findByTenDangNhapAndMatKhau(username, password);
-        return tk.orElse(null); // Trả về null nếu không tìm thấy
+        return tk.orElse(null); 
     }
 
-    /**
-     * Lấy toàn bộ tài khoản
-     */
     public List<TaiKhoan> getAllTaiKhoan() {
         return taiKhoanRepository.findAll();
     }
 
-    /**
-     * Lấy tài khoản theo tên đăng nhập
-     */
     public Optional<TaiKhoan> getTaiKhoanByTenDangNhap(String tenDangNhap) {
         return taiKhoanRepository.findById(tenDangNhap);
     }
 
-    /**
-     * Tìm kiếm tài khoản
-     */
     public List<TaiKhoan> searchTaiKhoan(String keyword) {
         return taiKhoanRepository
                 .findByTenDangNhapContainingOrQuyenContainingOrMaNguoiDungContaining(
@@ -49,9 +37,6 @@ public class TaiKhoanService {
                 );
     }
 
-    /**
-     * Thêm hoặc cập nhật tài khoản
-     */
     public TaiKhoan saveTaiKhoan(TaiKhoan taiKhoan) {
 
         if (taiKhoan.getTenDangNhap() == null ||
@@ -72,9 +57,6 @@ public class TaiKhoanService {
         return taiKhoanRepository.save(taiKhoan);
     }
 
-    /**
-     * Xóa tài khoản
-     */
     public void deleteTaiKhoan(String tenDangNhap) {
         taiKhoanRepository.deleteById(tenDangNhap);
     }

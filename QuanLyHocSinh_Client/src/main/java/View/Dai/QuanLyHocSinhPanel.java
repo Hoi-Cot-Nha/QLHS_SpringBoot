@@ -15,9 +15,7 @@ import java.util.Date;
 
 public class QuanLyHocSinhPanel extends JPanel {
 
-
     private HocSinhController controller = new HocSinhController();
-
 
     private JTable tableHS;
     private DefaultTableModel tableModel;
@@ -28,10 +26,8 @@ public class QuanLyHocSinhPanel extends JPanel {
     
     private JComboBox<String> cboGioiTinh,cboMaLop, cboMaDT;
 
-
     private JTextField txtTimKiem;
     private JButton btnTim, btnHienThiTatCa;
-
 
     private JButton btnThem, btnSua, btnXoa, btnLuu, btnHuy;
     
@@ -43,13 +39,11 @@ public class QuanLyHocSinhPanel extends JPanel {
         controller.loadTable(tableModel);
         setFormEnabled(false);
 
-        //sửa ngày 13/04/2026
         if (Model.Auth.isHocSinh()) {
             loadThongTinCaNhan();
-            // Mặc định khóa form, khi nào bấm "Sửa" mới mở cho nhập
+            
             setFormEnabled(false);
 
-            // CHỈ ẨN nút Thêm và Xóa
             btnThem.setVisible(false);
             btnXoa.setVisible(false);
         }
@@ -61,7 +55,6 @@ public class QuanLyHocSinhPanel extends JPanel {
 
         JPanel pnlNorth = new JPanel(new GridLayout(2, 1, 5, 5));
 
-        //thêm ngày 09/04/2026
         String titleText = Model.Auth.isHocSinh() ? "HỒ SƠ HỌC SINH" : "QUẢN LÝ HỌC SINH";
         JLabel lblTitle = new JLabel(titleText, JLabel.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
@@ -106,7 +99,6 @@ public class QuanLyHocSinhPanel extends JPanel {
 
         add(new JScrollPane(tableHS), BorderLayout.CENTER);
 
-
         JPanel pnlSouth = new JPanel(new BorderLayout());
         pnlSouth.setBorder(new TitledBorder("Thông tin học sinh"));
 
@@ -121,7 +113,6 @@ public class QuanLyHocSinhPanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         int y = 0;
-
 
         gbc.gridx = 0; gbc.gridy = y;
         pnlLeft.add(new JLabel("Mã HS:"), gbc);
@@ -144,7 +135,6 @@ public class QuanLyHocSinhPanel extends JPanel {
         spNgaySinh = new JSpinner(new SpinnerDateModel());
         spNgaySinh.setEditor(new JSpinner.DateEditor(spNgaySinh, "dd/MM/yyyy"));
         pnlLeft.add(spNgaySinh, gbc);
-        
 
         y++;
         gbc.gridx = 0; gbc.gridy = y;
@@ -167,15 +157,12 @@ public class QuanLyHocSinhPanel extends JPanel {
         cboMaLop = new JComboBox<>();
         pnlRight.add(cboMaLop, gbc);
 
-
         y++;
         gbc.gridx = 0; gbc.gridy = y;
         pnlRight.add(new JLabel("Mã đối tượng:"), gbc);
         gbc.gridx = 1;
         cboMaDT = new JComboBox<>();
         pnlRight.add(cboMaDT, gbc);
-
-
 
         pnlSouth.add(pnlInput, BorderLayout.CENTER);
 
@@ -209,7 +196,7 @@ public class QuanLyHocSinhPanel extends JPanel {
 
         btnTim.addActionListener(e -> timKiem());
         btnHienThiTatCa.addActionListener(e -> hienThiTatCa());
-        //thêm ngày 09/04/2026
+        
         if (Model.Auth.isHocSinh()) {
             pnlSearch.setVisible(false);
             btnThem.setVisible(false);
@@ -236,7 +223,7 @@ public class QuanLyHocSinhPanel extends JPanel {
         isThem = false;
         setFormEnabled(true);
         txtMaHS.setEnabled(false);
-        //thêm ngày 13/04/2026
+        
         if (Model.Auth.isHocSinh()) {
             cboMaLop.setEnabled(false);
             cboMaDT.setEnabled(false);
@@ -289,7 +276,6 @@ public class QuanLyHocSinhPanel extends JPanel {
         clearForm();
         setFormEnabled(false);
     }
-    
 
     private void setFormEnabled(boolean enabled) {
         txtMaHS.setEnabled(enabled);
@@ -299,7 +285,6 @@ public class QuanLyHocSinhPanel extends JPanel {
         txtDiaChi.setEnabled(enabled);
         cboMaLop.setEnabled(enabled);
         cboMaDT.setEnabled(enabled);
-
 
         btnLuu.setEnabled(enabled);
         btnHuy.setEnabled(enabled);
@@ -313,7 +298,6 @@ public class QuanLyHocSinhPanel extends JPanel {
 
         String keyword = txtTimKiem.getText().trim();
 
-        // Chưa nhập từ khóa
         if (keyword.isEmpty()) {
             JOptionPane.showMessageDialog(
                     this,
@@ -350,19 +334,14 @@ public class QuanLyHocSinhPanel extends JPanel {
 
     private void hienThiTatCa() {
 
-        // Xóa ô tìm kiếm
         txtTimKiem.setText("");
 
-        // Bỏ chọn dòng trên bảng
         tableHS.clearSelection();
 
-        // Xóa dữ liệu trên Form
         clearForm();
 
-        // Khóa Form
         setFormEnabled(false);
 
-        // Hiển thị toàn bộ dữ liệu
         controller.loadTable(tableModel);
     }
 
@@ -371,8 +350,7 @@ public class QuanLyHocSinhPanel extends JPanel {
         if (r >= 0) {
             txtMaHS.setText(tableModel.getValueAt(r, 0).toString());
             txtHoTen.setText(tableModel.getValueAt(r, 1).toString());
-            
-         
+
             try {
                 String strDate = tableModel.getValueAt(r, 2).toString();
          
@@ -382,8 +360,7 @@ public class QuanLyHocSinhPanel extends JPanel {
            
                 spNgaySinh.setValue(new Date());
             }
-    
-            
+
             cboGioiTinh.setSelectedItem(tableModel.getValueAt(r, 3));
             txtDiaChi.setText(tableModel.getValueAt(r, 4).toString());
             cboMaLop.setSelectedItem(tableModel.getValueAt(r, 5).toString());
@@ -398,7 +375,6 @@ public class QuanLyHocSinhPanel extends JPanel {
             Date d = (Date) spNgaySinh.getValue();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String strNgaySinh = sdf.format(d);
- 
 
             return new HocSinh(
                 txtMaHS.getText(),

@@ -42,7 +42,7 @@ public class ThongBaoApiClient {
 
     public List<Thongbao> search(String keyword) {
         try {
-            // Sử dụng cú pháp URI 4 tham số để Java tự động hóa việc Encode chuỗi chuẩn mã hóa quốc tế
+            
             URI uri = new URI("http", null, "localhost", 8080, "/api/thongbao/search", "keyword=" + keyword, null);
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -66,7 +66,7 @@ public class ThongBaoApiClient {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json, StandardCharsets.UTF_8)) // Đảm bảo ghi mã UTF-8 dữ liệu
+                    .POST(HttpRequest.BodyPublishers.ofString(json, StandardCharsets.UTF_8)) 
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());

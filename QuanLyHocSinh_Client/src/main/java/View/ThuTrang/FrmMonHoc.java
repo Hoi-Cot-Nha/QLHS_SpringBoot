@@ -25,7 +25,6 @@ public class FrmMonHoc extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // NORTH: tiêu đề + tìm kiếm
         JPanel pnlNorth = new JPanel(new BorderLayout(0, 5));
 
         JLabel title = new JLabel("QUẢN LÝ MÔN HỌC", JLabel.CENTER);
@@ -46,7 +45,6 @@ public class FrmMonHoc extends JPanel {
 
         add(pnlNorth, BorderLayout.NORTH);
 
-        // TABLE
         model = new DefaultTableModel(new String[]{"Mã MH", "Tên môn"}, 0);
         table = new JTable(model);
         TableSortHelper.enableTableSorting(table);
@@ -55,7 +53,6 @@ public class FrmMonHoc extends JPanel {
         table.getTableHeader().setDefaultRenderer(new TienIch.CustomTableHeaderRenderer());
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        // SOUTH: form nhập
         JPanel pnlSouth = new JPanel(new BorderLayout());
         pnlSouth.setBorder(new TitledBorder("Cập nhật môn học"));
 

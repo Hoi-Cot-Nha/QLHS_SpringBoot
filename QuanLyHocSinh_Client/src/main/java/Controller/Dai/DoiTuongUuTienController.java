@@ -10,7 +10,6 @@ public class DoiTuongUuTienController {
 
     private DoiTuongUuTienApi api = new DoiTuongUuTienApi();
 
-    // Hiển thị danh sách
     public void loadTable(DefaultTableModel model) {
 
         model.setRowCount(0);
@@ -32,34 +31,28 @@ public class DoiTuongUuTienController {
         }
     }
 
-    // Thêm
     public boolean them(DoiTuongUuTien dt) {
         return api.insert(dt);
     }
 
-    // Sửa
     public boolean sua(DoiTuongUuTien dt) {
         return api.update(dt);
     }
 
-    // Xóa
     public boolean xoa(String maDT) {
         return api.delete(maDT);
     }
 
-    // Tìm kiếm
     public boolean timKiem(String keyword, DefaultTableModel model) {
 
         model.setRowCount(0);
 
         List<DoiTuongUuTien> list = api.search(keyword);
 
-        // Không kết nối được Server
         if (list == null) {
             throw new RuntimeException("Không thể kết nối tới Server!");
         }
 
-        // Không có dữ liệu
         if (list.isEmpty()) {
             return false;
         }

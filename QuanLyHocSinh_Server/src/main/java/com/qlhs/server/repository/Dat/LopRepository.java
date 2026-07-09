@@ -22,11 +22,9 @@ public interface LopRepository extends JpaRepository<Lop, String> {
                     "FROM Lop l " +
                     "JOIN GiaoVien gv ON l.MaGVCN = gv.MaGV ";
 
-    // Danh sách lớp
     @Query(value = BASE_QUERY, nativeQuery = true)
     List<Map<String, Object>> findAllLopWithGVCN();
 
-    // Tìm kiếm lớp
     @Query(value = BASE_QUERY +
             "WHERE l.MaLop LIKE %:keyword% " +
             "OR l.TenLop LIKE %:keyword% " +
@@ -35,7 +33,6 @@ public interface LopRepository extends JpaRepository<Lop, String> {
             nativeQuery = true)
     List<Map<String, Object>> searchLop(@Param("keyword") String keyword);
 
-    // Tìm theo mã lớp
     @Query(value = BASE_QUERY +
             "WHERE l.MaLop = :maLop",
             nativeQuery = true)
@@ -44,8 +41,4 @@ public interface LopRepository extends JpaRepository<Lop, String> {
     @Query("SELECT DISTINCT l.nienKhoa FROM Lop l ORDER BY l.nienKhoa")
     List<String> findDistinctNienKhoa();
 
-    // JpaRepository đã có sẵn:
-    // save(Lop lop)
-    // findById(String maLop)
-    // deleteById(String maLop)
 }

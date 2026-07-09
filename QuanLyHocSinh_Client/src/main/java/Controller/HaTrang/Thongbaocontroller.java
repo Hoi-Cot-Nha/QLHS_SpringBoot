@@ -23,19 +23,16 @@ public class Thongbaocontroller {
     private void initEvents() {
         boolean[] editMode = {false};
 
-        // Gộp 4 Runnable cũ thành 1 hàm quản lý trạng thái tự động theo ngữ cảnh bài toán
         Runnable updateUIState = () -> {
             int row = view.getTable().getSelectedRow();
             boolean hasSelected = row != -1;
 
-            // Cấu hình nút: Thêm (chỉ bật khi chưa chọn dòng/chưa sửa), Sửa/Xóa (bật khi đã chọn dòng), Lưu/Hủy (bật khi đang nhập/sửa)
             view.setCrudButtonState(!hasSelected && !editMode[0], hasSelected, hasSelected, editMode[0], editMode[0]);
             view.setInputEditable(editMode[0]);
         };
 
         updateUIState.run();
 
-        // 1. Nút Lọc dữ liệu
         view.getBtnLoc().addActionListener(e -> {
             String tuKhoa = view.getLocKeyword().trim();
             if (tuKhoa.isEmpty()) { loadData(); return; }
@@ -45,16 +42,14 @@ public class Thongbaocontroller {
             if (currentList.isEmpty()) JOptionPane.showMessageDialog(view, "Không tìm thấy thông báo nào!");
         });
 
-        // 2. Nút Thêm
         view.getBtnThem().addActionListener(e -> {
-            editMode[0] = true; // Bật cờ để mở khóa các ô nhập liệu
+            editMode[0] = true; 
             view.refresh();
             view.getTable().clearSelection();
             updateUIState.run();
-            editMode[0] = false; // Trả lại cờ gốc chờ ấn Lưu
+            editMode[0] = false; 
         });
 
-        // 3. Sự kiện Click bảng
         view.getTable().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -66,21 +61,19 @@ public class Thongbaocontroller {
             }
         });
 
-        // 4. Nút Sửa (Bật chế độ chỉnh sửa trực tiếp)
         view.getBtnSua().addActionListener(e -> {
             int row = view.getTable().getSelectedRow();
             if (row != -1) {
                 editMode[0] = true;
                 view.fillForm(row);
                 updateUIState.run();
-                // Bật thêm nút Lưu/Hủy riêng cho trạng thái sửa nâng cao của view cũ nếu cần
+                
                 view.setCrudButtonState(false, true, true, true, true);
             } else {
                 JOptionPane.showMessageDialog(view, "Chọn dòng cần sửa!");
             }
         });
 
-        // 5. Nút Lưu (Gộp logic Thêm / Sửa siêu gọn)
         view.getBtnLuu().addActionListener(e -> {
             if (!validateForm()) return;
 
@@ -102,7 +95,6 @@ public class Thongbaocontroller {
             }
         });
 
-        // 6. Nút Xóa
         view.getBtnXoa().addActionListener(e -> {
             int row = view.getTable().getSelectedRow();
             if (row == -1) {
@@ -121,7 +113,6 @@ public class Thongbaocontroller {
             }
         });
 
-        // 7. Nút Hủy
         view.getBtnHuy().addActionListener(e -> {
             view.refresh();
             loadData();

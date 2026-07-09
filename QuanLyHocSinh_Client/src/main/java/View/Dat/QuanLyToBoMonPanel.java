@@ -1,15 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package View.Dat;
 
-/**
- *
- * @author ADMIN
- */
-
-import Controller.Dat.ToBoMonController; // Import Controller
+import Controller.Dat.ToBoMonController; 
 import Model.ToBoMon;
 
 import javax.swing.*;
@@ -30,9 +22,9 @@ public class QuanLyToBoMonPanel extends JPanel {
 
     public QuanLyToBoMonPanel() {
         initComponents();
-        // Gọi Controller để kích hoạt logic ngay khi tạo giao diện
+        
         new ToBoMonController(this);
-        // Thiết lập trạng thái ban đầu cho nút
+        
         setButtonState(true); 
     }
 
@@ -40,7 +32,6 @@ public class QuanLyToBoMonPanel extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // ===== 1. PANEL NORTH: CHỨA TIÊU ĐỀ =====
         JPanel pnlNorth = new JPanel(new BorderLayout(0, 10));
         JLabel lblTitle = new JLabel("QUẢN LÝ TỔ BỘ MÔN", JLabel.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
@@ -49,7 +40,6 @@ public class QuanLyToBoMonPanel extends JPanel {
         pnlNorth.add(lblTitle, BorderLayout.NORTH);
         add(pnlNorth, BorderLayout.NORTH);
 
-        // ===== 2. TABLE (CENTER) =====
         String[] cols = {"Mã Tổ Hợp", "Tên Tổ Hợp"};
         tableModel = new DefaultTableModel(cols, 0) {
              @Override
@@ -63,7 +53,6 @@ public class QuanLyToBoMonPanel extends JPanel {
 
         add(new JScrollPane(tableTBM), BorderLayout.CENTER);
 
-        // ===== 3. FORM INPUT (SOUTH) =====
         JPanel pnlSouth = new JPanel(new BorderLayout());
         pnlSouth.setBorder(new TitledBorder("Thông tin tổ bộ môn"));
 
@@ -115,9 +104,6 @@ public class QuanLyToBoMonPanel extends JPanel {
         add(pnlSouth, BorderLayout.SOUTH);
     }
 
-    // ===== CÁC HÀM HỖ TRỢ VIEW (Để Controller gọi) =====
-    
-    // Hàm nhận List dữ liệu và đổ vào bảng
     public void setTableData(List<ToBoMon> list) {
         tableModel.setRowCount(0);
         for (ToBoMon tbm : list) {
@@ -128,7 +114,6 @@ public class QuanLyToBoMonPanel extends JPanel {
         }
     }
 
-    // Hàm xóa trắng form
     public void clearForm() {
         txtMaToHop.setText("");
         txtTenToHop.setText("");
@@ -136,10 +121,8 @@ public class QuanLyToBoMonPanel extends JPanel {
         txtTenToHop.setEnabled(true);
     }
 
-    // Hàm bật tắt trạng thái nút (Nhập liệu / Bình thường)
     public void setButtonState(boolean isNormalState) {
-        // True: Bình thường (Mở Thêm/Sửa/Xóa, Đóng Lưu/Hủy)
-        // False: Đang nhập liệu (Đóng Thêm/Sửa/Xóa, Mở Lưu/Hủy)
+
         btnThem.setEnabled(isNormalState);
         btnSua.setEnabled(isNormalState);
         btnXoa.setEnabled(isNormalState);
@@ -147,10 +130,9 @@ public class QuanLyToBoMonPanel extends JPanel {
         btnLuu.setEnabled(!isNormalState);
         btnHuy.setEnabled(!isNormalState);
         
-        tableTBM.setEnabled(isNormalState); // Khóa bảng khi đang thêm/sửa
+        tableTBM.setEnabled(isNormalState); 
     }
 
-    // ===== GETTERS (Cần thiết để Controller truy cập các thành phần UI) =====
     public JTable getTableTBM() { return tableTBM; }
     public JTextField getTxtMaToHop() { return txtMaToHop; }
     public JTextField getTxtTenToHop() { return txtTenToHop; }

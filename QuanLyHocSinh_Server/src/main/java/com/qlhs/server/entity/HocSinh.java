@@ -6,12 +6,12 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "HocSinh")
-@Data // Tự động sinh Get/Set/ToString
+@Data 
 @NoArgsConstructor
 @AllArgsConstructor
 public class HocSinh {
 
-    @Id // Đánh dấu đây là khóa chính
+    @Id 
     @Column(name = "maHS", length = 50)
     private String maHS;
 

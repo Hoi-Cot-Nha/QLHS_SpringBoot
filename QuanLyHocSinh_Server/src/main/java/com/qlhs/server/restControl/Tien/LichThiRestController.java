@@ -39,7 +39,7 @@ public class LichThiRestController {
 
     @PostMapping
     public ResponseEntity<LichThi> add(@RequestBody LichThi lt) {
-        // Assume ID is auto-generated
+        
         return ResponseEntity.ok(lichThiService.save(lt));
     }
 

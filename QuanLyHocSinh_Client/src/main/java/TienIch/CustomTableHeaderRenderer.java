@@ -7,8 +7,8 @@ import java.awt.*;
 public class CustomTableHeaderRenderer extends DefaultTableCellRenderer {
     
     public CustomTableHeaderRenderer() {
-        setBackground(new Color(100, 150, 200));  // Light blue
-        setForeground(Color.WHITE);               // White text
+        setBackground(new Color(100, 150, 200));  
+        setForeground(Color.WHITE);               
         setFont(new Font("Segoe UI", Font.BOLD, 14));
         setOpaque(true);
         setHorizontalAlignment(JLabel.CENTER);

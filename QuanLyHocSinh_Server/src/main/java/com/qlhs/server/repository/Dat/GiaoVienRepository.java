@@ -23,11 +23,9 @@ public interface GiaoVienRepository extends JpaRepository<GiaoVien, String> {
                     "FROM GiaoVien gv " +
                     "JOIN ToHopMon th ON gv.MaToHop = th.MaToHop ";
 
-    // Danh sách giáo viên
     @Query(value = BASE_QUERY, nativeQuery = true)
     List<Map<String, Object>> findAllGiaoVienWithToHop();
 
-    // Tìm kiếm
     @Query(value = BASE_QUERY +
             "WHERE gv.MaGV LIKE %:keyword% " +
             "OR gv.HoTen LIKE %:keyword% " +
@@ -36,14 +34,9 @@ public interface GiaoVienRepository extends JpaRepository<GiaoVien, String> {
             nativeQuery = true)
     List<Map<String, Object>> searchGiaoVien(@Param("keyword") String keyword);
 
-    // Theo mã
     @Query(value = BASE_QUERY +
             "WHERE gv.MaGV = :maGV",
             nativeQuery = true)
     Map<String, Object> findByMaGVWithToHop(@Param("maGV") String maGV);
 
-    // JpaRepository đã có:
-    // save(GiaoVien gv)
-    // findById(String maGV)
-    // deleteById(String maGV)
 }

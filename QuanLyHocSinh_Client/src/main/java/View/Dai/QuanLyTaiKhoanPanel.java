@@ -14,13 +14,10 @@ import TienIch.TableSortHelper;
 
 public class QuanLyTaiKhoanPanel extends JPanel {
 
- 
     private TaiKhoanController controller = new TaiKhoanController();
-
 
     private JTable tableTK;
     private DefaultTableModel tableModel;
-
 
     private JTextField txtTenDangNhap, txtMaNguoiDung;
     private JPasswordField txtMatKhau;
@@ -29,7 +26,6 @@ public class QuanLyTaiKhoanPanel extends JPanel {
     private JTextField txtTimKiem;
     private JButton btnTim, btnHienThiTatCa;
 
-  
     private JButton btnThem, btnSua, btnXoa, btnLuu, btnHuy;
 
     private boolean isThem = false;
@@ -44,7 +40,6 @@ public class QuanLyTaiKhoanPanel extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-  
         JPanel pnlNorth = new JPanel(new GridLayout(2, 1, 5, 5));
 
         JLabel lblTitle = new JLabel("QUẢN LÝ TÀI KHOẢN", JLabel.CENTER);
@@ -70,7 +65,6 @@ public class QuanLyTaiKhoanPanel extends JPanel {
         pnlNorth.add(pnlSearch);
         add(pnlNorth, BorderLayout.NORTH);
 
-
         String[] columns = {"Tên đăng nhập", "Mật khẩu", "Quyền", "Mã người dùng"};
         tableModel = new DefaultTableModel(columns, 0);
         tableTK = new JTable(tableModel);
@@ -88,7 +82,6 @@ public class QuanLyTaiKhoanPanel extends JPanel {
         });
 
         add(new JScrollPane(tableTK), BorderLayout.CENTER);
-
 
         JPanel pnlSouth = new JPanel(new BorderLayout());
         pnlSouth.setBorder(new TitledBorder("Thông tin tài khoản"));
@@ -147,7 +140,6 @@ public class QuanLyTaiKhoanPanel extends JPanel {
         pnlSouth.add(pnlButton, BorderLayout.SOUTH);
         add(pnlSouth, BorderLayout.SOUTH);
 
-
         btnThem.addActionListener(e -> them());
         btnSua.addActionListener(e -> sua());
         btnXoa.addActionListener(e -> xoa());
@@ -157,7 +149,6 @@ public class QuanLyTaiKhoanPanel extends JPanel {
         btnTim.addActionListener(e -> timKiem());
         btnHienThiTatCa.addActionListener(e -> controller.loadTable(tableModel));
     }
-
 
     private void them() {
         clearForm();
@@ -199,7 +190,6 @@ public class QuanLyTaiKhoanPanel extends JPanel {
         }
     }
 
-
     private void xoa() {
         if (txtTenDangNhap.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Chọn tài khoản cần xóa");
@@ -222,13 +212,11 @@ public class QuanLyTaiKhoanPanel extends JPanel {
         }
     }
 
-
     private void huy() {
         clearForm();
         setFormEnabled(false);
     }
 
- 
     private void setFormEnabled(boolean enabled) {
         txtTenDangNhap.setEnabled(enabled);
         txtMatKhau.setEnabled(enabled);
@@ -275,7 +263,6 @@ public class QuanLyTaiKhoanPanel extends JPanel {
 
         String keyword = txtTimKiem.getText().trim();
 
-        // Chưa nhập từ khóa
         if (keyword.isEmpty()) {
             JOptionPane.showMessageDialog(
                     this,

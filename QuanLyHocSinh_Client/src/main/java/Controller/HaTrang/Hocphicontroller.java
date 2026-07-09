@@ -26,36 +26,32 @@ public class Hocphicontroller {
     private void initEvents() {
         boolean[] updateMode = {false};
 
-        // Gom trạng thái các nút (Chỉ xử lý khi không phải học sinh)
         Runnable setFormState = () -> {
             if (!Auth.isHocSinh()) {
                 boolean hasSelected = view.getTableHocPhi().getSelectedRow() != -1;
                 view.setCrudButtonState(!hasSelected && !updateMode[0], hasSelected && !updateMode[0], hasSelected && !updateMode[0], updateMode[0], updateMode[0]);
                 view.setInputEditable(updateMode[0]);
                 if (updateMode[0] && view.getTableHocPhi().getSelectedRow() != -1) {
-                    view.getTxtMaHS().setEditable(false); // Khóa riêng ô Mã HS khi sửa
+                    view.getTxtMaHS().setEditable(false); 
                 }
             }
         };
 
         setFormState.run();
 
-        // 1. Nút Lọc dữ liệu
         if (view.getBtnLoc() != null) view.getBtnLoc().addActionListener(e -> locDuLieu());
 
-        // 2. Nút Thêm
         if (view.getBtnThem() != null) {
             view.getBtnThem().addActionListener(e -> {
                 updateMode[0] = false;
                 selectedMaHP = 0;
                 view.refreshForm();
-                updateMode[0] = true; // Bật mode nhập mới
+                updateMode[0] = true; 
                 setFormState.run();
-                updateMode[0] = false; // Trả lại trạng thái cho nút Lưu/Hủy kiểm soát
+                updateMode[0] = false; 
             });
         }
 
-        // 3. Nút Sửa
         if (view.getBtnSua() != null) {
             view.getBtnSua().addActionListener(e -> {
                 if (view.getTableHocPhi().getSelectedRow() == -1) {
@@ -67,7 +63,6 @@ public class Hocphicontroller {
             });
         }
 
-        // 4. Nút Lưu
         if (view.getBtnLuu() != null) {
             view.getBtnLuu().addActionListener(e -> {
                 if (xuLyLuu(updateMode[0])) {
@@ -78,7 +73,6 @@ public class Hocphicontroller {
             });
         }
 
-        // 5. Nút Xóa
         if (view.getBtnXoa() != null) {
             view.getBtnXoa().addActionListener(e -> {
                 if (xoaHocPhi()) {
@@ -89,7 +83,6 @@ public class Hocphicontroller {
             });
         }
 
-        // 6. Nút Hủy
         if (view.getBtnHuy() != null) {
             view.getBtnHuy().addActionListener(e -> {
                 view.refreshForm();
@@ -99,7 +92,6 @@ public class Hocphicontroller {
             });
         }
 
-        // 7. Sự kiện Click vào bảng
         view.getTableHocPhi().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -111,7 +103,6 @@ public class Hocphicontroller {
             }
         });
 
-        // 8. TỰ ĐỘNG ĐIỀN MÃ LỚP
         if (view.getTxtMaHS() != null) {
             view.getTxtMaHS().addFocusListener(new java.awt.event.FocusAdapter() {
                 @Override
@@ -124,7 +115,6 @@ public class Hocphicontroller {
             });
         }
 
-        // 9. TỰ ĐỘNG TÍNH TOÁN SỐ TIỀN
         if (view.getTxtTongTien() != null && view.getTxtMienGiam() != null) {
             KeyAdapter tinhTienTuDong = new KeyAdapter() {
                 @Override
@@ -133,7 +123,7 @@ public class Hocphicontroller {
                         long tongTien = view.getTxtTongTien().getText().trim().isEmpty() ? 0 : Long.parseLong(view.getTxtTongTien().getText().trim());
                         long mienGiam = view.getTxtMienGiam().getText().trim().isEmpty() ? 0 : Long.parseLong(view.getTxtMienGiam().getText().trim());
                         if (view.getTxtPhaiDong() != null) view.getTxtPhaiDong().setText(String.valueOf(tongTien - mienGiam));
-                    } catch (NumberFormatException ex) { /* Bỏ qua ký tự lỗi */ }
+                    } catch (NumberFormatException ex) {  }
                 }
             };
             view.getTxtTongTien().addKeyListener(tinhTienTuDong);

@@ -16,26 +16,20 @@ import java.text.ParseException;
 
 public class LichThiPanel extends JPanel {
 
-    // --- Khai báo Component ---
-    // Phần tìm kiếm và lọc
     private JTextField txtTimKiem;
     private JButton btnTimKiem, btnXemTatCa, btnLocDanhSach;
     private JComboBox<String> cboLocKyThi, cboLocMon, cboLocPhong, cboLocLop;
-    
-    // Phần bảng dữ liệu
+
     private JTable table;
     private DefaultTableModel model;
     private List<LichThi> cachedList;
-    
-    // Nút chức năng đặc biệt
+
     private JButton btnXuatExcel;
-    
-    // Form nhập liệu chi tiết
+
     private JComboBox<String> cboMaLT, cboTenMH, cboTenPhong, cboTenKyThi, cboLop;
     private JDateChooser dateNgayThi;
     private JSpinner spinGioBatDau, spinGioKetThuc;
-    
-    // Các nút thao tác CRUD
+
     private JButton btnThem, btnSua, btnXoa, btnLuu, btnHuy, btnMoi;
 
     public LichThiPanel() {
@@ -43,22 +37,18 @@ public class LichThiPanel extends JPanel {
     }
 
     private void initComponents() {
-        // Setup layout chính: Border (Bắc - Trung - Nam) có padding 10px
+        
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // 1. PHẦN TRÊN (NORTH): Tiêu đề + Thanh tìm kiếm
         JPanel pnlNorth = new JPanel(new BorderLayout(5, 5));
-        
-        // Tiêu đề to đậm
-        //thêm ngày 09/04/2026
+
         String titleText = (Model.Auth.isHocSinh() || Model.Auth.isGiaoVien()) ? "XEM LỊCH THI" : "QUẢN LÝ LỊCH THI";
         JLabel lblTitle = new JLabel(titleText, JLabel.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
         lblTitle.setForeground(new Color(0, 102, 204));
         pnlNorth.add(lblTitle, BorderLayout.NORTH);
 
-        // Panel chứa Bộ Lọc
         JPanel pnlFilter = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
         pnlFilter.setBorder(new TitledBorder("Bộ Lọc Lịch Thi"));
         
@@ -78,7 +68,6 @@ public class LichThiPanel extends JPanel {
         ButtonStyleHelper.styleButtonFilter(btnLocDanhSach);
         pnlFilter.add(btnLocDanhSach);
 
-        // Panel chứa ô tìm kiếm + nút
         JPanel pnlSearch = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
         pnlSearch.setBorder(new TitledBorder("Tìm kiếm nhanh"));
         pnlSearch.add(new JLabel("Nhập Tên Môn hoặc Kỳ thi:"));
@@ -97,7 +86,6 @@ public class LichThiPanel extends JPanel {
         pnlNorth.add(pnlTools, BorderLayout.CENTER);
         add(pnlNorth, BorderLayout.NORTH);
 
-        // 2. PHẦN GIỮA (CENTER): Bảng danh sách lịch thi
         String[] cols = {"Mã LT", "Kỳ Thi", "Tên Môn", "Lớp", "Ngày Thi", "Bắt Đầu", "Kết Thúc", "Phòng"};
         model = new DefaultTableModel(cols, 0);
         table = new JTable(model);
@@ -107,21 +95,18 @@ public class LichThiPanel extends JPanel {
         table.getTableHeader().setDefaultRenderer(new TienIch.CustomTableHeaderRenderer());
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        // 3. PHẦN DƯỚI (SOUTH): Form nhập liệu + Nút bấm
         JPanel pnlSouth = new JPanel(new BorderLayout());
         pnlSouth.setBorder(new TitledBorder("Thông tin chi tiết"));
 
-        // Dùng GridBagLayout để căn chỉnh các ô nhập cho thẳng hàng lối
         JPanel pnlInput = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 10, 5, 10); 
         gbc.fill = GridBagConstraints.HORIZONTAL; 
 
-        // --- Dòng 1: Mã LT + Kỳ Thi ---
-        gbc.gridx=0; gbc.gridy=0; gbc.weightx = 0; // Label không giãn
+        gbc.gridx=0; gbc.gridy=0; gbc.weightx = 0; 
         pnlInput.add(new JLabel("Mã LT:"), gbc);
         
-        gbc.gridx=1; gbc.gridy=0; gbc.weightx = 1.0; // Textfield giãn hết cỡ
+        gbc.gridx=1; gbc.gridy=0; gbc.weightx = 1.0; 
         cboMaLT=new JComboBox<>(); cboMaLT.setEditable(true); pnlInput.add(cboMaLT, gbc);
         
         gbc.gridx=2; gbc.gridy=0; gbc.weightx = 0;
@@ -133,7 +118,6 @@ public class LichThiPanel extends JPanel {
         cboTenKyThi.setSelectedIndex(0);
         pnlInput.add(cboTenKyThi, gbc);
 
-        // --- Dòng 2: Mã Môn + Ngày Thi ---
         gbc.gridx=0; gbc.gridy=1; gbc.weightx = 0;
         pnlInput.add(new JLabel("Tên Môn:"), gbc);
         
@@ -148,7 +132,6 @@ public class LichThiPanel extends JPanel {
         dateNgayThi.setDateFormatString("dd/MM/yyyy");
         pnlInput.add(dateNgayThi, gbc);
 
-        // --- Dòng 3: Giờ Bắt Đầu + Kết Thúc ---
         SpinnerDateModel modelBatDau = new SpinnerDateModel();
         spinGioBatDau = new JSpinner(modelBatDau);
         JSpinner.DateEditor editorBatDau = new JSpinner.DateEditor(spinGioBatDau, "HH:mm");
@@ -171,7 +154,6 @@ public class LichThiPanel extends JPanel {
         gbc.gridx=3; gbc.gridy=2; gbc.weightx = 1.0;
         pnlInput.add(spinGioKetThuc, gbc);
 
-        // --- Dòng 4: Mã Phòng + Lớp ---
         gbc.gridx=0; gbc.gridy=3; gbc.weightx = 0;
         pnlInput.add(new JLabel("Tên Phòng:"), gbc);
         
@@ -186,7 +168,6 @@ public class LichThiPanel extends JPanel {
 
         pnlSouth.add(pnlInput, BorderLayout.CENTER);
 
-        // Panel chứa các nút bấm phía dưới cùng
         JPanel pnlBtn = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         btnThem = new JButton("Thêm");
         ButtonStyleHelper.styleButtonAdd(btnThem);
@@ -215,8 +196,7 @@ public class LichThiPanel extends JPanel {
         pnlBtn.add(btnLuu);
         pnlBtn.add(btnHuy);
         pnlBtn.add(btnMoi);
-        
-        // Nút Xuất Excel (Style xanh lá)
+
         btnXuatExcel = new JButton("Xuất Excel");
         ButtonStyleHelper.styleButtonExport(btnXuatExcel);
         btnXuatExcel.setPreferredSize(new Dimension(120, 35));
@@ -225,7 +205,7 @@ public class LichThiPanel extends JPanel {
         pnlSouth.add(pnlBtn, BorderLayout.SOUTH);
         
         add(pnlSouth, BorderLayout.SOUTH);
-        //thêm ngày 13/04/2026
+        
         if (Model.Auth.isHocSinh() || Model.Auth.isGiaoVien()) {
             pnlSouth.setVisible(false);
         }
@@ -233,7 +213,6 @@ public class LichThiPanel extends JPanel {
         setCrudButtonState(true, false, false, false, false);
     }
 
-    // --- Getter lấy thông tin bộ lọc ---
     public String getKyThiFilter() { return cboLocKyThi.getSelectedItem() != null ? cboLocKyThi.getSelectedItem().toString() : ""; }
     public String getMonFilter() { return cboLocMon.getSelectedItem() != null ? cboLocMon.getSelectedItem().toString() : ""; }
     public String getPhongFilter() { return cboLocPhong.getSelectedItem() != null ? cboLocPhong.getSelectedItem().toString() : ""; }
@@ -244,16 +223,12 @@ public class LichThiPanel extends JPanel {
         return val;
     }
 
-    // --- Getter lấy từ khóa tìm kiếm ---
     public String getKeyword() { return txtTimKiem.getText().trim(); }
-    
-    // --- Setter Dữ liệu ComboBox Filter và Input ---
+
     public void setKyThiData(List<String> kyThis) {
         cboLocKyThi.removeAllItems();
         cboLocKyThi.addItem("");
-        
-        // Không removeAllItems của cboTenKyThi để giữ các tuỳ chọn mặc định
-        // Chỉ thêm những kỳ thi mới chưa có trong danh sách
+
         for (String k : kyThis) {
             cboLocKyThi.addItem(k);
             boolean exists = false;
@@ -301,7 +276,7 @@ public class LichThiPanel extends JPanel {
         }
         cboMaLT.setSelectedItem("");
     }
-    // --- Đóng gói dữ liệu nhập thành Object LichThi ---
+    
     public LichThi getLichThiInput() {
         LichThi lt = new LichThi();
         
@@ -357,11 +332,10 @@ public class LichThiPanel extends JPanel {
             java.util.Date d = new java.text.SimpleDateFormat("yyyy-MM-dd").parse(yyyyMMdd);
             return new java.text.SimpleDateFormat("dd/MM/yyyy").format(d);
         } catch (Exception e) {
-            return yyyyMMdd; // Return original if parsing fails
+            return yyyyMMdd; 
         }
     }
 
-    // --- Hiển thị danh sách lên bảng ---
     public void setTableData(List<LichThi> list) {
         this.cachedList = list;
         model.setRowCount(0);
@@ -374,8 +348,7 @@ public class LichThiPanel extends JPanel {
             });
         }
     }
-    
-    // --- Click vào bảng -> Đổ dữ liệu ngược lại form ---
+
     public void fillForm(int row) {
         if(row >= 0 && cachedList != null && row < cachedList.size()) {
             LichThi lt = cachedList.get(row);
@@ -415,8 +388,7 @@ public class LichThiPanel extends JPanel {
             cboLop.getEditor().setItem(lt.getMaLop());
         }
     }
-    
-    // --- Reset form trắng tinh ---
+
     public void clearForm() {
         cboMaLT.setSelectedItem(""); cboMaLT.getEditor().setItem("");
         cboTenMH.setSelectedItem(""); cboTenMH.getEditor().setItem("");
@@ -426,12 +398,10 @@ public class LichThiPanel extends JPanel {
         cboTenPhong.setSelectedItem(""); cboTenPhong.getEditor().setItem("");
         cboLop.setSelectedItem(""); cboLop.getEditor().setItem("");
     }
-    
-    // --- Tiện ích thông báo & Getter Table ---
+
     public void showMessage(String msg) { JOptionPane.showMessageDialog(this, msg); }
     public JTable getTable() { return table; }
 
-   // --- Gán sự kiện (Controller sẽ gọi mấy hàm này) ---
     public void addBtnLocDanhSachListener(ActionListener ac) { btnLocDanhSach.addActionListener(ac); }
     public void addBtnTimKiemListener(ActionListener ac) { btnTimKiem.addActionListener(ac); }
     public void addBtnXemTatCaListener(ActionListener ac) { btnXemTatCa.addActionListener(ac); }

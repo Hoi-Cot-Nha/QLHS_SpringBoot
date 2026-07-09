@@ -21,7 +21,6 @@ public class GiaoVienApi {
     private final HttpClient client = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
 
-    // Lấy danh sách giáo viên
     public List<Giaovien> getAll() throws Exception {
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -40,10 +39,8 @@ public class GiaoVienApi {
 
         return gson.fromJson(response.body(), type);
 
-
     }
 
-    // Lấy giáo viên theo mã
     public Giaovien getByMaGV(String maGV) throws Exception {
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -65,12 +62,10 @@ public class GiaoVienApi {
         return gson.fromJson(response.body(), Giaovien.class);
     }
 
-    // Kiểm tra tồn tại
     public boolean exists(String maGV) throws Exception {
         return getByMaGV(maGV) != null;
     }
 
-    // Thêm giáo viên
     public Giaovien insert(Giaovien gv) throws Exception {
 
         String json = gson.toJson(gv);
@@ -91,7 +86,6 @@ public class GiaoVienApi {
         return gson.fromJson(response.body(), Giaovien.class);
     }
 
-    // Cập nhật giáo viên
     public Giaovien update(Giaovien gv) throws Exception {
 
         String json = gson.toJson(gv);
@@ -116,7 +110,6 @@ public class GiaoVienApi {
         return gson.fromJson(response.body(), Giaovien.class);
     }
 
-    // Xóa giáo viên
     public boolean delete(String maGV) throws Exception {
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -138,7 +131,6 @@ public class GiaoVienApi {
         return true;
     }
 
-    // Tìm kiếm giáo viên
     public List<Giaovien> searchGiaoVien(String keyword) throws Exception {
 
         String url = BASE_URL + "/search?keyword="

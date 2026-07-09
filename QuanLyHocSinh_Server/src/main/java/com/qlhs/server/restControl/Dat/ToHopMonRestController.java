@@ -16,13 +16,11 @@ public class ToHopMonRestController {
     @Autowired
     private ToHopMonService toHopMonService;
 
-    // Lấy tất cả
     @GetMapping
     public List<Map<String, Object>> getAllToHopMon() {
         return toHopMonService.getAllToHopMon();
     }
 
-    // Tìm kiếm
     @GetMapping("/search")
     public List<Map<String, Object>> searchToHopMon(
             @RequestParam String keyword) {
@@ -30,7 +28,6 @@ public class ToHopMonRestController {
         return toHopMonService.searchToHopMon(keyword);
     }
 
-    // Lấy theo mã
     @GetMapping("/{maToHop}")
     public List<Map<String, Object>> getToHopMonById(
             @PathVariable String maToHop) {
@@ -38,7 +35,6 @@ public class ToHopMonRestController {
         return toHopMonService.getToHopMonById(maToHop);
     }
 
-    // Thêm
     @PostMapping
     public ResponseEntity<ToHopMon> create(
             @RequestBody ToHopMon toHopMon) {
@@ -47,7 +43,6 @@ public class ToHopMonRestController {
                 toHopMonService.saveToHopMon(toHopMon));
     }
 
-    // Cập nhật
     @PutMapping("/{maToHop}")
     public ResponseEntity<ToHopMon> update(
             @PathVariable String maToHop,
@@ -59,7 +54,6 @@ public class ToHopMonRestController {
                 toHopMonService.saveToHopMon(toHopMon));
     }
 
-    // Xóa
     @DeleteMapping("/{maToHop}")
     public ResponseEntity<Void> delete(
             @PathVariable String maToHop) {

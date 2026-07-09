@@ -32,7 +32,7 @@ public class HocPhiApiClient {
             return gson.fromJson(response.body(), type);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ArrayList<>(); // Trả về list rỗng nếu lỗi để tránh Crash giống DAO
+            return new ArrayList<>(); 
         }
     }
 
@@ -80,8 +80,6 @@ public class HocPhiApiClient {
             String json = gson.toJson(hp);
             HttpRequest request;
 
-            // Nếu maHP <= 0 hoặc bằng null (chưa có ID) -> Thực hiện hành động tạo mới (POST)
-            // Nếu đã có maHP gốc -> Thực hiện hành động cập nhật (PUT) dữ liệu
             if (hp.getMaHP() <= 0) {
                 request = HttpRequest.newBuilder()
                         .uri(URI.create(BASE_URL))

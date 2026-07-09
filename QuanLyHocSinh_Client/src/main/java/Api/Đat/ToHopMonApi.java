@@ -17,7 +17,6 @@ public class ToHopMonApi {
     private static final String BASE_URL = ApiConfig.BASE_URL+"/api/tohopmon";
     private final Gson gson = new Gson();
 
-    // Lấy tất cả
     public List<ToBoMon> getAll() {
         try {
             URL url = new URL(BASE_URL);
@@ -33,7 +32,6 @@ public class ToHopMonApi {
         return null;
     }
 
-    // Thêm
     public boolean insert(ToBoMon toHopMon) {
         try {
             URL url = new URL(BASE_URL);
@@ -58,7 +56,6 @@ public class ToHopMonApi {
         return false;
     }
 
-    // Cập nhật
     public boolean update(ToBoMon toHopMon) {
         try {
             URL url = new URL(BASE_URL + "/" + toHopMon.getMaToHop());
@@ -82,7 +79,6 @@ public class ToHopMonApi {
         return false;
     }
 
-    // Xóa
     public boolean delete(String maToHop) {
         try {
             URL url = new URL(BASE_URL + "/" + maToHop);

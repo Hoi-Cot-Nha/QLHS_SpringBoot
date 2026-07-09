@@ -31,7 +31,6 @@ public class LopApi {
         gson = new Gson();
     }
 
-    // Lấy danh sách lớp
     public List<LopGVCN> getAllLop() {
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -53,7 +52,6 @@ public class LopApi {
         return new ArrayList<>();
     }
 
-    // Lấy lớp theo mã
     public Lop getById(String maLop) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -75,12 +73,10 @@ public class LopApi {
         return null;
     }
 
-    // Kiểm tra tồn tại
     public boolean exists(String maLop) {
         return getById(maLop) != null;
     }
 
-    // Thêm lớp
     public boolean create(Lop lop) {
         try {
             String json = gson.toJson(lop);
@@ -103,7 +99,6 @@ public class LopApi {
         return false;
     }
 
-    // Cập nhật lớp
     public boolean update(Lop lop) {
         try {
             String json = gson.toJson(lop);
@@ -126,7 +121,6 @@ public class LopApi {
         return false;
     }
 
-    // Xóa lớp
     public boolean delete(String maLop) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -147,7 +141,6 @@ public class LopApi {
         return false;
     }
 
-    // Tìm kiếm lớp
     public List<LopGVCN> search(String keyword) {
         try {
             String url = BASE_URL + "/search?keyword="
@@ -173,7 +166,6 @@ public class LopApi {
         return new ArrayList<>();
     }
 
-    // Lấy danh sách niên khóa
     public List<String> getDistinctNienKhoa() {
         try {
             HttpRequest request = HttpRequest.newBuilder()

@@ -32,7 +32,6 @@ public class LoginController {
                 return;
             }
 
-            
             String role = dao.checkLogin(user, pass);
             TaiKhoan tk = dao.checkLoginFull(user, pass);
 

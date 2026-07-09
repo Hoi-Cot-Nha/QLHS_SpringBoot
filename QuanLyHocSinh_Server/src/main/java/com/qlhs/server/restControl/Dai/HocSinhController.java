@@ -48,10 +48,6 @@ public class HocSinhController {
 
     }
 
-    //=====================
-    // Tìm kiếm
-    //=====================
-
     @GetMapping("/search")
     public List<HocSinh> search(
             @RequestParam String keyword) {
@@ -60,20 +56,12 @@ public class HocSinhController {
 
     }
 
-    //=====================
-    // Lấy danh sách mã lớp
-    //=====================
-
     @GetMapping("/malop")
     public List<String> getAllMaLop() {
 
         return service.getAllMaLop();
 
     }
-
-    //=====================
-    // Lấy danh sách mã đối tượng
-    //=====================
 
     @GetMapping("/madoituong")
     public List<String> getAllMaDT() {

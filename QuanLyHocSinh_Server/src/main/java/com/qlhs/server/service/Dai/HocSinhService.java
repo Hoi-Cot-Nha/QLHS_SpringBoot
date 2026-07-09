@@ -32,9 +32,6 @@ public class HocSinhService {
         repository.deleteById(maHS);
     }
 
-    //=========================
-    // Tìm kiếm
-    //=========================
     public List<HocSinh> search(String keyword) {
 
         LinkedHashSet<HocSinh> result = new LinkedHashSet<>();
@@ -45,9 +42,6 @@ public class HocSinhService {
         return new ArrayList<>(result);
     }
 
-    //=========================
-    // Danh sách mã lớp
-    //=========================
     public List<String> getAllMaLop() {
 
         List<String> list = new ArrayList<>();
@@ -67,9 +61,6 @@ public class HocSinhService {
 
     }
 
-    //=========================
-    // Danh sách mã đối tượng
-    //=========================
     public List<String> getAllMaDT() {
 
         List<String> list = new ArrayList<>();

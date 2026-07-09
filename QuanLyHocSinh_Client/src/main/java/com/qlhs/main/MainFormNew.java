@@ -389,7 +389,6 @@ public class MainFormNew extends JFrame {
         lastActiveButton = btn;
     }
 
-    // Giữ nguyên logic chuyển Panel của cả 2 bản[cite: 1, 2]
     private void switchPanel(String title, String formCode) {
         if (formCode.equals("DangXuat")) {
             int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn đăng xuất?", "Xác nhận", JOptionPane.YES_NO_OPTION);

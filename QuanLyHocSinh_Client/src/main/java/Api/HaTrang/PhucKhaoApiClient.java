@@ -20,7 +20,7 @@ public class PhucKhaoApiClient {
     private static final String BASE_URL = ApiConfig.BASE_URL + "/api/phuckhao";
     private final HttpClient client = HttpClient.newHttpClient();
     private final Gson gson = new GsonBuilder()
-            .setDateFormat("yyyy-MM-dd") // Giữ cấu trúc format ngày tháng đồng bộ với server
+            .setDateFormat("yyyy-MM-dd") 
             .create();
 
     public List<Phuckhao> getAll() {
@@ -35,7 +35,7 @@ public class PhucKhaoApiClient {
             return gson.fromJson(response.body(), type);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ArrayList<>(); // Trả về danh sách rỗng nếu lỗi kết nối
+            return new ArrayList<>(); 
         }
     }
 
@@ -51,7 +51,6 @@ public class PhucKhaoApiClient {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            // Trả về true nếu thêm mới thành công (200 OK hoặc 201 Created)
             return response.statusCode() == 200 || response.statusCode() == 201;
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,7 +123,6 @@ public class PhucKhaoApiClient {
 
             Type listType = new TypeToken<List<Phuckhao>>(){}.getType();
 
-            // Nếu Server trả về Object chứ không phải Array danh sách
             if (body.startsWith("{")) {
                 Phuckhao singlePk = gson.fromJson(body, Phuckhao.class);
                 List<Phuckhao> list = new ArrayList<>();

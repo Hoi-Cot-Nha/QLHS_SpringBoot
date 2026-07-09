@@ -20,9 +20,6 @@ public class DoiTuongUuTienApi {
 
     private static final Gson gson = new Gson();
 
-    // ==============================
-    // Lấy danh sách đối tượng ưu tiên
-    // ==============================
     public List<DoiTuongUuTien> getAll() {
 
         try {
@@ -53,9 +50,6 @@ public class DoiTuongUuTienApi {
         return null;
     }
 
-    // ==============================
-    // Lấy đối tượng theo mã
-    // ==============================
     public DoiTuongUuTien getById(String maDT) {
 
         try {
@@ -84,9 +78,6 @@ public class DoiTuongUuTienApi {
         return null;
     }
 
-    // ==============================
-    // Thêm đối tượng
-    // ==============================
     public boolean insert(DoiTuongUuTien dt) {
 
         try {
@@ -122,9 +113,6 @@ public class DoiTuongUuTienApi {
         return false;
     }
 
-    // ==============================
-    // Cập nhật đối tượng
-    // ==============================
     public boolean update(DoiTuongUuTien dt) {
 
         try {
@@ -159,9 +147,6 @@ public class DoiTuongUuTienApi {
         return false;
     }
 
-    // ==============================
-    // Xóa đối tượng
-    // ==============================
     public boolean delete(String maDT) {
 
         try {
@@ -187,9 +172,6 @@ public class DoiTuongUuTienApi {
         return false;
     }
 
-    // ==============================
-    // Tìm kiếm
-    // ==============================
     public List<DoiTuongUuTien> search(String keyword) {
 
         try {

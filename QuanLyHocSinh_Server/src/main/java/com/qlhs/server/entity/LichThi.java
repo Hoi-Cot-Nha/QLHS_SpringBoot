@@ -13,7 +13,7 @@ import java.time.LocalTime;
 public class LichThi {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Khóa chính tự tăng
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
     @Column(name = "MaLT")
     private int maLT;
 

@@ -35,7 +35,7 @@ public class ThongBaoRestController {
 
     @PostMapping
     public ResponseEntity<ThongBao> createTB(@RequestBody ThongBao thongBao){
-        // Tự động gán ngày tạo thực tế lúc bấm thêm trên hệ thống
+        
         if(thongBao.getNgayTao() == null) {
             thongBao.setNgayTao(new Date());
         }

@@ -48,10 +48,9 @@ public class LichThiController {
             phongHocList = phongApi.getAll();
             List<String> tenPhongs = new ArrayList<>();
             for (PhongHoc p : phongHocList) {
-                tenPhongs.add(p.getTenPhong()); // Hiển thị tên phòng thay vì mã
+                tenPhongs.add(p.getTenPhong()); 
             }
             view.setPhongHocData(tenPhongs);
-
 
             LopApi lopApi = new LopApi();
             List<LopGVCN> lopList = lopApi.getAllLop();
@@ -78,7 +77,6 @@ public class LichThiController {
             String tenMon = view.getMonFilter();
             String phong = view.getPhongFilter();
             String maLop = view.getLopFilter();
-
 
             String maMH = "";
             if (!tenMon.isEmpty() && monHocList != null) {
@@ -112,8 +110,7 @@ public class LichThiController {
             editMode[0] = false;
             view.clearForm();
             view.getTable().clearSelection();
-            
-            // Auto đề xuất Mã LT tiếp theo
+
             int maxId = 0;
             for(int i=0; i<view.getTable().getRowCount(); i++) {
                 try {
@@ -132,12 +129,11 @@ public class LichThiController {
                 selected = view.getCboMaLT().getSelectedItem().toString();
             }
             if(!selected.isEmpty()) {
-                // Tìm trong bảng xem mã này có tồn tại không
+                
                 for(int i=0; i<view.getTable().getRowCount(); i++) {
                     if(view.getTable().getValueAt(i, 0).toString().equals(selected)) {
                         view.getTable().setRowSelectionInterval(i, i);
-                        // Khi setRowSelectionInterval thì tableMouseListener sẽ tự kích hoạt
-                        // và fill data + chuyển sang EditMode
+
                         break;
                     }
                 }
@@ -155,8 +151,7 @@ public class LichThiController {
         });
         view.addBtnLuuListener(e -> {
             LichThi lt = view.getLichThiInput();
-            
-            // Map TenMH -> MaMH
+
             if (!lt.getMaMH().isEmpty() && monHocList != null) {
                 for (MonHoc m : monHocList) {
                     if (m.getTenMH().equals(lt.getMaMH())) {
@@ -165,8 +160,7 @@ public class LichThiController {
                     }
                 }
             }
-            
-            // Map TenPhong -> MaPhong
+
             if (!lt.getMaPhong().isEmpty() && phongHocList != null) {
                 for (PhongHoc p : phongHocList) {
                     if (p.getTenPhong() != null && p.getTenPhong().equals(lt.getMaPhong())) {
@@ -180,8 +174,7 @@ public class LichThiController {
                 view.showMessage("Vui lòng nhập Mã môn và Ngày thi và Lớp!");
                 return;
             }
-            
-            // Validate Giờ Bắt Đầu < Giờ Kết Thúc
+
             try {
                 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
                 java.util.Date start = sdf.parse(lt.getGioBatDau());
@@ -195,16 +188,14 @@ public class LichThiController {
                 return;
             }
 
-            // Kiểm tra trùng lịch thi (Overlap Check)
             List<LichThi> allExams = dao.getAllLichThi();
             for (LichThi existing : allExams) {
-                if (existing.getMaLT() == lt.getMaLT()) continue; // Bỏ qua chính nó khi sửa
+                if (existing.getMaLT() == lt.getMaLT()) continue; 
                 
                 if (existing.getNgayThi() != null && existing.getMaPhong() != null &&
                     existing.getNgayThi().equals(lt.getNgayThi()) && 
                     existing.getMaPhong().equals(lt.getMaPhong())) {
-                    
-                    // Logic trùng giờ: Bắt đầu mới < Kết thúc cũ VÀ Kết thúc mới > Bắt đầu cũ
+
                     if (lt.getGioBatDau().compareTo(existing.getGioKetThuc()) < 0 && 
                         lt.getGioKetThuc().compareTo(existing.getGioBatDau()) > 0) {
                         view.showMessage(String.format("Lỗi: Trùng lịch với Mã LT %d (từ %s đến %s) cùng ngày, cùng phòng!", 

@@ -4,16 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ButtonStyleHelper {
-    
-    // Định nghĩa màu sắc chuyên nghiệp
-    private static final Color COLOR_ADD = new Color(33, 150, 243); // Blue
-    private static final Color COLOR_EDIT = new Color(255, 152, 0); // Orange
-    private static final Color COLOR_DELETE = new Color(244, 67, 54); // Red
-    private static final Color COLOR_SAVE = new Color(76, 175, 80); // Green
-    private static final Color COLOR_CANCEL = new Color(117, 117, 117); // Gray
-    private static final Color COLOR_VIEW = new Color(0, 150, 136); // Teal
-    private static final Color COLOR_SEARCH = new Color(63, 81, 181); // Indigo
-    private static final Color COLOR_EXPORT = new Color(76, 175, 80); // Green
+
+    private static final Color COLOR_ADD = new Color(33, 150, 243); 
+    private static final Color COLOR_EDIT = new Color(255, 152, 0); 
+    private static final Color COLOR_DELETE = new Color(244, 67, 54); 
+    private static final Color COLOR_SAVE = new Color(76, 175, 80); 
+    private static final Color COLOR_CANCEL = new Color(117, 117, 117); 
+    private static final Color COLOR_VIEW = new Color(0, 150, 136); 
+    private static final Color COLOR_SEARCH = new Color(63, 81, 181); 
+    private static final Color COLOR_EXPORT = new Color(76, 175, 80); 
     private static final Color TEXT_COLOR = Color.BLACK;
     
     public static void styleButtonAdd(JButton btn) {

@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package View.HaTrang;
 
 import Controller.HaTrang.Thongbaocontroller;
@@ -15,10 +12,6 @@ import javax.swing.table.DefaultTableModel;
 import TienIch.ButtonStyleHelper;
 import TienIch.TableSortHelper;
 
-/**
- *
- * @author ADMIN
- */
 public class QuanlyThongbaoPanel extends JPanel {
     private JTable table;
     private DefaultTableModel model;
@@ -120,16 +113,14 @@ public class QuanlyThongbaoPanel extends JPanel {
         }
 
         setCrudButtonState(true, false, false, false, false);
-        setInputEditable(false); // Khóa form lúc khởi tạo ban đầu
+        setInputEditable(false); 
     }
 
-    // Điều khiển trạng thái cho phép nhập liệu hoặc khóa ô văn bản
     public void setInputEditable(boolean editable) {
         txtTieuDe.setEditable(editable);
         txtNguoiGui.setEditable(editable);
         txtNoiDung.setEditable(editable);
 
-        // Đổi màu nền để người dùng nhận biết biểu thị đóng/mở khóa ô nhập
         Color bgColor = editable ? Color.WHITE : new Color(240, 240, 240);
         txtTieuDe.setBackground(bgColor);
         txtNguoiGui.setBackground(bgColor);

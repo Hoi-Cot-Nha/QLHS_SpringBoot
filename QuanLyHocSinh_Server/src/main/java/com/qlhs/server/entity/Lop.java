@@ -24,5 +24,4 @@ public class Lop {
     @JoinColumn(name = "MaGVCN")
     private GiaoVien giaoVienChuNhiem;
 
-
 }

@@ -16,13 +16,11 @@ public class LopRestController {
     @Autowired
     private LopService lopService;
 
-    // Lấy tất cả
     @GetMapping
     public List<Map<String, Object>> getAllLop() {
         return lopService.getAllLop();
     }
 
-    // Tìm kiếm
     @GetMapping("/search")
     public List<Map<String, Object>> searchLop(
             @RequestParam String keyword) {
@@ -34,14 +32,12 @@ public class LopRestController {
         return lopService.getDistinctNienKhoa();
     }
 
-    // Lấy theo mã
     @GetMapping("/{maLop}")
     public Map<String, Object> getLopById(
             @PathVariable String maLop) {
         return lopService.getLopById(maLop);
     }
 
-    // Thêm
     @PostMapping
     public ResponseEntity<Lop> create(
             @RequestBody Lop lop) {
@@ -50,7 +46,6 @@ public class LopRestController {
                 lopService.saveLop(lop));
     }
 
-    // Cập nhật
     @PutMapping("/{maLop}")
     public ResponseEntity<Lop> update(
             @PathVariable String maLop,
@@ -62,7 +57,6 @@ public class LopRestController {
                 lopService.saveLop(lop));
     }
 
-    // Xóa
     @DeleteMapping("/{maLop}")
     public ResponseEntity<Void> delete(
             @PathVariable String maLop) {

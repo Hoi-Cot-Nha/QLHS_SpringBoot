@@ -33,9 +33,6 @@ public class TaiKhoanApi {
         gson = new Gson();
     }
 
-    /**
-     * Đăng nhập và trả về quyền
-     */
     public String checkLogin(String user, String pass) {
         TaiKhoan tk = checkLoginFull(user, pass);
         if (tk != null) {
@@ -44,9 +41,6 @@ public class TaiKhoanApi {
         return null;
     }
 
-    /**
-     * Đăng nhập và trả về đầy đủ thông tin tài khoản
-     */
     public TaiKhoan checkLoginFull(String tenDangNhap, String matKhau) {
 
         try {
@@ -77,9 +71,6 @@ public class TaiKhoanApi {
         return null;
     }
 
-    /**
-     * Lấy toàn bộ tài khoản
-     */
     public List<TaiKhoan> getAll() {
 
         try {
@@ -107,14 +98,6 @@ public class TaiKhoanApi {
         return new ArrayList<>();
     }
 
-    /**
-     * Lấy tài khoản theo tên đăng nhập
-     */
-
-
-    /**
-     * Thêm tài khoản
-     */
     public boolean insert(TaiKhoan tk) {
 
         try {
@@ -139,9 +122,6 @@ public class TaiKhoanApi {
         return false;
     }
 
-    /**
-     * Cập nhật tài khoản
-     */
     public boolean update(TaiKhoan tk) {
 
         try {
@@ -166,9 +146,6 @@ public class TaiKhoanApi {
         return false;
     }
 
-    /**
-     * Xóa tài khoản
-     */
     public boolean delete(String tenDangNhap) {
 
         try {
@@ -193,9 +170,6 @@ public class TaiKhoanApi {
         return false;
     }
 
-    /**
-     * Tìm kiếm tài khoản
-     */
     public List<TaiKhoan> search(String keyword) {
 
         try {

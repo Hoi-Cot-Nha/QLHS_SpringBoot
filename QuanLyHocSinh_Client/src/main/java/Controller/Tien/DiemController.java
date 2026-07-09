@@ -44,7 +44,7 @@ public class DiemController {
             view.setMonHocData(mons);
         } catch (Exception e) {
             e.printStackTrace();
-            // Nếu lỗi kết nối, có thể đưa ra thông báo hoặc để trống danh sách
+            
             System.out.println("Lỗi khi tải danh sách môn học từ API: " + e.getMessage());
             view.setMonHocData(new ArrayList<>());
         }
@@ -81,7 +81,7 @@ public class DiemController {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int row = view.getTable().getSelectedRow();
-                view.fillFormInput(row); // Gọi hàm bên View để điền text
+                view.fillFormInput(row); 
             }
         });
         view.addBtnXuatExcelListener(e -> {
@@ -93,7 +93,7 @@ public class DiemController {
         String keyword = view.getTuKhoaTimKiem();
 
         if (keyword.isEmpty()) {
-            loadData(); // Nếu để trống thì tải lại toàn bộ
+            loadData(); 
             return;
         }
 
@@ -104,7 +104,6 @@ public class DiemController {
             view.showMessage("Không tìm thấy học sinh nào với từ khóa: " + keyword);
         }
     }
-
 
     private void loadData() {
         List<Diem> list;

@@ -13,14 +13,12 @@ public class HocSinhController {
 
     private HocSinhApi api = new HocSinhApi();
 
-    // Load dữ liệu lên bảng
     public void loadTable(DefaultTableModel model) {
 
         model.setRowCount(0);
 
         List<HocSinh> list;
 
-        // Kiểm tra phân quyền
         if (Auth.isHocSinh()) {
 
             HocSinh hs = api.getHocSinh(Auth.maNguoiDung);
@@ -71,17 +69,14 @@ public class HocSinhController {
         return api.insertHocSinh(hs);
     }
 
-    // Sửa
     public boolean sua(HocSinh hs) {
         return api.updateHocSinh(hs);
     }
 
-    // Xóa
     public boolean xoa(String maHS) {
         return api.deleteHocSinh(maHS);
     }
 
-    // Load mã lớp
     public void loadComboMaLop(JComboBox<String> cbo) {
 
         cbo.removeAllItems();
@@ -96,7 +91,6 @@ public class HocSinhController {
 
     }
 
-    // Load mã đối tượng
     public void loadComboMaDT(JComboBox<String> cbo) {
 
         cbo.removeAllItems();
@@ -111,24 +105,20 @@ public class HocSinhController {
 
     }
 
-    // Tìm kiếm
     public boolean timKiem(String keyword, DefaultTableModel model) {
 
         model.setRowCount(0);
 
         List<HocSinh> list = api.search(keyword);
 
-        // Server lỗi hoặc không kết nối được
         if (list == null) {
             throw new RuntimeException("Không thể kết nối tới Server.");
         }
 
-        // Không có kết quả
         if (list.isEmpty()) {
             return false;
         }
 
-        // Có dữ liệu
         for (HocSinh hs : list) {
             model.addRow(new Object[]{
                 hs.getMaHS(),
@@ -144,7 +134,6 @@ public class HocSinhController {
         return true;
     }
 
-    // Thông tin cá nhân
     public HocSinh getThongTinCaNhan() {
 
         return api.getHocSinh(Auth.maNguoiDung);

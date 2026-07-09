@@ -26,7 +26,6 @@ public class QuanLyHocPhiPanel extends JPanel {
     private JTextField txtTenHSCT;
     private JComboBox<String> cboTrangThai;
 
-    // Component UI cho học sinh
     private JLabel lblTongTienVal, lblMienGiamVal, lblPhaiDongVal, lblTrangThaiBadge;
     private JButton btnThanhToanHocSinh;
 
@@ -40,7 +39,6 @@ public class QuanLyHocPhiPanel extends JPanel {
         setBackground(new Color(245, 245, 245));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // 1. KHỞI TẠO COMPONENT (Luôn chạy để tránh NullPointerException)
         txtMaHS = new JTextField();
         txtTenHSCT = new JTextField();
         txtTenHSCT.setEditable(false);
@@ -56,23 +54,20 @@ public class QuanLyHocPhiPanel extends JPanel {
         txtPhaiDong.setBackground(new Color(245, 245, 245));
         cboTrangThai = new JComboBox<>(new String[]{"Chưa đóng", "Đã đóng", "Bảo lưu"});
 
-        // KHỞI TẠO CÁC NÚT ĐỂ CONTROLLER KHÔNG BỊ LỖI NULL POINTER
         btnThem = new JButton("Thêm");       ButtonStyleHelper.styleButtonAdd(btnThem);
         btnSua = new JButton("Sửa");         ButtonStyleHelper.styleButtonEdit(btnSua);
         btnXoa = new JButton("Xóa");         ButtonStyleHelper.styleButtonDelete(btnXoa);
         btnLuu = new JButton("Lưu");         ButtonStyleHelper.styleButtonSave(btnLuu);
         btnHuy = new JButton("Hủy");         ButtonStyleHelper.styleButtonCancel(btnHuy);
 
-        // --- PANEL NORTH (TITLE & FILTER) ---
         JPanel pnlNorth = new JPanel(new BorderLayout(10, 10));
         pnlNorth.setOpaque(false);
 
-        // ĐÃ SỬA: Đồng bộ chữ tiêu đề ngắn gọn giống các chức năng khác
         String titleText = Model.Auth.isHocSinh() ? "HỌC PHÍ HỌC SINH" : "QUẢN LÝ HỌC PHÍ";
         JLabel lblTitle = new JLabel(titleText, JLabel.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
         lblTitle.setForeground(new Color(41, 128, 185));
-        pnlNorth.add(lblTitle, BorderLayout.NORTH); // ĐÃ SỬA: Thêm dòng này để hiển thị tiêu đề lên trên cùng
+        pnlNorth.add(lblTitle, BorderLayout.NORTH); 
 
         JPanel pnlFilter = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
         pnlFilter.setBackground(Color.WHITE);
@@ -91,29 +86,26 @@ public class QuanLyHocPhiPanel extends JPanel {
         txtNamHoc = new JTextField(10);
         pnlFilter.add(txtNamHoc);
 
-        btnLoc = new JButton("Tìm Kiếm"); // ĐÃ SỬA: Đổi tên nút thành Tìm Kiếm cho đồng bộ
-        ButtonStyleHelper.styleButtonSearch(btnLoc); // ĐÃ SỬA: Dùng styleButtonSearch thay vì styleButtonView
+        btnLoc = new JButton("Tìm Kiếm"); 
+        ButtonStyleHelper.styleButtonSearch(btnLoc); 
         pnlFilter.add(btnLoc);
 
         pnlNorth.add(pnlFilter, BorderLayout.SOUTH);
         add(pnlNorth, BorderLayout.NORTH);
 
-        // --- TABLE ---
         String[] cols = {"ID", "Mã HS", "Tên Học Sinh", "Mã Lớp", "Kỳ", "Năm học", "Tổng tiền", "Miễn giảm", "Phải đóng", "Trạng thái"};
         tableModel = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
         };
         tableHocPhi = new JTable(tableModel);
-        
-        // Hide Mã HS column
+
         tableHocPhi.getColumnModel().removeColumn(tableHocPhi.getColumnModel().getColumn(1));
         
         TableSortHelper.enableTableSorting(tableHocPhi);
         tableHocPhi.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         tableHocPhi.setRowHeight(30);
 
-        // ĐÃ SỬA: Đổi màu thanh tiêu đề bảng thành màu xanh dương đồng bộ
         tableHocPhi.getTableHeader().setDefaultRenderer(new TienIch.CustomTableHeaderRenderer());
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -126,13 +118,11 @@ public class QuanLyHocPhiPanel extends JPanel {
         scrollPane.setBorder(BorderFactory.createTitledBorder("Danh sách học phí"));
         add(scrollPane, BorderLayout.CENTER);
 
-        // --- PANEL SOUTH (INPUT & BUTTONS) ---
         JPanel pnlSouth = new JPanel(new BorderLayout(10, 10));
         pnlSouth.setOpaque(false);
 
-        // 2. PHÂN CHIA GIAO DIỆN CHUẨN (KHÔNG BỊ TRÙNG LẶP CODE ĐÈ NHAU)
         if (!Model.Auth.isHocSinh()) {
-            // --- Giao diện dành cho Giáo viên / Admin ---
+            
             JPanel pnlInput = new JPanel(new GridLayout(5, 4, 15, 10));
             pnlInput.setBackground(Color.WHITE);
             pnlInput.setBorder(BorderFactory.createCompoundBorder(
@@ -165,7 +155,7 @@ public class QuanLyHocPhiPanel extends JPanel {
             pnlSouth.add(pnlButtons, BorderLayout.SOUTH);
 
         } else {
-            // --- Giao diện Card Đẹp dành cho HỌC SINH ---
+            
             JPanel pnlCard = new JPanel(new GridLayout(1, 3, 20, 0));
             pnlCard.setOpaque(false);
             pnlCard.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
@@ -210,7 +200,6 @@ public class QuanLyHocPhiPanel extends JPanel {
 
             pnlSouth.add(pnlAction, BorderLayout.SOUTH);
 
-            // Sự kiện Click hiển thị Dialog QR Code công nợ học phí
             btnThanhToanHocSinh.addActionListener(e -> {
                 JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Mã QR Thanh Toán", true);
                 dialog.setSize(400, 450);
@@ -252,7 +241,6 @@ public class QuanLyHocPhiPanel extends JPanel {
         }
         add(pnlSouth, BorderLayout.SOUTH);
 
-        // --- Event click bảng ---
         tableHocPhi.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -389,7 +377,6 @@ public class QuanLyHocPhiPanel extends JPanel {
         cboHocKy.setSelectedIndex(0);
     }
 
-    // Thêm hàm này vào cuối file QuanLyHocPhiPanel.java để điều khiển việc cho gõ chữ hay không
     public void setInputEditable(boolean editable) {
         txtMaHS.setEditable(editable);
         txtNamHocCT.setEditable(editable);
@@ -398,7 +385,6 @@ public class QuanLyHocPhiPanel extends JPanel {
         txtMienGiam.setEditable(editable);
         cboTrangThai.setEnabled(editable);
 
-        // Riêng ô Mã Lớp và Phải Đóng thì lúc nào cũng phải khóa vì nó tự tính toán
         txtMaLopCT.setEditable(false);
         txtPhaiDong.setEditable(false);
     }

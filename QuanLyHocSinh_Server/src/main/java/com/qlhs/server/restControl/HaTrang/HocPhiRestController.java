@@ -61,7 +61,7 @@ public class HocPhiRestController {
 
     @PostMapping
     public ResponseEntity<HocPhi> createHP(@RequestBody HocPhi hocPhi) {
-        // Đảm bảo khi tạo mới thì ID truyền vào database phải bằng 0 hoặc null để DB tự tăng
+        
         hocPhi.setMaHP(0);
 
         return ResponseEntity.ok(hocPhiService.saveHP(hocPhi));

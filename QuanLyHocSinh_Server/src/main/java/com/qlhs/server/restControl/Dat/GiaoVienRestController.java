@@ -16,27 +16,23 @@ public class GiaoVienRestController {
     @Autowired
     private GiaoVienService giaoVienService;
 
-    // Lấy tất cả
     @GetMapping
     public List<Map<String, Object>> getAllGiaoVien() {
         return giaoVienService.getAllGiaoVien();
     }
 
-    // Tìm kiếm
     @GetMapping("/search")
     public List<Map<String, Object>> searchGiaoVien(
             @RequestParam String keyword) {
         return giaoVienService.searchGiaoVien(keyword);
     }
 
-    // Lấy theo mã
     @GetMapping("/{maGV}")
     public Map<String, Object> getGiaoVienById(
             @PathVariable String maGV) {
         return giaoVienService.getGiaoVienById(maGV);
     }
 
-    // Thêm
     @PostMapping
     public ResponseEntity<GiaoVien> create(
             @RequestBody GiaoVien giaoVien) {
@@ -45,7 +41,6 @@ public class GiaoVienRestController {
                 giaoVienService.saveGiaoVien(giaoVien));
     }
 
-    // Cập nhật
     @PutMapping("/{maGV}")
     public ResponseEntity<GiaoVien> update(
             @PathVariable String maGV,
@@ -57,7 +52,6 @@ public class GiaoVienRestController {
                 giaoVienService.saveGiaoVien(giaoVien));
     }
 
-    // Xóa
     @DeleteMapping("/{maGV}")
     public ResponseEntity<Void> delete(
             @PathVariable String maGV) {

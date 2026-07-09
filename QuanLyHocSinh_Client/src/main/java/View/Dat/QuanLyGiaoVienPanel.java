@@ -26,10 +26,8 @@ public class QuanLyGiaoVienPanel extends JPanel {
     public QuanLyGiaoVienPanel() {
         initComponents();
 
-        // Mặc định khi vừa mở form lên thì khóa các ô nhập liệu lại
         setFormEnabled(false);
 
-        // Nếu là giáo viên thì tự động load thông tin của chính mình
         if (Model.Auth.isGiaoVien()) {
             loadThongTinCaNhan();
         }
@@ -39,10 +37,8 @@ public class QuanLyGiaoVienPanel extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // ===== 1. PANEL NORTH: CHỨA TIÊU ĐỀ + TÌM KIẾM =====
         JPanel pnlNorth = new JPanel(new BorderLayout(0, 10));
 
-        // -- Tiêu đề --
         String titleText = Model.Auth.isGiaoVien() ? "HỒ SƠ GIÁO VIÊN" : "QUẢN LÝ GIÁO VIÊN";
         JLabel lblTitle = new JLabel(titleText, JLabel.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
@@ -50,7 +46,6 @@ public class QuanLyGiaoVienPanel extends JPanel {
         lblTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
         pnlNorth.add(lblTitle, BorderLayout.NORTH);
 
-        // -- Thanh tìm kiếm --
         JPanel pnlSearch = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         pnlSearch.setBorder(new TitledBorder("Tìm kiếm"));
 
@@ -64,7 +59,6 @@ public class QuanLyGiaoVienPanel extends JPanel {
         pnlNorth.add(pnlSearch, BorderLayout.CENTER);
         add(pnlNorth, BorderLayout.NORTH);
 
-        // ===== 2. TABLE (CENTER) =====
         String[] cols = {"Mã GV", "Họ Tên", "Ngày Sinh", "SĐT", "Tổ Bộ Môn"};
         tableModel = new DefaultTableModel(cols, 0);
         tableGV = new JTable(tableModel);
@@ -95,7 +89,6 @@ public class QuanLyGiaoVienPanel extends JPanel {
         tableGV.getColumnModel().getColumn(2).setCellRenderer(dateRenderer);
         add(new JScrollPane(tableGV), BorderLayout.CENTER);
 
-        // ===== 3. FORM INPUT (SOUTH) =====
         JPanel pnlSouth = new JPanel(new BorderLayout());
         pnlSouth.setBorder(new TitledBorder("Thông tin giáo viên"));
 
@@ -163,7 +156,6 @@ public class QuanLyGiaoVienPanel extends JPanel {
         pnlSouth.add(pnlBtn, BorderLayout.SOUTH);
         add(pnlSouth, BorderLayout.SOUTH);
 
-        // --- PHÂN QUYỀN ẨN TÌM KIẾM ---
         if (Model.Auth.isGiaoVien()) {
             pnlSearch.setVisible(false);
         }
@@ -179,34 +171,25 @@ public class QuanLyGiaoVienPanel extends JPanel {
         });
     }
 
-    // ========================================================
-    // CÁC HÀM TIỆN ÍCH DÀNH CHO PHÂN QUYỀN VÀ KHÓA/MỞ FORM
-    // ========================================================
-
     public void setFormEnabled(boolean enabled) {
-        // Cho phép Giáo viên / Admin sửa thông tin cơ bản
+        
         txtHoTen.setEnabled(enabled);
         spNgaySinh.setEnabled(enabled);
         txtSDT.setEnabled(enabled);
 
-        // Luôn luôn khóa Mã GV (Không ai được tự đổi mã)
         txtMaGV.setEnabled(false);
 
-        // Khóa Tổ Bộ Môn nếu là Giáo viên (chỉ Admin mới được xếp tổ)
         if (Model.Auth.isGiaoVien()) {
             cboMaToHop.setEnabled(false);
         } else {
             cboMaToHop.setEnabled(enabled);
         }
 
-        // Bật/tắt nút Lưu và Hủy
         btnLuu.setEnabled(enabled);
         btnHuy.setEnabled(enabled);
 
-        // Bật/tắt các nút thao tác
         btnSua.setEnabled(!enabled);
 
-        // Ẩn hoàn toàn nút Thêm và Xóa nếu là Giáo viên
         if (Model.Auth.isGiaoVien()) {
             btnThem.setVisible(false);
             btnXoa.setVisible(false);
@@ -238,6 +221,5 @@ public class QuanLyGiaoVienPanel extends JPanel {
     public JButton getBtnLuu() { return btnLuu; }
     public JButton getBtnHuy() { return btnHuy; }
     public JButton getBtnXem() { return btnXem; }
-
 
 }

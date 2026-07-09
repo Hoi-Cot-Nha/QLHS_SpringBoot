@@ -32,7 +32,6 @@ public class FrmPhongHoc extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // NORTH: tiêu đề + tìm kiếm
         JPanel pnlNorth = new JPanel(new BorderLayout(0, 10));
 
         JLabel lblTitle = new JLabel("QUẢN LÝ PHÒNG HỌC", JLabel.CENTER);
@@ -63,7 +62,6 @@ public class FrmPhongHoc extends JPanel {
         pnlNorth.add(pnlSearch, BorderLayout.CENTER);
         add(pnlNorth, BorderLayout.NORTH);
 
-        // TABLE
         model = new DefaultTableModel(
                 new String[]{"Mã phòng", "Tên phòng", "Sức chứa", "Loại", "Tình trạng"}, 0);
         table = new JTable(model);
@@ -73,7 +71,6 @@ public class FrmPhongHoc extends JPanel {
         table.getTableHeader().setDefaultRenderer(new TienIch.CustomTableHeaderRenderer());
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        // SOUTH: form nhập
         JPanel pnlSouth = new JPanel(new BorderLayout());
         pnlSouth.setBorder(new TitledBorder("Cập nhật phòng học"));
 

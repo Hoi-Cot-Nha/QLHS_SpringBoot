@@ -18,9 +18,6 @@ public class HocSinhApi {
 
     private static final Gson gson = new Gson();
 
-    // ==============================
-    // Lấy danh sách học sinh
-    // ==============================
     public List<HocSinh> getAllHocSinh() {
 
         try {
@@ -49,9 +46,6 @@ public class HocSinhApi {
         return null;
     }
 
-    // ==============================
-    // Lấy học sinh theo mã
-    // ==============================
     public HocSinh getHocSinh(String maHS) {
 
         try {
@@ -80,9 +74,6 @@ public class HocSinhApi {
         return null;
     }
 
-    // ==============================
-    // Thêm học sinh
-    // ==============================
     public boolean insertHocSinh(HocSinh hs) {
 
         try {
@@ -118,9 +109,6 @@ public class HocSinhApi {
         return false;
     }
 
-    // ==============================
-    // Cập nhật học sinh
-    // ==============================
     public boolean updateHocSinh(HocSinh hs) {
 
         try {
@@ -156,9 +144,6 @@ public class HocSinhApi {
         return false;
     }
 
-    // ==============================
-    // Xóa học sinh
-    // ==============================
     public boolean deleteHocSinh(String maHS) {
 
         try {
@@ -184,9 +169,6 @@ public class HocSinhApi {
         return false;
     }
 
-    // ==============================
-    // Tìm kiếm
-    // ==============================
     public List<HocSinh> search(String keyword) {
 
         try {
@@ -217,9 +199,6 @@ public class HocSinhApi {
         return null;
     }
 
-    // ==============================
-    // Lấy mã lớp
-    // ==============================
     public List<String> getAllMaLop() {
 
         try {
@@ -250,9 +229,6 @@ public class HocSinhApi {
         return null;
     }
 
-    // ==============================
-    // Lấy mã đối tượng
-    // ==============================
     public List<String> getAllMaDT() {
 
         try {

@@ -10,9 +10,6 @@ public class TaiKhoanController {
 
     private final TaiKhoanApi api = new TaiKhoanApi();
 
-    /**
-     * Hiển thị danh sách tài khoản
-     */
     public void loadTable(DefaultTableModel model) {
 
         model.setRowCount(0);
@@ -32,30 +29,18 @@ public class TaiKhoanController {
 
     }
 
-    /**
-     * Thêm tài khoản
-     */
     public boolean them(TaiKhoan tk) {
         return api.insert(tk);
     }
 
-    /**
-     * Cập nhật tài khoản
-     */
     public boolean sua(TaiKhoan tk) {
         return api.update(tk);
     }
 
-    /**
-     * Xóa tài khoản
-     */
     public boolean xoa(String tenDangNhap) {
         return api.delete(tenDangNhap);
     }
 
-    /**
-     * Tìm kiếm tài khoản
-     */
     public boolean timKiem(String keyword, DefaultTableModel model) {
 
         model.setRowCount(0);

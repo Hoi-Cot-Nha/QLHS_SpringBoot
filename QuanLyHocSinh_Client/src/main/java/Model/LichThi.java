@@ -45,7 +45,6 @@ public class LichThi {
         this.maPhong = maPhong;
     }
 
-
     public int getMaLT() { return maLT; }
     public void setMaLT(int maLT) { this.maLT = maLT; }
 

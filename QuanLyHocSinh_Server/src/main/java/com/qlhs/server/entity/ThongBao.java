@@ -16,7 +16,7 @@ import java.util.Date;
 public class ThongBao {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // <--- BẮT BUỘC PHẢI CÓ ĐỂ TỰ ĐỘNG TĂNG MÃ
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
     @Column(name="MaTB")
     private int maTB;
 
@@ -27,7 +27,7 @@ public class ThongBao {
     private String noiDung;
 
     @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern="yyyy-MM-dd", timezone="GMT+7") // <--- ĐỒNG BỘ ĐỊNH DẠNG NGÀY VỚI CLIENT
+    @JsonFormat(pattern="yyyy-MM-dd", timezone="GMT+7") 
     @Column(name="NgayTao")
     private Date ngayTao;
 

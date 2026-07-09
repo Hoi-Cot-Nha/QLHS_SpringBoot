@@ -10,23 +10,8 @@ import java.util.Optional;
 @Repository
 public interface TaiKhoanRepository extends JpaRepository<TaiKhoan, String> {
 
-    /**
-     * Đăng nhập
-     * Tương đương:
-     * SELECT * FROM TaiKhoan
-     * WHERE TenDangNhap = ? AND MatKhau = ?
-     */
     Optional<TaiKhoan> findByTenDangNhapAndMatKhau(String tenDangNhap, String matKhau);
 
-    /**
-     * Tìm kiếm
-     * Tương đương:
-     * SELECT *
-     * FROM TaiKhoan
-     * WHERE TenDangNhap LIKE ?
-     *    OR Quyen LIKE ?
-     *    OR MaNguoiDung LIKE ?
-     */
     List<TaiKhoan> findByTenDangNhapContainingOrQuyenContainingOrMaNguoiDungContaining(
             String tenDangNhap,
             String quyen,

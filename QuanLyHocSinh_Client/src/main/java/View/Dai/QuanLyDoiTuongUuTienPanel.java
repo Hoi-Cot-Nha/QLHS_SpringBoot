@@ -14,25 +14,19 @@ import TienIch.TableSortHelper;
 
 public class QuanLyDoiTuongUuTienPanel extends JPanel {
 
-    
     private DoiTuongUuTienController controller = new DoiTuongUuTienController();
-
 
     private JTable tableDT;
     private DefaultTableModel tableModel;
 
-
     private JTextField txtMaDT, txtTenDT, txtTiLeGiam;
-
 
     private JTextField txtTimKiem;
     private JButton btnTim, btnHienThiTatCa;
 
-    
     private JButton btnThem, btnSua, btnXoa, btnLuu, btnHuy;
     
     private boolean isThem = false;
-
 
     public QuanLyDoiTuongUuTienPanel() {
         initComponents();
@@ -44,7 +38,6 @@ public class QuanLyDoiTuongUuTienPanel extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        
         JPanel pnlNorth = new JPanel(new GridLayout(2, 1, 5, 5));
 
         JLabel lblTitle = new JLabel("QUẢN LÝ ĐỐI TƯỢNG ƯU TIÊN", JLabel.CENTER);
@@ -87,7 +80,6 @@ public class QuanLyDoiTuongUuTienPanel extends JPanel {
         });
 
         add(new JScrollPane(tableDT), BorderLayout.CENTER);
-
 
         JPanel pnlSouth = new JPanel(new BorderLayout());
         pnlSouth.setBorder(new TitledBorder("Thông tin đối tượng ưu tiên"));
@@ -139,7 +131,6 @@ public class QuanLyDoiTuongUuTienPanel extends JPanel {
         pnlSouth.add(pnlButton, BorderLayout.SOUTH);
         add(pnlSouth, BorderLayout.SOUTH);
 
-
         btnThem.addActionListener(e -> them());
         btnSua.addActionListener(e -> sua());
         btnXoa.addActionListener(e -> xoa());
@@ -149,7 +140,6 @@ public class QuanLyDoiTuongUuTienPanel extends JPanel {
         btnTim.addActionListener(e -> timKiem());
         btnHienThiTatCa.addActionListener(e -> hienThiTatCa());
     }
-
 
     private void them() {
         clearForm();
@@ -187,7 +177,6 @@ public class QuanLyDoiTuongUuTienPanel extends JPanel {
                 return;
             }
 
-            // Chuyển từ % sang số thực để lưu DB
             tiLe = tiLe / 100.0;
 
         } catch (NumberFormatException e) {
@@ -212,7 +201,6 @@ public class QuanLyDoiTuongUuTienPanel extends JPanel {
         }
     }
 
-    
     private void huy() {
         clearForm();
         setFormEnabled(false);
@@ -252,14 +240,10 @@ public class QuanLyDoiTuongUuTienPanel extends JPanel {
     }
 }
 
-
-
-
     private void timKiem() {
 
         String keyword = txtTimKiem.getText().trim();
 
-        // Chưa nhập từ khóa
         if (keyword.isEmpty()) {
             JOptionPane.showMessageDialog(
                     this,
@@ -307,7 +291,6 @@ public class QuanLyDoiTuongUuTienPanel extends JPanel {
 
         controller.loadTable(tableModel);
     }
-
 
     private void doDuLieuVaoForm() {
         int row = tableDT.getSelectedRow();

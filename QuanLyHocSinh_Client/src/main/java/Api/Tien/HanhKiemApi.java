@@ -161,7 +161,7 @@ public class HanhKiemApi {
     }
 
     public List<HanhKiem> searchHanhKiemByMaHS(String maHS, String keyword) {
-        // HanhKiem doesn't have an endpoint specifically for this, but we can filter the getHanhKiemByMaHS list
+        
         List<HanhKiem> list = getHanhKiemByMaHS(maHS);
         List<HanhKiem> filtered = new ArrayList<>();
         String lowerKeyword = keyword.toLowerCase();

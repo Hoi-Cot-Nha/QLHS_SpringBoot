@@ -132,9 +132,7 @@ public class HanhKiemController {
             public void focusLost(java.awt.event.FocusEvent e) {
                 String maHS = view.getMaHSInput();
                 if (!maHS.isEmpty()) {
-                    // TODO: Gọi API lấy Học Sinh để lấy Tên HS theo MaHS
-                    // Ví dụ: view.setTenHS(hocSinhApi.getHocSinhByMa(maHS).getTenHS());
-                    // Tạm thời nếu có thể lấy từ bảng Hạnh Kiểm đã load:
+
                     List<HanhKiem> list = dao.searchHanhKiemByMaHS(maHS, "");
                     if(list != null && !list.isEmpty()) {
                         view.setTenHS(list.get(0).getTenHS());

@@ -22,7 +22,6 @@ public class ToBoMon {
     public String getTruongBoMon() { return truongBoMon; }
     public void setTruongBoMon(String truongBoMon) { this.truongBoMon = truongBoMon; }
 
-    // Hàm này quyết định ComboBox hiện cái gì (Hiện Tên Tổ thay vì mã loằng ngoằng)
     @Override
     public String toString() {
         return this.tenToHop; 

@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public interface ThongBaoRepository extends JpaRepository<ThongBao, Integer> {
 
-    // Đặt tên hàm ngắn gọn theo ý mình, dùng @Query để xử lý tìm kiếm không phân biệt hoa thường
     @Query("SELECT t FROM ThongBao t WHERE " +
             "t.tieuDe LIKE CONCAT('%', :keyword, '%') OR " +
             "t.noiDung LIKE CONCAT('%', :keyword, '%') OR " +

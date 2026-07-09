@@ -10,20 +10,16 @@ import TienIch.TableSortHelper;
 
 public class QuanLyLopPanel extends JPanel {
 
-
     private JTable tableLop;
     private DefaultTableModel tableModel;
 
-    
     private JTextField txtMaLop, txtTenLop;
     private JComboBox<String> cboNienKhoa;
     private JComboBox<Giaovien> cboGVCN;
 
-  
     private JTextField txtTimKiem;
     private JButton btnTimKiem;
 
-    
     private JButton btnThem, btnSua, btnXoa, btnLuu, btnHuy, btnXem;
 
     public QuanLyLopPanel() {
@@ -34,21 +30,15 @@ public class QuanLyLopPanel extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // ===== 1. PANEL NORTH: CHỨA TIÊU ĐỀ + TÌM KIẾM =====
-        // Sử dụng BorderLayout: Title ở trên, Search ở dưới
         JPanel pnlNorth = new JPanel(new BorderLayout(0, 10));
 
-        // -- Tiêu đề --
         JLabel lblTitle = new JLabel("QUẢN LÝ LỚP HỌC", JLabel.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
         lblTitle.setForeground(new Color(0, 102, 204));
-        lblTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0)); // Tạo khoảng hở
-        
-        // Thêm tiêu đề vào vị trí trên cùng của pnlNorth
+        lblTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0)); 
+
         pnlNorth.add(lblTitle, BorderLayout.NORTH);
 
-
-        // -- Thanh tìm kiếm --
         JPanel pnlSearch = new JPanel(new FlowLayout(FlowLayout.LEFT));
         pnlSearch.setBorder(new TitledBorder("Tìm kiếm"));
 
@@ -60,14 +50,10 @@ public class QuanLyLopPanel extends JPanel {
         pnlSearch.add(txtTimKiem);
         pnlSearch.add(btnTimKiem);
 
-        // Thêm thanh tìm kiếm vào phần giữa của pnlNorth (nằm dưới tiêu đề)
         pnlNorth.add(pnlSearch, BorderLayout.CENTER);
 
-        // ==> QUAN TRỌNG: Đưa cả khối pnlNorth ra giao diện chính
         add(pnlNorth, BorderLayout.NORTH);
 
-
-        // ===== 2. TABLE (CENTER) =====
         String[] cols = {"Mã Lớp", "Tên Lớp", "Niên Khóa", "GVCN"};
         tableModel = new DefaultTableModel(cols, 0);
         tableLop = new JTable(tableModel);
@@ -77,8 +63,6 @@ public class QuanLyLopPanel extends JPanel {
         tableLop.getTableHeader().setDefaultRenderer(new TienIch.CustomTableHeaderRenderer());
         add(new JScrollPane(tableLop), BorderLayout.CENTER);
 
-
-        // ===== 3. FORM INPUT (SOUTH) =====
         JPanel pnlSouth = new JPanel(new BorderLayout());
         pnlSouth.setBorder(new TitledBorder("Thông tin lớp"));
 
@@ -147,7 +131,6 @@ public class QuanLyLopPanel extends JPanel {
         pnlSouth.add(pnlBtn, BorderLayout.SOUTH);
         add(pnlSouth, BorderLayout.SOUTH);
     }
-
 
     public JTable getTableLop() { return tableLop; }
     public DefaultTableModel getTableModel() { return tableModel; }
