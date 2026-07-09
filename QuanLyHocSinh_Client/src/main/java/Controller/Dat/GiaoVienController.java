@@ -74,8 +74,11 @@ public class GiaoVienController {
     private void loadTable() {
 
         try {
-
             List<Giaovien> list = api.getAll();
+            
+            if (Model.Auth.isGiaoVien()) {
+                list = list.stream().filter(gv -> gv.getMaGV().equals(Model.Auth.maNguoiDung)).collect(java.util.stream.Collectors.toList());
+            }
 
             view.getTableModel().setRowCount(0);
 
@@ -294,6 +297,10 @@ public class GiaoVienController {
             }
 
             List<Giaovien> list=api.searchGiaoVien(keyword);
+
+            if (Model.Auth.isGiaoVien()) {
+                list = list.stream().filter(gv -> gv.getMaGV().equals(Model.Auth.maNguoiDung)).collect(java.util.stream.Collectors.toList());
+            }
 
             view.getTableModel().setRowCount(0);
 
