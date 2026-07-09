@@ -19,6 +19,7 @@ public class ToHopMon {
     @Column(name = "TenToHop", nullable = false, length = 100)
     private String tenToHop;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "toHopMon")
     private List<GiaoVien> giaoViens;
 }

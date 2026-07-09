@@ -19,6 +19,8 @@ public class QuanLyDiemPanel extends JPanel {
     private DefaultTableModel tableModel;
 
     private JTextField txtMaHS, txtTenHS, txtDiem15p, txtDiem1Tiet, txtDiemGiuaKy, txtDiemCuoiKy;
+    private JComboBox<String> cboHocKyInput;
+    private JComboBox<String> cboMonHocInput;
     private JButton btnCapNhat;
 
     private JTextField txtTimKiem;
@@ -126,6 +128,14 @@ public class QuanLyDiemPanel extends JPanel {
         gbc.gridx=2; gbc.gridy=2; pnlInput.add(new JLabel("Điểm Cuối Kỳ:"), gbc);
         gbc.gridx=3; gbc.gridy=2; txtDiemCuoiKy=new JTextField(); pnlInput.add(txtDiemCuoiKy, gbc);
 
+        gbc.gridx=0; gbc.gridy=3; pnlInput.add(new JLabel("Học Kỳ:"), gbc);
+        cboHocKyInput = new JComboBox<>(new String[]{"1", "2"});
+        gbc.gridx=1; gbc.gridy=3; pnlInput.add(cboHocKyInput, gbc);
+
+        gbc.gridx=2; gbc.gridy=3; pnlInput.add(new JLabel("Môn Học:"), gbc);
+        cboMonHocInput = new JComboBox<>();
+        gbc.gridx=3; gbc.gridy=3; pnlInput.add(cboMonHocInput, gbc);
+
         pnlSouth.add(pnlInput, BorderLayout.CENTER);
 
         JPanel pnlButton = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -189,9 +199,11 @@ public class QuanLyDiemPanel extends JPanel {
     public void setMonHocData(List<Model.MonHoc> mons) {
         this.monHocList = mons;
         cboLocMon.removeAllItems();
+        if(cboMonHocInput != null) cboMonHocInput.removeAllItems();
         cboLocMon.addItem("");
         for (Model.MonHoc mon : mons) {
             cboLocMon.addItem(mon.getTenMH());
+            if(cboMonHocInput != null) cboMonHocInput.addItem(mon.getTenMH());
         }
     }
 
@@ -206,8 +218,26 @@ public class QuanLyDiemPanel extends JPanel {
     public Diem getDiemInput() {
         Diem d = new Diem();
         d.setMaHS(txtMaHS.getText());
-        d.setMaMH(getMaMonFilter()); 
-        d.setHocKy(getHocKyFilter()); 
+
+        String tenMonSelected = cboMonHocInput.getSelectedItem() != null ? cboMonHocInput.getSelectedItem().toString() : "";
+        String maMH = "";
+        if (monHocList != null) {
+            for (Model.MonHoc m : monHocList) {
+                if (m.getTenMH().equals(tenMonSelected)) {
+                    maMH = m.getMaMH();
+                    break;
+                }
+            }
+        }
+        d.setMaMH(maMH); 
+
+        int hocKy = 1;
+        try {
+            if (cboHocKyInput.getSelectedItem() != null) {
+                hocKy = Integer.parseInt(cboHocKyInput.getSelectedItem().toString());
+            }
+        } catch (Exception e) {}
+        d.setHocKy(hocKy); 
         try {
             
             d.setDiem15p(Double.parseDouble(txtDiem15p.getText()));
@@ -243,6 +273,12 @@ public class QuanLyDiemPanel extends JPanel {
             txtMaHS.setText(tableModel.getValueAt(row, 0).toString());
             txtTenHS.setText(tableModel.getValueAt(row, 1).toString());
             
+            Object tenMonObj = tableModel.getValueAt(row, 3);
+            if(tenMonObj != null) cboMonHocInput.setSelectedItem(tenMonObj.toString());
+            
+            Object hkObj = tableModel.getValueAt(row, 4);
+            if(hkObj != null) cboHocKyInput.setSelectedItem(hkObj.toString());
+
             txtDiem15p.setText(tableModel.getValueAt(row, 5).toString());
             txtDiem1Tiet.setText(tableModel.getValueAt(row, 6).toString());
             txtDiemGiuaKy.setText(tableModel.getValueAt(row, 7).toString());

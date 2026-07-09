@@ -195,12 +195,13 @@ public class LopController {
         if (ok) {
             JOptionPane.showMessageDialog(view, "Thành công!");
             loadComboBox();
-            loadTable();
+
             setButtonState(true);
             clearForm();
         } else {
             JOptionPane.showMessageDialog(view, "Thất bại! Kiểm tra lại mã lớp.");
         }
+        loadTable();
     }
 
     private void huy() {

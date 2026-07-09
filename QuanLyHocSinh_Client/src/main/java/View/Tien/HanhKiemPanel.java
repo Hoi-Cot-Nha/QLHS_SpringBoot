@@ -317,6 +317,13 @@ public class HanhKiemPanel extends JPanel {
         }
         
         setFormEnabled(luu); 
+        
+        // Nếu đang ở trạng thái Sửa (btnLuu bật, btnSua bật) thì khóa các trường khóa chính lại
+        if (luu && sua) {
+            cboNamHocInput.setEnabled(false);
+            cboHocKyInput.setEnabled(false);
+            cboMaLopInput.setEnabled(false);
+        }
     }
 
     public void hideButtonForStudent() {

@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
 
 @Entity
@@ -34,4 +34,13 @@ public class GiaoVien {
     @JoinColumn(name = "MaToHop")
     @JsonBackReference
     private ToHopMon toHopMon;
+
+    @JsonProperty("maToHop")
+    public void setMaToHopFromJson(String maToHop) {
+        if (maToHop != null && !maToHop.isEmpty()) {
+            ToHopMon th = new ToHopMon();
+            th.setMaToHop(maToHop);
+            this.toHopMon = th;
+        }
+    }
 }

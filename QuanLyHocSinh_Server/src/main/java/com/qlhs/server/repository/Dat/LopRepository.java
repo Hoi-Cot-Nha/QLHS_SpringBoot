@@ -20,7 +20,7 @@ public interface LopRepository extends JpaRepository<Lop, String> {
                     "l.MaGVCN AS maGVCN, " +
                     "gv.HoTen AS tenGVCN " +
                     "FROM Lop l " +
-                    "JOIN GiaoVien gv ON l.MaGVCN = gv.MaGV ";
+                    "LEFT JOIN GiaoVien gv ON l.MaGVCN = gv.MaGV ";
 
     @Query(value = BASE_QUERY, nativeQuery = true)
     List<Map<String, Object>> findAllLopWithGVCN();

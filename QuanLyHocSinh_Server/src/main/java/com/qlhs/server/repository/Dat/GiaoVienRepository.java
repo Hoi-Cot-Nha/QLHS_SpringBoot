@@ -21,7 +21,7 @@ public interface GiaoVienRepository extends JpaRepository<GiaoVien, String> {
                     "th.MaToHop AS maToHop, " +
                     "th.TenToHop AS tenToHop " +
                     "FROM GiaoVien gv " +
-                    "JOIN ToHopMon th ON gv.MaToHop = th.MaToHop ";
+                    "LEFT JOIN ToHopMon th ON gv.MaToHop = th.MaToHop ";
 
     @Query(value = BASE_QUERY, nativeQuery = true)
     List<Map<String, Object>> findAllGiaoVienWithToHop();

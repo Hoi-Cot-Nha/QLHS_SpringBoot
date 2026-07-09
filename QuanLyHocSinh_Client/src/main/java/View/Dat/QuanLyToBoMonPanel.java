@@ -1,7 +1,11 @@
-
 package View.Dat;
 
-import Controller.Dat.ToBoMonController; 
+/**
+ *
+ * @author ADMIN
+ */
+
+import Controller.Dat.ToBoMonController; // Import Controller
 import Model.ToBoMon;
 
 import javax.swing.*;
@@ -18,32 +22,49 @@ public class QuanLyToBoMonPanel extends JPanel {
     private DefaultTableModel tableModel;
 
     private JTextField txtMaToHop, txtTenToHop;
-    private JButton btnThem, btnSua, btnXoa, btnLuu, btnHuy;
+    private JTextField txtTimKiem;
+    private JButton btnThem, btnSua, btnXoa, btnLuu, btnHuy, btnTim;
 
     public QuanLyToBoMonPanel() {
         initComponents();
-        
+        // Gọi Controller để kích hoạt logic ngay khi tạo giao diện
         new ToBoMonController(this);
-        
-        setButtonState(true); 
+        // Thiết lập trạng thái ban đầu cho nút
+        setButtonState(true);
     }
 
     private void initComponents() {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        // ===== 1. PANEL NORTH: CHỨA TIÊU ĐỀ VÀ THANH TÌM KIẾM =====
         JPanel pnlNorth = new JPanel(new BorderLayout(0, 10));
+
         JLabel lblTitle = new JLabel("QUẢN LÝ TỔ BỘ MÔN", JLabel.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
         lblTitle.setForeground(new Color(0, 102, 204));
-        lblTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         pnlNorth.add(lblTitle, BorderLayout.NORTH);
+
+        // THAY ĐỔI TẠI ĐÂY: Chuyển FlowLayout.RIGHT thành FlowLayout.LEFT để đẩy sang bên trái
+        JPanel pnlSearch = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        pnlSearch.add(new JLabel("Tìm kiếm (Mã/Tên):"));
+        txtTimKiem = new JTextField(20);
+        txtTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        pnlSearch.add(txtTimKiem);
+
+        btnTim = new JButton("Tìm");
+        ButtonStyleHelper.styleButtonAdd(btnTim);
+        btnTim.setPreferredSize(new Dimension(90, 30));
+        pnlSearch.add(btnTim);
+
+        pnlNorth.add(pnlSearch, BorderLayout.SOUTH);
         add(pnlNorth, BorderLayout.NORTH);
 
+        // ===== 2. TABLE (CENTER) =====
         String[] cols = {"Mã Tổ Hợp", "Tên Tổ Hợp"};
         tableModel = new DefaultTableModel(cols, 0) {
-             @Override
-             public boolean isCellEditable(int row, int column) { return false; }
+            @Override
+            public boolean isCellEditable(int row, int column) { return false; }
         };
         tableTBM = new JTable(tableModel);
         TableSortHelper.enableTableSorting(tableTBM);
@@ -53,6 +74,7 @@ public class QuanLyToBoMonPanel extends JPanel {
 
         add(new JScrollPane(tableTBM), BorderLayout.CENTER);
 
+        // ===== 3. FORM INPUT (SOUTH) =====
         JPanel pnlSouth = new JPanel(new BorderLayout());
         pnlSouth.setBorder(new TitledBorder("Thông tin tổ bộ môn"));
 
@@ -104,12 +126,14 @@ public class QuanLyToBoMonPanel extends JPanel {
         add(pnlSouth, BorderLayout.SOUTH);
     }
 
+    // ===== CÁC HÀM HỖ TRỢ VIEW (Để Controller gọi) =====
+
     public void setTableData(List<ToBoMon> list) {
         tableModel.setRowCount(0);
         for (ToBoMon tbm : list) {
             tableModel.addRow(new Object[]{
-                tbm.getMaToHop(), 
-                tbm.getTenToHop()
+                    tbm.getMaToHop(),
+                    tbm.getTenToHop()
             });
         }
     }
@@ -117,28 +141,33 @@ public class QuanLyToBoMonPanel extends JPanel {
     public void clearForm() {
         txtMaToHop.setText("");
         txtTenToHop.setText("");
+        txtTimKiem.setText("");
         txtMaToHop.setEnabled(true);
         txtTenToHop.setEnabled(true);
     }
 
     public void setButtonState(boolean isNormalState) {
-
         btnThem.setEnabled(isNormalState);
         btnSua.setEnabled(isNormalState);
         btnXoa.setEnabled(isNormalState);
-        
+        btnTim.setEnabled(isNormalState);
+
         btnLuu.setEnabled(!isNormalState);
         btnHuy.setEnabled(!isNormalState);
-        
-        tableTBM.setEnabled(isNormalState); 
+
+        txtTimKiem.setEnabled(isNormalState);
+        tableTBM.setEnabled(isNormalState);
     }
 
+    // ===== GETTERS =====
     public JTable getTableTBM() { return tableTBM; }
     public JTextField getTxtMaToHop() { return txtMaToHop; }
     public JTextField getTxtTenToHop() { return txtTenToHop; }
+    public JTextField getTxtTimKiem() { return txtTimKiem; }
     public JButton getBtnThem() { return btnThem; }
     public JButton getBtnSua() { return btnSua; }
     public JButton getBtnXoa() { return btnXoa; }
     public JButton getBtnLuu() { return btnLuu; }
     public JButton getBtnHuy() { return btnHuy; }
+    public JButton getBtnTim() { return btnTim; }
 }

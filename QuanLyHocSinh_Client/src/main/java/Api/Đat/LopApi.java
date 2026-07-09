@@ -94,9 +94,10 @@ public class LopApi {
 
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
 
-        return false;
+
     }
 
     public boolean update(Lop lop) {
@@ -116,9 +117,10 @@ public class LopApi {
 
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
 
-        return false;
+
     }
 
     public boolean delete(String maLop) {
